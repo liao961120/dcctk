@@ -1,2 +1,2 @@
-# Diachronic Character-based Corpus analysis Toolkit
+# Diachronic Character-based Corpus Toolkit
 
