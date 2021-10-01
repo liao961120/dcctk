@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("README.md", encoding="utf-8") as f:
       long_description = f.read().strip()
@@ -12,7 +12,7 @@ setup(name='dcctk',
       author='Yongfu Liao',
       author_email='liao961120@github.com',
       license='MIT',
-      packages=['dcctk'],
+      packages=find_packages("dcctk", exclude=["test"]),
       install_requires=['pyyaml'],
       # tests_require=['deepdiff'],
       zip_safe=False)

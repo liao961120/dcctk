@@ -4,14 +4,17 @@ from typing import Union
 REGEX_META = set('[].^$*+{}|()')
 ESCAPE = chr(92)
 SPECIAL_SET = {r'\d', r'\D', r'\s', r'\S', r'\w', r'\W'}
+dft_attr = 'char'
 
-def queryMatchToken(queryTerm: dict, corpToken: dict):
+def queryMatchToken(queryTerm: dict, corpToken: str):
     if 'match' in queryTerm:
         positive_matched_tag = 0
         for tag, values in queryTerm.get('match').items():
-            if tag not in corpToken: return False
+            if tag != dft_attr: continue
+            ###### FIX BUG HERE ###############
             if allValues_match_token(values, tag, corpToken): 
                 positive_matched_tag += 1
+            #######################
         
         if positive_matched_tag != len(queryTerm.get('match')):
             return False
@@ -19,18 +22,18 @@ def queryMatchToken(queryTerm: dict, corpToken: dict):
     if 'not_match' in queryTerm:
         negative_matched_tag = 0
         counter = 0
-        for tag, values in queryTerm.get('not_match').items():
-            target_value = corpToken.get(tag, None)
-            for value in values:
-                counter += 1
-                value, mode = match_mode(value)
-                if mode == "literal":
-                    if value != target_value:
-                        negative_matched_tag += 1
-                else:
-                    value = append_regex_anchors(value)
-                    if (target_value != None) and re.search(value, target_value):
-                        negative_matched_tag += 1
+        values =  queryTerm.get('not_match').get(dft_attr, [])
+        target_value = corpToken
+        for value in values:
+            counter += 1
+            value, mode = match_mode(value)
+            if mode == "literal":
+                if value != target_value:
+                    negative_matched_tag += 1
+            else:
+                value = append_regex_anchors(value)
+                if (target_value != None) and re.search(value, target_value):
+                    negative_matched_tag += 1
         
         if negative_matched_tag != counter:
             return False
@@ -39,7 +42,7 @@ def queryMatchToken(queryTerm: dict, corpToken: dict):
 
 
 
-def allValues_match_token(values:list, tag:Union[str, int] , target: dict) -> bool:
+def allValues_match_token(values:list, tag:Union[str, int] , target: str) -> bool:
     """Check whether all CQL generated values match a token in corpus
 
     Parameters
@@ -48,7 +51,7 @@ def allValues_match_token(values:list, tag:Union[str, int] , target: dict) -> bo
         A list of attribute values to check
     tag : Union[str, int]
         Attribute of the token
-    target : dict
+    target : str
         A token object retrieved from the corpus
 
     Returns
@@ -62,10 +65,10 @@ def allValues_match_token(values:list, tag:Union[str, int] , target: dict) -> bo
         value, mode = match_mode(value)
         if mode == "regex":
             value = append_regex_anchors(value)
-            if re.search(value, target[tag]):
+            if re.search(value, target):
                 matched_num += 1
         if mode == "literal":
-            if value == target[tag]:
+            if value == target:
                 matched_num += 1
     
     return matched_num == len(values)

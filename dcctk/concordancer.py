@@ -2,6 +2,7 @@ import re
 import math
 import cqls
 from typing import Union
+from itertools import chain
 from collections import Counter
 from .UtilsConcord import queryMatchToken, match_mode
 from .corpusIndex import IndexedCorpus
@@ -55,41 +56,20 @@ class Concordancer(IndexedCorpus):
                 yield result
 
 
-    def set_cql_parameters(self, default_attr: str, max_quant: int=6):
-        """Set parameters for CQL queries in the Concordancer
-
-        Parameters
-        ----------
-        default_attr : str
-            The default attribute of the tokens. CQL allows expressing
-            a token without specifying its attribute, like ``"hits"``. 
-            If ``default_attr`` is set to, for example, ``word``, 
-            ``"hits"`` is then equivalent to ``[word="hits"]`` in CQL.
-        max_quant : int, optional
-            The maximium quantity to evaluate to for the CQL token-level
-            quantifier. ``max_quant`` is used in two CQL expressions: ``+``
-            and ``*``. The upper bounds of these quantifiers are theoretically
-            infinite, but since the computer cannot generate a infinite number
-            of queries, an upper bound of the quantifier must be specified. 
-            By default, it is set to 6.
-        """
-        self._cql_default_attr = default_attr
-        self._cql_max_quantity = max_quant
-
-
     def _kwic(self, keywords: list, left=5, right=5):
         # Get concordance from corpus
         search_results = self._search_keywords(keywords)
         if search_results is None: 
             return []
-        for doc_idx, sent_idx, tk_idx in search_results:
-            cc = self._kwic_single(doc_idx, sent_idx, tk_idx, tk_len=len(keywords), left=left, right=right, keywords=keywords)
+        for subcorp_idx, text_idx, sent_idx, tk_idx in search_results:
+            cc = self._kwic_single(subcorp_idx, text_idx, sent_idx, tk_idx, tk_len=len(keywords), left=left, right=right, keywords=keywords)
             yield cc
         
         
-    def _kwic_single(self, doc_idx, sent_idx, tk_idx, tk_len=1, left=5, right=5, keywords:list=None):
+    def _kwic_single(self, subcorp_idx, text_idx, sent_idx, tk_idx, tk_len=1, left=5, right=5, keywords:list=None):
         # Flatten doc sentences to a list of tokens
-        text, keyword_idx = flatten_doc_to_sent(self._get_corp_data(doc_idx))
+        doc = self._get_corp_data(subcorp_idx, text_idx)
+        text, keyword_idx = flatten_doc_to_sent(doc['c'])
 
         tk_start_idx = keyword_idx(sent_idx, tk_idx)
         tk_end_idx = tk_start_idx + tk_len
@@ -103,7 +83,7 @@ class Concordancer(IndexedCorpus):
                 for lab in keyword.get('__label__'):
                     if lab not in captureGroups:
                         captureGroups[lab] = []
-                    tk = self._get_corp_data(doc_idx, sent_idx, i + tk_idx)
+                    tk = self._get_corp_data(subcorp_idx, text_idx, sent_idx, i + tk_idx)
                     captureGroups[lab].append(tk)
 
         return {
@@ -111,9 +91,14 @@ class Concordancer(IndexedCorpus):
             "keyword": text[tk_start_idx:tk_end_idx],
             "right": text[tk_end_idx:end_idx],
             "position": {
-                "doc_idx": doc_idx,
+                "subcorp_idx": subcorp_idx,
+                "text_idx": text_idx,
                 "sent_idx": sent_idx,
                 "tk_idx": tk_idx
+            },
+            "meta": {
+                'time': self.get_meta(subcorp_idx, include_id=False),
+                'text': self.get_meta(subcorp_idx, text_idx)
             },
             "captureGroups": captureGroups
         }
@@ -154,8 +139,8 @@ class Concordancer(IndexedCorpus):
                 if queryMatchToken(queryTerm=w_k, corpToken=w_c):
                     matched_num += 1
             if matched_num == len(keywords):
-                first_keyword_idx = idx[2] - keyword_anchor['seed_idx']
-                matched_results.append( [idx[0], idx[1], first_keyword_idx] )
+                first_keyword_idx = idx[3] - keyword_anchor['seed_idx']
+                matched_results.append( [idx[0], idx[1], idx[2], first_keyword_idx] )
             
         return matched_results
 
@@ -192,17 +177,16 @@ class Concordancer(IndexedCorpus):
 
         # Deal with empty token {}
         if ('match' not in keyword) and ('not_match' not in keyword):
-            return self.all_tk_idx
+            return set(chain.from_iterable(self.index.values()))
 
         else:
             ########################################
             ##########   POSITIVE MATCH   ##########
             ########################################
             matching_idicies = Counter()
-            for tag, values in keyword['match'].items():
-                # Check all values of a specific tag
-                for idx in self._intersect_search(tag, values):
-                    matching_idicies.update({idx: 1})
+            chars = keyword['match'].get(self._cql_default_attr, [])
+            for idx in self._intersect_search(chars):
+                matching_idicies.update({idx: 1})
             
             # Get indicies that matched all given tags 
             for idx, count in matching_idicies.items():
@@ -211,14 +195,14 @@ class Concordancer(IndexedCorpus):
             
             # Special case: match is empty
             if len(keyword['match']) == 0:
-                positive_match = self.all_tk_idx
+                positive_match = set(chain.from_iterable(self.index.values()))
             
             ########################################
             ##########   NEGATIVE MATCH   ##########
             ########################################
-            for tag, values in keyword['not_match'].items():
-                for idx in self._union_search(tag, values):
-                    negative_match.add(idx)
+            chars = keyword['not_match'].get(self._cql_default_attr, [])
+            for idx in self._union_search(chars):
+                negative_match.add(idx)
 
             ########################################
             #####  POSITIVE - NEGATIVE MATCH  ######
@@ -231,14 +215,12 @@ class Concordancer(IndexedCorpus):
         return positive_match
 
 
-    def _union_search(self, tag:Union[str, int], values:list):
+    def _union_search(self, values:list):
         """Given candidates values, return from corpus the position 
         of tokens matching any of the values
 
         Parameters
         ----------
-        tag : Union[str, int]
-            The tag of the token used for comparison
         values : list
             A list of values to compare with
         """
@@ -247,26 +229,21 @@ class Concordancer(IndexedCorpus):
         for value in values:
             value, mode = match_mode(value)
             if mode == "literal":
-                if value in self.corp_idx[tag]:
-                    for idx in self.corp_idx[tag][value]: 
-                        matched_indicies.add(idx)
+                matched_indicies.update(self.index.get(value, []))
             else:
-                for term in self.corp_idx[tag]:
-                    if re.search(value, term):
-                        for idx in self.corp_idx[tag][term]:
-                            matched_indicies.add(idx)
+                for char in self.index:
+                    if re.search(value, char):
+                        matched_indicies.update(self.index[char])
         
         return matched_indicies
 
 
-    def _intersect_search(self, tag:Union[str, int], values:list):
+    def _intersect_search(self, values:list):
         """Given candidates values, return from corpus the position 
         of tokens matching all values
 
         Parameters
         ----------
-        tag : Union[str, int]
-            The tag of the token used for comparison
         values : list
             A list of values to compare with
         """
@@ -274,16 +251,15 @@ class Concordancer(IndexedCorpus):
         match_count = Counter()
         for value in values:
             value, mode = match_mode(value)
-            indices = []
+            indices = set()
             if mode == "literal":
-                if value in self.corp_idx[tag]:
-                    indices = self.corp_idx[tag][value]
+                indices = self.index.get(value, set())
             else:
-                for term in self.corp_idx[tag]:
-                    if re.search(value, term):
-                        indices += self.corp_idx[tag][term]
+                for char in self.index:
+                    if re.search(value, char):
+                        indices.update(self.index[char])
             
-            for idx in set(indices):
+            for idx in indices:
                 match_count.update({idx: 1})
         
         # Filter idicies that match all values given
@@ -295,37 +271,31 @@ class Concordancer(IndexedCorpus):
         return intersect_match
         
 
-
-    def _get_keywords(self, search_anchor: dict, doc_idx, sent_idx, tk_idx):
-        sent = self._get_corp_data(doc_idx, sent_idx)
+    def _get_keywords(self, search_anchor: dict, subcorp_idx, doc_idx, sent_idx, tk_idx):
+        sent = self._get_corp_data(subcorp_idx, doc_idx, sent_idx)
         start_idx = max(0, tk_idx - search_anchor['seed_idx'])
         end_idx = min(start_idx + search_anchor['length'], len(sent))
         
         return sent[start_idx:end_idx]
 
 
-    def _get_corp_data(self, doc_idx, sent_idx=None, tk_idx=None):
+    def _get_corp_data(self, subcorp_idx, doc_idx=None, sent_idx=None, tk_idx=None):
         """Get corpus data by position
         """
-        if self.text_key is not None:
-            if sent_idx is None:
-                return self.corpus[doc_idx][self.text_key]
-            if tk_idx is None:
-                return self.corpus[doc_idx][self.text_key][sent_idx]
-            return self.corpus[doc_idx][self.text_key][sent_idx][tk_idx]
-        else:
-            if sent_idx is None:
-                return self.corpus[doc_idx]
-            if tk_idx is None:
-                return self.corpus[doc_idx][sent_idx]
-            return self.corpus[doc_idx][sent_idx][tk_idx]
+        if doc_idx is None:
+            return self.corpus[subcorp_idx]
+        if sent_idx is None:
+            return self.corpus[subcorp_idx]['text'][doc_idx]
+        if tk_idx is None:
+            return self.corpus[subcorp_idx]['text'][doc_idx]['c'][sent_idx]
+        return self.corpus[subcorp_idx]['text'][doc_idx]['c'][sent_idx][tk_idx]
 
 
 ##################
 # Helper functions
 ##################
 def flatten_doc_to_sent(doc):
-    text = []
+    text = ''
     sent_lengths = []
     for sent in doc:
         sent_lengths.append(len(sent))
@@ -338,23 +308,3 @@ def flatten_doc_to_sent(doc):
         return tk_idx
     
     return text, keyword_idx
-        
-
-def norm_token_struct(token):
-    if isinstance(token, dict):
-        return token
-    if isinstance(token, str):
-        return {"word": token}
-    if isinstance(token, list):
-        return { i:item for i, item in enumerate(token) }
-    raise Exception("Invalid token structure")
-
-
-def is_subdict(subdict:dict, dict_:dict, regex=False):
-    for k in subdict:
-        if k not in dict_: return False
-        if not regex:
-            if subdict[k] != dict_[k]: return False
-        else:
-            if not re.search(subdict[k], dict_[k]): return False
-    return True
