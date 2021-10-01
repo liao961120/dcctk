@@ -1,0 +1,21 @@
+"01":
+  time_range: [-1000, -206]
+  label: 先秦
+"02":
+  time_range: [-205, 220]
+  label: 漢
+"03":
+  time_range: [221, 589]
+  label: 魏晉南北
+"04":
+  time_range: [590, 960]
+  label: 唐五代
+"05":
+  time_range: [961, 1368]
+  label: 宋元
+"06":
+  time_range: [1369, 1644]
+  label: 明
+"07":
+  time_range: [1645, 1912]
+  label: 清
