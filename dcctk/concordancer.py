@@ -82,9 +82,13 @@ class Concordancer(IndexedCorpus):
             if '__label__' in keyword:
                 for lab in keyword.get('__label__'):
                     if lab not in captureGroups:
-                        captureGroups[lab] = []
+                        captureGroups[lab] = {
+                            's': '',
+                            'i': []
+                        }
                     tk = self._get_corp_data(subcorp_idx, text_idx, sent_idx, i + tk_idx)
-                    captureGroups[lab].append(tk)
+                    captureGroups[lab]['s'] += tk
+                    captureGroups[lab]['i'].append(i)
 
         return {
             "left": text[start_idx:tk_start_idx],

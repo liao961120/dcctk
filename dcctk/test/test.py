@@ -3,20 +3,20 @@ from dcctk.corpusReader import PlainTextReader
 from dcctk.concordancer import Concordancer
 from dcctk.corpus import TextBasedCorpus
 
-# c = Concordancer(PlainTextReader().corpus)
-
-c = TextBasedCorpus(PlainTextReader().corpus)
+c = Concordancer(PlainTextReader().corpus)
 
 #%%
+# c = TextBasedCorpus(PlainTextReader().corpus)
 # c.list_files('三國')
 # c.get_meta_by_path('03/三國志_蜀書一.txt')
 # c.get_text('03/三國志_蜀書一.txt', as_str=True)
-x = c.get_texts('01', texts_as_str=False, sents_as_str=True)
+texts = c.get_texts('三國志', texts_as_str=False, sents_as_str=True)
+texts_str = c.get_texts('三國志', texts_as_str=True, sents_as_str=True)
 
 #%%
 
 cql = '''
-"君" "子" "之" obj:[char != "風"]
+"將" "軍" "之" obj:([char != "風"] [char != "風"])
 '''.strip()
 results = list(c.cql_search(cql, left=3, right=3))
 
