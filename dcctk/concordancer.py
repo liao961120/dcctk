@@ -386,6 +386,12 @@ class ConcordLine:
 class obj(object):
     def __init__(self, **entries):
         self.__dict__.update(entries)
+    
+    def __repr__(self):
+        s = []
+        for k, v in self.__dict__.items():
+            s.append(f".{k} = {str(v)}")
+        return '\n'.join(s)
 
 ##################
 # Helper functions
