@@ -1,8 +1,17 @@
 #%%
 from dcctk.corpusReader import PlainTextReader
 from dcctk.concordancer import Concordancer
+from dcctk.corpus import TextBasedCorpus
 
-c = Concordancer(PlainTextReader().corpus)
+# c = Concordancer(PlainTextReader().corpus)
+
+c = TextBasedCorpus(PlainTextReader().corpus)
+
+#%%
+# c.list_files('三國')
+# c.get_meta_by_path('03/三國志_蜀書一.txt')
+# c.get_text('03/三國志_蜀書一.txt', as_str=True)
+x = c.get_texts('01', texts_as_str=False, sents_as_str=True)
 
 #%%
 

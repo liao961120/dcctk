@@ -5,7 +5,7 @@ from typing import Union
 from itertools import chain
 from collections import Counter
 from .UtilsConcord import queryMatchToken, match_mode
-from .corpusIndex import IndexedCorpus
+from .corpus import IndexedCorpus
 
 
 class Concordancer(IndexedCorpus):
