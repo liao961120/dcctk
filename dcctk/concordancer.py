@@ -1,7 +1,8 @@
 import re
 import math
+import json
 import cqls
-from typing import Union
+from typing import Callable
 from itertools import chain
 from collections import Counter
 from .UtilsConcord import queryMatchToken, match_mode
@@ -46,27 +47,27 @@ class Concordancer(IndexedCorpus):
                         'verb': [<tk>],
                         'noun': [<tk>]}
                 }
-            
+
             where ``<tk>`` is a token (char), represented as a string,
         """
-        queries = cqls.parse(cql, default_attr=self._cql_default_attr,max_quant=self._cql_max_quantity)
+        queries = cqls.parse(
+            cql, default_attr=self._cql_default_attr, max_quant=self._cql_max_quantity)
 
         for query in queries:
             for result in self._kwic(keywords=query, left=left, right=right):
                 yield result
 
-
     def _kwic(self, keywords: list, left=5, right=5):
         # Get concordance from corpus
         search_results = self._search_keywords(keywords)
-        if search_results is None: 
+        if search_results is None:
             return []
         for subcorp_idx, text_idx, sent_idx, tk_idx in search_results:
-            cc = self._kwic_single(subcorp_idx, text_idx, sent_idx, tk_idx, tk_len=len(keywords), left=left, right=right, keywords=keywords)
-            yield cc
-        
-        
-    def _kwic_single(self, subcorp_idx, text_idx, sent_idx, tk_idx, tk_len=1, left=5, right=5, keywords:list=None):
+            cc = self._kwic_single(subcorp_idx, text_idx, sent_idx, tk_idx, tk_len=len(
+                keywords), left=left, right=right, keywords=keywords)
+            yield ConcordLine(cc)
+
+    def _kwic_single(self, subcorp_idx, text_idx, sent_idx, tk_idx, tk_len=1, left=5, right=5, keywords: list = None):
         # Flatten doc sentences to a list of tokens
         doc = self._get_corp_data(subcorp_idx, text_idx)
         text, keyword_idx = flatten_doc_to_sent(doc['c'])
@@ -84,39 +85,35 @@ class Concordancer(IndexedCorpus):
                     if lab not in captureGroups:
                         captureGroups[lab] = {
                             's': '',
-                            'i': []
+                            'i': [i, i]
                         }
-                    tk = self._get_corp_data(subcorp_idx, text_idx, sent_idx, i + tk_idx)
+                    tk = self._get_corp_data(
+                        subcorp_idx, text_idx, sent_idx, i + tk_idx)
                     captureGroups[lab]['s'] += tk
-                    captureGroups[lab]['i'].append(i)
+                    captureGroups[lab]['i'][-1] = i
 
         return {
             "left": text[start_idx:tk_start_idx],
             "keyword": text[tk_start_idx:tk_end_idx],
             "right": text[tk_end_idx:end_idx],
-            "position": {
-                "subcorp_idx": subcorp_idx,
-                "text_idx": text_idx,
-                "sent_idx": sent_idx,
-                "tk_idx": tk_idx
-            },
+            "position": (subcorp_idx, text_idx, sent_idx, tk_idx),
             "meta": {
+                'id': self.corpus[subcorp_idx]['text'][text_idx]['id'],
                 'time': self.get_meta(subcorp_idx, include_id=False),
-                'text': self.get_meta(subcorp_idx, text_idx)
+                'text': self.get_meta(subcorp_idx, text_idx, include_id=False)
             },
             "captureGroups": captureGroups
         }
 
-
     def _search_keywords(self, keywords: list):
         #########################################################
-        # Find keywords with the least number of matching results 
+        # Find keywords with the least number of matching results
         #########################################################
         best_search_loc = (0, None, math.inf)
         for i, keyword in enumerate(keywords):
             results = self._search_keyword(keyword)
             num_of_matched = len(results)
-            if num_of_matched == 0: 
+            if num_of_matched == 0:
                 return None
             elif num_of_matched < best_search_loc[-1]:
                 best_search_loc = (i, results, num_of_matched)
@@ -129,13 +126,13 @@ class Concordancer(IndexedCorpus):
             'length': len(keywords),
             'seed_idx': best_search_loc[0]
         }
-        
+
         # Check all possible matching keywords
         matched_results = []
         for idx in results:
             # Get all possible matching keywords from corpus
             candidates = self._get_keywords(keyword_anchor, *idx)
-            if len(candidates) != len(keywords): 
+            if len(candidates) != len(keywords):
                 continue
             # Check every token in keywords
             matched_num = 0
@@ -144,10 +141,10 @@ class Concordancer(IndexedCorpus):
                     matched_num += 1
             if matched_num == len(keywords):
                 first_keyword_idx = idx[3] - keyword_anchor['seed_idx']
-                matched_results.append( [idx[0], idx[1], idx[2], first_keyword_idx] )
-            
-        return matched_results
+                matched_results.append(
+                    [idx[0], idx[1], idx[2], first_keyword_idx])
 
+        return matched_results
 
     def _search_keyword(self, keyword: dict):
         """Global search of a keyword to find candidates of correct kwic instances
@@ -159,7 +156,7 @@ class Concordancer(IndexedCorpus):
             the keyword:
 
             .. code-block:: python
-            
+
                 {
                     'match': {
                         'word': ['打'],
@@ -191,16 +188,16 @@ class Concordancer(IndexedCorpus):
             chars = keyword['match'].get(self._cql_default_attr, [])
             for idx in self._intersect_search(chars):
                 matching_idicies.update({idx: 1})
-            
-            # Get indicies that matched all given tags 
+
+            # Get indicies that matched all given tags
             for idx, count in matching_idicies.items():
                 if count == len(keyword['match']):
                     positive_match.add(idx)
-            
+
             # Special case: match is empty
             if len(keyword['match']) == 0:
                 positive_match = set(chain.from_iterable(self.index.values()))
-            
+
             ########################################
             ##########   NEGATIVE MATCH   ##########
             ########################################
@@ -218,10 +215,9 @@ class Concordancer(IndexedCorpus):
 
         return positive_match
 
-
-    def _union_search(self, values:list):
-        """Given candidates values, return from corpus the position 
-        of tokens matching any of the values
+    def _union_search(self, values: list):
+        """Given candidates values, return from corpus the 
+        position of tokens matching any of the values.
 
         Parameters
         ----------
@@ -238,13 +234,12 @@ class Concordancer(IndexedCorpus):
                 for char in self.index:
                     if re.search(value, char):
                         matched_indicies.update(self.index[char])
-        
+
         return matched_indicies
 
-
-    def _intersect_search(self, values:list):
-        """Given candidates values, return from corpus the position 
-        of tokens matching all values
+    def _intersect_search(self, values: list):
+        """Given candidates values, return from corpus the
+        position of tokens matching all values.
 
         Parameters
         ----------
@@ -262,26 +257,24 @@ class Concordancer(IndexedCorpus):
                 for char in self.index:
                     if re.search(value, char):
                         indices.update(self.index[char])
-            
+
             for idx in indices:
                 match_count.update({idx: 1})
-        
+
         # Filter idicies that match all values given
         intersect_match = set()
         for idx, count in match_count.items():
             if count == len(values):
                 intersect_match.add(idx)
-        
+
         return intersect_match
-        
 
     def _get_keywords(self, search_anchor: dict, subcorp_idx, doc_idx, sent_idx, tk_idx):
         sent = self._get_corp_data(subcorp_idx, doc_idx, sent_idx)
         start_idx = max(0, tk_idx - search_anchor['seed_idx'])
         end_idx = min(start_idx + search_anchor['length'], len(sent))
-        
-        return sent[start_idx:end_idx]
 
+        return sent[start_idx:end_idx]
 
     def _get_corp_data(self, subcorp_idx, doc_idx=None, sent_idx=None, tk_idx=None):
         """Get corpus data by position
@@ -294,6 +287,105 @@ class Concordancer(IndexedCorpus):
             return self.corpus[subcorp_idx]['text'][doc_idx]['c'][sent_idx]
         return self.corpus[subcorp_idx]['text'][doc_idx]['c'][sent_idx][tk_idx]
 
+
+class ConcordLine:
+
+    def __init__(self, cc: dict):
+        """Initialize an instance of concordance line
+
+        Parameters
+        ----------
+        cc : dict
+            A dictionary returned by
+            :meth:`concordancer.Concordancer._kwic_single`.
+            It has the following stucture:
+
+            .. code-block:: python
+
+                {
+                    'left': '，又喜',
+                    'keyword': '將軍之去，',
+                    'right': '計必乘',
+                    'position': (2, 55, 5, 208),
+                    'meta': {
+                        'id': '03/三國志_蜀書七.txt',
+                        'time': {
+                            'time_range': [221, 589], 
+                            'label': '魏晉南北', 
+                            'ord': 3
+                        },
+                        'text': {
+                            'book': '三國志', 'sec': '蜀書七'
+                        }
+                    },
+                    'captureGroups': {
+                        'obj': {'s': '去，', 'i': [3, 4]}
+                    }
+                }
+        """
+        self.data = cc
+        self.meta = obj(**cc.get('meta'))
+    
+
+    def __repr__(self) -> str:
+        l, k, r = self.data['left'], self.data['keyword'], self.data['right']
+        cc = '<Concord ' + l + '{' + k + '}' + r + '>'
+        return cc
+
+
+    def get_kwic(self, return_keyword_idx=True):
+        """Get string representation of the concordance line
+
+        Parameters
+        ----------
+        return_keyword_idx : bool, optional
+            Whether to return the index of the keywords
+            in the concordance line, by default True
+
+        Returns
+        -------
+        str or tuple
+            If return keyword_idx is True, returns tuple,
+            with the second element being the index of the
+            keywords (idx_from, idx_to).
+        """
+        l, k, r = self.data['left'], self.data['keyword'], self.data['right']
+        s = l + k + r
+        if return_keyword_idx:
+            i_fr = len(l)
+            i_to = i_fr + len(k) - 1
+            return s, (i_fr, i_to)
+        return s        
+
+
+    def get_timestep(self, key:Callable=None):
+        """Get time step info of the concordance line
+
+        Parameters
+        ----------
+        key : Callable, optional
+            If specified, applied on self.meta.time to return
+            time step data. By default None, which uses 
+            subcorp_idx as time step information.
+
+        Returns
+        -------
+        Int
+            The time step that the concordance line belongs to.
+        """
+        if key is not None:
+            return key(self.meta.time)
+        return self.data['position'][0]
+
+
+    def to_json(self, ensure_ascii=False, indent=False):
+        return json.dumps(self.data, ensure_ascii=ensure_ascii, indent=indent)
+
+
+
+class obj(object):
+    def __init__(self, **entries):
+        self.__dict__.update(entries)
 
 ##################
 # Helper functions
@@ -310,5 +402,5 @@ def flatten_doc_to_sent(doc):
         for i in range(sent_idx):
             tk_idx += sent_lengths[i]
         return tk_idx
-    
+
     return text, keyword_idx

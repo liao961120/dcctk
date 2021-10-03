@@ -14,13 +14,15 @@ texts = c.get_texts('三國志', texts_as_str=False, sents_as_str=True)
 texts_str = c.get_texts('三國志', texts_as_str=True, sents_as_str=True)
 
 #%%
-
 cql = '''
-"將" "軍" "之" obj:([char != "風"] [char != "風"])
+"將" "軍" "之" obj:[]
 '''.strip()
 results = list(c.cql_search(cql, left=3, right=3))
-
-
+results[:5]
+x = results[0]
+#%%
+x.get_kwic()
+x.get_timestep()
 
 # %%
 import cqls
