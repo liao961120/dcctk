@@ -37,12 +37,7 @@ class Concordancer(IndexedCorpus):
                     'left': [<tk>, <tk>, ...],
                     'keyword': [<tk>, <tk>, ...],
                     'right': [<tk>, <tk>, ...],
-                    'position': {
-                        'subcorp_idx': <int>
-                        'text_idx': <int>, 
-                        'sent_idx': <int>, 
-                        'tk_idx': <int>
-                    },
+                    'position': ( <int>, <int>, <int>, <int> ),
                     'captureGroups': {
                         'verb': [<tk>],
                         'noun': [<tk>]}
