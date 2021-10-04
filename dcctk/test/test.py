@@ -2,6 +2,7 @@
 from dcctk.corpusReader import PlainTextReader
 from dcctk.concordancer import Concordancer
 from dcctk.corpus import TextBasedCorpus
+from dcctk.embeddings import AnchiBert, semantic_sort
 
 c = Concordancer(PlainTextReader().corpus)
 
@@ -15,14 +16,38 @@ texts_str = c.get_texts('三國志', texts_as_str=True, sents_as_str=True)
 
 #%%
 cql = '''
-"將" "軍" "之" obj:[]
+"法" "院"
 '''.strip()
-results = list(c.cql_search(cql, left=3, right=3))
-results[:5]
+results = list(c.cql_search(cql, left=10, right=10))
+print(len(results))
 x = results[0]
 #%%
 x.get_kwic()
 x.get_timestep()
+
+#%%
+# Sort Concord
+results_sorted = sorted(results, key=lambda x: x.get_timestep())
+# results[0].get_timestep()
+
+#%%
+emb = AnchiBert()
+
+#%%
+base_sent, base_tk = results[17].get_kwic()
+print(base_sent)
+print(base_tk)
+sem_sort_by_tk = semantic_sort(emb, results[:200], base_sent, base_tk)
+sem_sort_by_sent = semantic_sort(emb, results[:200], base_sent)
+
+#%%
+import gdown
+
+
+gdown.download('https://drive.google.com/uc?id=1uMlNJzilEhSigIcfjTjPdYOZL9IQfHNK', output="AnchiBERT.zip")
+
+#%%
+gdown.extractall("AnchiBERT.zip")
 
 # %%
 import cqls

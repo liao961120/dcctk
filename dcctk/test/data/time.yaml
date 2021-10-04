@@ -26,3 +26,7 @@
   time_range: [1645, 1912]
   label: 清
   ord: 7
+"08":
+  time_range: [1980, 2007]
+  label: ASBC
+  ord: 8
