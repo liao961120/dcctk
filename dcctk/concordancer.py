@@ -13,6 +13,7 @@ class Concordancer(IndexedCorpus):
 
     _cql_default_attr = "char"
     _cql_max_quantity = 5
+    all_idx_cache = None
 
     def cql_search(self, cql: str, left=5, right=5):
         """Search the corpus with Corpus Query Language
@@ -108,12 +109,13 @@ class Concordancer(IndexedCorpus):
         for i, keyword in enumerate(keywords):
             # Skip regex searches
             has_regex = False
-            chars = keyword['match'].get(self._cql_default_attr, []) + keyword['not_match'].get(self._cql_default_attr, [])
+            chars = keyword.get('match', {}).get(self._cql_default_attr, []) + \
+                keyword.get('not_match', {}).get(self._cql_default_attr, [])
             for char in chars:
                 if match_mode(char)[1] == 'regex':
                     has_regex = True
                     break
-            if has_regex: continue
+            if has_regex or len(chars) == 0: continue
 
             results = self._search_keyword(keyword)
             num_of_matched = len(results)
@@ -184,8 +186,9 @@ class Concordancer(IndexedCorpus):
 
         # Deal with empty token {}
         if ('match' not in keyword) and ('not_match' not in keyword):
-            return set(chain.from_iterable(self.index.values()))
-
+            if self.all_idx_cache is None:
+                self.all_idx_cache = set(chain.from_iterable(self.index.values()))
+            return self.all_idx_cache
         else:
             ########################################
             ##########   POSITIVE MATCH   ##########
@@ -202,7 +205,9 @@ class Concordancer(IndexedCorpus):
 
             # Special case: match is empty
             if len(keyword['match']) == 0:
-                positive_match = set(chain.from_iterable(self.index.values()))
+                if self.all_idx_cache is None:
+                    self.all_idx_cache = set(chain.from_iterable(self.index.values()))
+                positive_match = self.all_idx_cache
 
             ########################################
             ##########   NEGATIVE MATCH   ##########
@@ -220,6 +225,7 @@ class Concordancer(IndexedCorpus):
             print(f"{keyword} not found in corpus")
 
         return positive_match
+
 
     def _union_search(self, values: list):
         """Given candidates values, return from corpus the 
