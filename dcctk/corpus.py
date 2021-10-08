@@ -1,5 +1,5 @@
 import re
-from tqdm.auto import tqdm
+from tqdm.auto import trange
 
 
 class TextBasedCorpus:
@@ -64,9 +64,9 @@ class TextBasedCorpus:
 
     def index_path(self):
         print("Indexing corpus for text retrival...")
-        for i, subcorp in tqdm(enumerate(self.corpus)):
-            self.path_index[subcorp['id']] = i
-            for j, text in enumerate(subcorp['text']):
+        for i in trange(len(self.corpus)):
+            self.path_index[self.corpus[i]['id']] = i
+            for j, text in enumerate(self.corpus[i]['text']):
                 self.path_index[text['id']] = (i, j)
 
 
@@ -76,7 +76,6 @@ class IndexedCorpus(TextBasedCorpus):
     """
 
     def __init__(self, corpus) -> None:
-        # self.corpus = corpus
         TextBasedCorpus.__init__(self, corpus)
         self.index = {}
         self.index_corpus()
@@ -99,8 +98,8 @@ class IndexedCorpus(TextBasedCorpus):
 
     def index_corpus(self):
         print("Indexing corpus for concordance search...")
-        for i, subcorp in tqdm(enumerate(self.corpus)):
-            for j, text in enumerate(subcorp['text']):
+        for i in trange(len(self.corpus)):
+            for j, text in enumerate(self.corpus[i]['text']):
                 for k, sent in enumerate(text['c']):
                     for l, char in enumerate(sent):
                         if char not in self.index:
