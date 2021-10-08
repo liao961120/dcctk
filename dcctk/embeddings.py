@@ -111,6 +111,7 @@ def semantic_sort(m:AnchiBert, concord_lines:list, base_sent:str=None, base_tk:t
     else:
         compare_base = m.encode_sentence(base_sent, is_traditional=is_traditional)
 
+    results = []
     for i in trange(len(concord_lines)):
         result = concord_lines[i]
         sent, tk_idx = result.get_kwic()
@@ -119,14 +120,14 @@ def semantic_sort(m:AnchiBert, concord_lines:list, base_sent:str=None, base_tk:t
         else:
             vec = m.encode_sentence(sent, is_traditional=is_traditional)
         
-        concord_lines[i] = (result, simil_func(compare_base, vec))
+        results.append( (result, simil_func(compare_base, vec)) )
 
-    return sorted(concord_lines, key=lambda x: x[1], reverse=True)
+    return sorted(results, key=lambda x: x[1], reverse=True)
 
 
 
 def _download_bert_model():
     print("Downloading AnchiBert model ...")
     import gdown
-    gdown.download('https://drive.google.com/uc?id=1uMlNJzilEhSigIcfjTjPdYOZL9IQfHNK', output="AnchiBERT.zip")
+    gdown.download('https://drive.google.com/uc?id=1uMlNJzilEhSigIcfjTjPdYOZL9IQfHNK', quiet=False, output="AnchiBERT.zip")
     gdown.extractall("AnchiBERT.zip")

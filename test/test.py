@@ -4,7 +4,7 @@ from dcctk.concordancer import Concordancer
 from dcctk.corpus import TextBasedCorpus
 from dcctk.embeddings import AnchiBert, semantic_sort
 
-c = Concordancer(PlainTextReader().corpus)
+c = Concordancer(PlainTextReader("data/").corpus)
 
 #%%
 # c = TextBasedCorpus(PlainTextReader().corpus)
