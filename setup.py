@@ -4,7 +4,7 @@ with open("README.md", encoding="utf-8") as f:
       long_description = f.read().strip()
 
 setup(name='dcctk',
-      version='0.0.9',
+      version='0.0.10',
       description="Diachronic Character-based Corpus toolkit",
       long_description=long_description,
       long_description_content_type='text/markdown',

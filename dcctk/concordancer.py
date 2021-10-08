@@ -12,7 +12,7 @@ from .corpus import IndexedCorpus
 class Concordancer(IndexedCorpus):
 
     _cql_default_attr = "char"
-    _cql_max_quantity = 6
+    _cql_max_quantity = 5
 
     def cql_search(self, cql: str, left=5, right=5):
         """Search the corpus with Corpus Query Language
@@ -106,6 +106,15 @@ class Concordancer(IndexedCorpus):
         #########################################################
         best_search_loc = (0, None, math.inf)
         for i, keyword in enumerate(keywords):
+            # Skip regex searches
+            has_regex = False
+            chars = keyword['match'].get(self._cql_default_attr, []) + keyword['not_match'].get(self._cql_default_attr, [])
+            for char in chars:
+                if match_mode(char)[1] == 'regex':
+                    has_regex = True
+                    break
+            if has_regex: continue
+
             results = self._search_keyword(keyword)
             num_of_matched = len(results)
             if num_of_matched == 0:
@@ -113,6 +122,8 @@ class Concordancer(IndexedCorpus):
             elif num_of_matched < best_search_loc[-1]:
                 best_search_loc = (i, results, num_of_matched)
         results = best_search_loc[1]
+        if results is None:
+            results = self._search_keyword(keyword)
 
         #######################################
         # Check other tokens around search seed
