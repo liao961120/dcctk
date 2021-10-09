@@ -24,7 +24,7 @@ class SenseAnalysis:
         self.hover_df = hover_df
         if hover_df is None:
             hover_df = []
-            for x in self.concords:
+            for i, x in enumerate(self.concords):
                 d = {
                     'left': x.data['left'],
                     'keyword': x.data['keyword'],
@@ -34,6 +34,7 @@ class SenseAnalysis:
                 }
                 for k, v in flatten(x.data['meta'], parent_key='m').items():
                     d[k] = stringify_obj(v)
+                d['emb_id'] = i
                 hover_df.append(d)
             self.hover_df = pd.DataFrame(hover_df)
     
