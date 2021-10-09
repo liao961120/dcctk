@@ -51,11 +51,11 @@ class SenseAnalysis:
         return self.hover_df
     
 
-    def plot_cluster_results(self, interactive=False, labels='cluster'):
+    def plot_cluster_results(self, interactive=False, labels='cluster', **keywords):
         if labels not in self.hover_df:
             Warning('Clustering not performed yet, please run `SenseAnalysis.hierarchical_clustering()` before calling this function.')
             return
-        self.plot_embeddings(interactive=interactive, labels=labels)
+        self.plot_embeddings(interactive=interactive, labels=labels, **keywords)
 
 
     def hierarchical_clustering_explore(self, method='average', metric='cosine', standardize_features=True, \
