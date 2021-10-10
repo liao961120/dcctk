@@ -1,9 +1,10 @@
-from .senseAnalysis import SenseAnalysis
 import pandas as pd
+from copy import deepcopy
+
 
 class DiachronicSenseAnalysis:
 
-    def __init__(self, SA:SenseAnalysis):
+    def __init__(self, SA):
         """Diachronic sense analysis based on sense clustering with Bert
 
         Parameters
@@ -21,16 +22,35 @@ class DiachronicSenseAnalysis:
 
         # Sense distribution
         self.sense_distribution = None
+        self.sense_timeseries = None
         self.ts_label_map = None
         self._sense_distribution_across_time()
     
     
-    def plot_sense_distribution(self, xticks:str=None, **kwargs):
+    def plot_sense_distribution(self, timelabel:str=None, **kwargs):
         ax = self.sense_distribution.plot.bar(**kwargs)
-        if xticks is None:
-            ax.set_xticklabels(sorted(i for i in range(len(self.ts_label_map))), rotation=0)
+        if timelabel is None:
+            ax.set_xticklabels(list(range(len(self.ts_label_map))), rotation=0)
         else:
-            ax.set_xticklabels(sorted(l[xticks] for l in self.ts_label_map), rotation=0)
+            ax.set_xticklabels([l[timelabel] for l in self.ts_label_map], rotation=0)
+
+
+    def plot_sense_timeseries(self, clusters:list=None, timelabel:str=None, raw_count=True, **kwargs):
+        d = deepcopy(self.sense_timeseries)
+        if not raw_count:
+            total_freq = d.apply(lambda x: x.sum(), axis=0)
+            d = d / total_freq
+
+        # Subset
+        if clusters is not None:
+            d = d[ [int(x) for x in clusters] ]
+        if timelabel is not None:
+            d['label'] = [l[timelabel] for l in self.ts_label_map]
+        else:
+            d['label'] = [ str(i) for i in range(len(self.ts_label_map)) ]
+
+        ax = d.plot.line(x='label', **kwargs)  # cmap=plt.cm.get_cmap('Reds', d.shape[1])
+        ax = ax.set_xlabel('')
 
 
     def _sense_distribution_across_time(self):
@@ -54,6 +74,7 @@ class DiachronicSenseAnalysis:
 
         d = pd.DataFrame(distr)
         d = d.reindex(sorted(d.columns), axis=1)
+        self.sense_timeseries = deepcopy(d)
         total_freq = d.apply(lambda x: x.sum(), axis=1)
         for index, row in d.iterrows(): 
             d.loc[index] = row / total_freq[index]
