@@ -3,14 +3,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from typing import Callable
 from tqdm.auto import trange
-from .embeddings import AnchiBert
 from .UtilsGeneral import stringify_obj, flatten
 from .UtilsStats import cossim
 
 
 class SenseAnalysis:
 
-    def __init__(self, concord_lines:list, bert_model:AnchiBert, is_traditional=True, token_idx:tuple=None, hover_df:pd.DataFrame=None):
+    def __init__(self, concord_lines:list, bert_model, is_traditional=True, token_idx:tuple=None, hover_df:pd.DataFrame=None):
         
         self.model = bert_model
         self.concords = concord_lines
@@ -29,8 +28,7 @@ class SenseAnalysis:
                     'left': x.data['left'],
                     'keyword': x.data['keyword'],
                     'right': x.data['right'],
-                    # 'kwic': x.data['left'] + '{' + x.data['keyword'] + '}' + x.data['right'],
-                    'timestep': str(x.get_timestep()),
+                    'timestep': x.get_timestep(),
                 }
                 for k, v in flatten(x.data['meta'], parent_key='m').items():
                     d[k] = stringify_obj(v)
@@ -39,11 +37,15 @@ class SenseAnalysis:
             self.hover_df = pd.DataFrame(hover_df)
     
 
-    def hierarchical_clustering(self, threshold=5, criterion='maxclust', standardize=True, method='average', metric='cosine', visualize=True):
+    def __repr__(self) -> str:
+        return f"<SenseAnalysis   clustered: {'cluster' in self.hover_df}>"
+
+
+    def hierarchical_clustering(self, threshold=5, criterion='maxclust', standardize_features=True, method='average', metric='cosine', visualize=True):
         from scipy.cluster.hierarchy import fcluster
 
         if self.clustering is None:
-            self.hierarchical_clustering_explore(standardize=standardize, method=method, metric=metric, dendrogram=False, elbow=False)
+            self.hierarchical_clustering_explore(method=method, metric=metric, standardize_features=standardize_features, dendrogram=False, elbow=False)
         self.hover_df['cluster'] = fcluster(self.clustering, t=threshold, criterion=criterion)
 
         if visualize:
