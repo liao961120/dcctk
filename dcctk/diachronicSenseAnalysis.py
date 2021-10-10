@@ -22,7 +22,7 @@ class DiachronicSenseAnalysis:
 
         # Sense distribution
         self.sense_distribution = None
-        self.sense_timeseries = None
+        self.sense_distribution_raw = None
         self.ts_label_map = None
         self._sense_distribution_across_time()
     
@@ -36,7 +36,7 @@ class DiachronicSenseAnalysis:
 
 
     def plot_sense_timeseries(self, clusters:list=None, timelabel:str=None, raw_count=True, **kwargs):
-        d = deepcopy(self.sense_timeseries)
+        d = deepcopy(self.sense_distribution_raw)
         if not raw_count:
             total_freq = d.apply(lambda x: x.sum(), axis=0)
             d = d / total_freq
@@ -74,7 +74,7 @@ class DiachronicSenseAnalysis:
 
         d = pd.DataFrame(distr)
         d = d.reindex(sorted(d.columns), axis=1)
-        self.sense_timeseries = deepcopy(d)
+        self.sense_distribution_raw = deepcopy(d)
         total_freq = d.apply(lambda x: x.sum(), axis=1)
         for index, row in d.iterrows(): 
             d.loc[index] = row / total_freq[index]
