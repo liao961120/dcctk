@@ -2,9 +2,23 @@
 from dcctk.corpusReader import PlainTextReader
 from dcctk.concordancer import Concordancer
 from dcctk.corpus import TextBasedCorpus
-from dcctk.embeddings import AnchiBert, semantic_sort
+from dcctk.dispersion import Dispersion
+# from dcctk.embeddings import AnchiBert
 
-c = Concordancer(PlainTextReader("data/").corpus)
+c = Dispersion(PlainTextReader("data/").corpus)
+
+# c = TextBasedCorpus(PlainTextReader("data/").corpus)
+# c = Concordancer(PlainTextReader("data/").corpus)
+#%%
+from collections import Counter
+
+c.char_dispersion('a', subcorp_idx=None, return_raw=True)
+# c.char_dispersion('a', subcorp_idx)
+subcorp_idx = None
+char = 'a'
+v = Counter((i, j) for i, j, _, _ in c.index.get(char, []))
+# d = c._get_dispersion_data(v, subcorp_idx)
+#stats = { n: func(d) for n, func in c.dispersion_func }
 
 #%%
 # c = TextBasedCorpus(PlainTextReader().corpus)
