@@ -19,13 +19,15 @@ class Dispersion(IndexedCorpus):
         self.num_of_text = 0
         self.num_of_text_in_each_subcorp = [ 0 ] * self.num_of_subcorp
         self._compute_sizes()
+        # Free memory
+        del self.corpus
 
         # Functions for measures of dispersion
         self.dispersion_func = [
+            ('range', Range),
             ('DP', DP), 
             ('DPnorm', DPnorm), 
             ('KLdivergence', KLdivergence), 
-            ('range', Range),
             ('JuillandD', JuillandD), 
             ('RosengrenS', RosengrenS),
         ]
@@ -41,7 +43,7 @@ class Dispersion(IndexedCorpus):
             (i.e., a sequence/generator of :class:`concordancer.ConcordLine`) 
             or :class:`pandas.DataFrame` with a column :code:`m.id` specifying
             the path to a text file (i.e., a dataframe recording the clustering 
-            result of :meth:`senseAnalysis.SenseAnalysis.hierarchical_clustering`).
+            result of :meth:`concordSimil.ConcordSimil.hierarchical_clustering`).
         subcorp_idx : int, optional
             The index of the subcorpus used to derive the data, 
             by default None, which uses the full corpus to derive 
@@ -135,6 +137,7 @@ class Dispersion(IndexedCorpus):
         """
 
         if isinstance(subcorp_idx, int):
+            corp_size = self.subcorp_size[subcorp_idx]
             size = self.num_of_text_in_each_subcorp[subcorp_idx]
             V = [ 0 ] * size
             P = V.copy()
@@ -145,6 +148,7 @@ class Dispersion(IndexedCorpus):
                 Sj = self.text_size[subcorp_idx][j]['s']
                 V[j], P[j], S[j] = Vj, Pj, Sj
         else:
+            corp_size = self.corp_size
             size = self.num_of_text
             V = [ 0 ] * size
             P = V.copy()
@@ -162,7 +166,8 @@ class Dispersion(IndexedCorpus):
                 'v': V,
                 'p': P,
                 's': S,
-                'f': sum(V)
+                'f': sum(V),
+                'corpus_size': corp_size 
         }
 
 
