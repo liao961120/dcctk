@@ -5,10 +5,35 @@ from dcctk.corpus import TextBasedCorpus
 from dcctk.dispersion import Dispersion
 # from dcctk.embeddings import AnchiBert
 
-c = Dispersion(PlainTextReader("data/").corpus)
+# c = Dispersion(PlainTextReader("data/").corpus)
 
 # c = TextBasedCorpus(PlainTextReader("data/").corpus)
-# c = Concordancer(PlainTextReader("data/").corpus)
+c = Concordancer(PlainTextReader("data/").corpus)
+
+#%%
+import cqls 
+
+
+cql = '''
+"君" "子" [ char!="[。，」』]" ]
+'''.strip()
+
+# queries = cqls.parse(
+#             cql, default_attr='char', max_quant=3)
+
+# negative_match = set()
+# keyword = queries[0][-1]
+# chars = keyword['not_match'].get('char', [])
+# for idx in c._union_search(chars):
+#     negative_match.add(idx)
+
+results = list(c.cql_search(cql, left=10, right=10))
+for r in results[:5]: print(r)
+#%%
+for i, char in enumerate(c._search_keyword(keyword)):
+    print(c._get_corp_data(*char))
+    if i == 5: break
+
 #%%
 from collections import Counter
 
