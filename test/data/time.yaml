@@ -30,7 +30,7 @@
   time_range: [1980, 2007]
   label: ASBC
   ord: 8
-"10"
+"10":
   time_range: [2008, 2008]
   label: "Analyzing Dispersion toy data"
   ord: 15
