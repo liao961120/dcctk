@@ -3,9 +3,17 @@ from copy import deepcopy
 
 
 class SenseAnalysis:
+    """Sense distribution based on sense clustering of concordance lines
+    """
+
+    sense_distribution = None
+    sense_distribution_raw = None
+    ts_label_map = []
+    """Timestep meta info
+    """
 
     def __init__(self, CS):
-        """Diachronic sense analysis based on sense clustering with Bert
+        """Initialize sense analysis
 
         Parameters
         ----------
@@ -21,13 +29,18 @@ class SenseAnalysis:
             raise Exception(f'Clustering not performed yet, please run `.hierarchical_clustering()` in {CS} before passing it in.')
 
         # Sense distribution
-        self.sense_distribution = None
-        self.sense_distribution_raw = None
-        self.ts_label_map = None
         self._sense_distribution_across_time()
     
     
     def plot_sense_distribution(self, timelabel:str=None, **kwargs):
+        """Plot distribution of sense clusters across time
+
+        Parameters
+        ----------
+        timelabel : str, optional
+            Key specifying the label to use on the x-axis. Avaliable labels
+            are found in :attr:`SenseAnalysis.ts_label_map`. By default None.
+        """
         ax = self.sense_distribution.plot.bar(**kwargs)
         if timelabel is None:
             ax.set_xticklabels(list(range(len(self.ts_label_map))), rotation=0)

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2. Corpus Input &mdash; dcctk 0.0.32 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Corpus Search &amp; Concordancer" href="concordance.html" />
+    <link rel="prev" title="1. Quick Start" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> dcctk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">1. Quick Start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Corpus Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concordance.html">3. Corpus Search &amp; Concordancer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sense.html">4. Sense Analysis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">dcctk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">2. </span>Corpus Input</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/corpusReader.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="corpus-input">
+<h1><span class="section-number">2. </span>Corpus Input<a class="headerlink" href="#corpus-input" title="Permalink to this headline"></a></h1>
+<p><a class="reference internal" href="#dcctk.corpusReader.PlainTextReader" title="dcctk.corpusReader.PlainTextReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcctk.corpusReader.PlainTextReader</span></code></a> deals with the default plain text
+corpus structure input in <code class="code docutils literal notranslate"><span class="pre">dcctk</span></code>.
+To read in corpus with other structures, you could write your own class or
+function that returnes a corpus object that follows the required structure.
+This required structure can be found below (a corpus with two timesteps, with
+each timestep having three texts in it):</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Required corpus structure</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+   <span class="p">{</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;01&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;m&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;1st timestep&quot;</span><span class="p">,</span> <span class="nt">&quot;ord&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nt">&quot;time_range&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">-1000</span><span class="p">,</span> <span class="mi">-206</span><span class="p">]},</span>
+      <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+              <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;這是第三篇裡的一個句子。&quot;</span><span class="p">,</span> <span class="s2">&quot;這是第二個句子。&quot;</span><span class="p">],</span>
+              <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;01/text3.txt&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;m&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;about&quot;</span><span class="p">:</span> <span class="s2">&quot;Text 3 in 1st timestep&quot;</span><span class="p">}</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+              <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;這是一個句子。&quot;</span><span class="p">,</span> <span class="s2">&quot;這是第二個句子。&quot;</span><span class="p">],</span>
+              <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;01/text1.txt&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;m&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;about&quot;</span><span class="p">:</span> <span class="s2">&quot;Text 1 in 1st timestep&quot;</span><span class="p">}</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+              <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span>
+                  <span class="s2">&quot;這是第二篇裡的一個句子。&quot;</span><span class="p">,</span> <span class="s2">&quot;這是第二個句子。&quot;</span><span class="p">],</span>
+              <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;01/text2.txt&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;m&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;about&quot;</span><span class="p">:</span> <span class="s2">&quot;Text 2 in 1st timestep&quot;</span><span class="p">}</span>
+          <span class="p">}</span>
+      <span class="p">]</span>
+   <span class="p">},</span>
+   <span class="p">{</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;02&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;m&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;2nd timestep&quot;</span><span class="p">,</span> <span class="nt">&quot;ord&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nt">&quot;time_range&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">-205</span><span class="p">,</span> <span class="mi">220</span><span class="p">]},</span>
+      <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+              <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;這是第三篇裡的一個句子。&quot;</span><span class="p">,</span> <span class="s2">&quot;這是第二個句子。&quot;</span><span class="p">],</span>
+              <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;02/text3.txt&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;m&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;about&quot;</span><span class="p">:</span> <span class="s2">&quot;Text 3 in 2nd timestep&quot;</span><span class="p">}</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+              <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;這是一個句子。&quot;</span><span class="p">,</span> <span class="s2">&quot;這是第二個句子。&quot;</span><span class="p">],</span>
+              <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;02/text1.txt&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;m&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;about&quot;</span><span class="p">:</span> <span class="s2">&quot;Text 1 in 2nd timestep&quot;</span><span class="p">}</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+              <span class="nt">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;這是第二篇裡的一個句子。&quot;</span><span class="p">,</span> <span class="s2">&quot;這是第二個句子。&quot;</span><span class="p">],</span>
+              <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;02/text2.txt&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;m&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;about&quot;</span><span class="p">:</span> <span class="s2">&quot;Text 2 in 2nd timestep&quot;</span><span class="p">}</span>
+          <span class="p">}</span>
+      <span class="p">]</span>
+   <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="dcctk.corpusReader.PlainTextReader">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dcctk.corpusReader.</span></span><span class="sig-name descname"><span class="pre">PlainTextReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">dir_path='data/'</span></em>, <em class="sig-param"><span class="pre">ts_meta_filename='time.yaml'</span></em>, <em class="sig-param"><span class="pre">text_meta_filename='text_meta.yaml'</span></em>, <em class="sig-param"><span class="pre">ts_meta_loader=None</span></em>, <em class="sig-param"><span class="pre">text_meta_loader=None</span></em>, <em class="sig-param"><span class="pre">plain_text_reader=&lt;function</span> <span class="pre">read_text_as_sentences&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/corpusReader.html#PlainTextReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.corpusReader.PlainTextReader" title="Permalink to this definition"></a></dt>
+<dd><p>Plain text corpus input handler</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gdown</span> <span class="kn">import</span> <span class="n">cached_download</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dcctk.corpusReader</span> <span class="kn">import</span> <span class="n">PlainTextReader</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/liao961120/dcctk/raw/main/test/minimal_plaintext_corpus.zip&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cached_download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;minimal_plaintext_corpus.zip&quot;</span><span class="p">,</span> <span class="n">postprocess</span><span class="o">=</span><span class="n">gdown</span><span class="o">.</span><span class="n">extractall</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">PlainTextReader</span><span class="p">(</span><span class="s2">&quot;minimal_plaintext_corpus/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">corpus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+
+<span class="go">[{&#39;id&#39;: &#39;01&#39;,</span>
+<span class="go">&#39;m&#39;: {&#39;label&#39;: &#39;1st timestep&#39;, &#39;ord&#39;: 1, &#39;time_range&#39;: [-1000, -206]},</span>
+<span class="go">&#39;text&#39;: [{&#39;c&#39;: [&#39;這是第三篇裡的一個句子。&#39;, &#39;這是第二個句子。&#39;],</span>
+<span class="go">            &#39;id&#39;: &#39;01/text3.txt&#39;,</span>
+<span class="go">            &#39;m&#39;: {&#39;about&#39;: &#39;Text 3 in 1st timestep&#39;}},</span>
+<span class="go">        {&#39;c&#39;: [&#39;這是一個句子。&#39;, &#39;這是第二個句子。&#39;],</span>
+<span class="go">            &#39;id&#39;: &#39;01/text1.txt&#39;,</span>
+<span class="go">            &#39;m&#39;: {&#39;about&#39;: &#39;Text 1 in 1st timestep&#39;}},</span>
+<span class="go">        {&#39;c&#39;: [&#39;這是第二篇裡的一個句子。&#39;, &#39;這是第二個句子。&#39;],</span>
+<span class="go">            &#39;id&#39;: &#39;01/text2.txt&#39;,</span>
+<span class="go">            &#39;m&#39;: {&#39;about&#39;: &#39;Text 2 in 1st timestep&#39;}}]},</span>
+<span class="go">{&#39;id&#39;: &#39;02&#39;,</span>
+<span class="go">&#39;m&#39;: {&#39;label&#39;: &#39;2nd timestep&#39;, &#39;ord&#39;: 2, &#39;time_range&#39;: [-205, 220]},</span>
+<span class="go">&#39;text&#39;: [{&#39;c&#39;: [&#39;這是第三篇裡的一個句子。&#39;, &#39;這是第二個句子。&#39;],</span>
+<span class="go">            &#39;id&#39;: &#39;02/text3.txt&#39;,</span>
+<span class="go">            &#39;m&#39;: {&#39;about&#39;: &#39;Text 3 in 2nd timestep&#39;}},</span>
+<span class="go">        {&#39;c&#39;: [&#39;這是一個句子。&#39;, &#39;這是第二個句子。&#39;],</span>
+<span class="go">            &#39;id&#39;: &#39;02/text1.txt&#39;,</span>
+<span class="go">            &#39;m&#39;: {&#39;about&#39;: &#39;Text 1 in 2nd timestep&#39;}},</span>
+<span class="go">        {&#39;c&#39;: [&#39;這是第二篇裡的一個句子。&#39;, &#39;這是第二個句子。&#39;],</span>
+<span class="go">            &#39;id&#39;: &#39;02/text2.txt&#39;,</span>
+<span class="go">            &#39;m&#39;: {&#39;about&#39;: &#39;Text 2 in 2nd timestep&#39;}}]}]</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="dcctk.corpusReader.PlainTextReader.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">dir_path='data/'</span></em>, <em class="sig-param"><span class="pre">ts_meta_filename='time.yaml'</span></em>, <em class="sig-param"><span class="pre">text_meta_filename='text_meta.yaml'</span></em>, <em class="sig-param"><span class="pre">ts_meta_loader=None</span></em>, <em class="sig-param"><span class="pre">text_meta_loader=None</span></em>, <em class="sig-param"><span class="pre">plain_text_reader=&lt;function</span> <span class="pre">read_text_as_sentences&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/corpusReader.html#PlainTextReader.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.corpusReader.PlainTextReader.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Read in plain text corpus</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>dir_path</strong><span class="classifier">str, optional</span></dt><dd><p>Path to the directory containing the plain text corpus. For the
+directory structure of the plain text corpus, refer to the example
+data in the GitHub <a class="reference external" href="https://github.com/liao961120/dcctk/tree/main/test/data">repo</a>. By default “data/”.</p>
+</dd>
+<dt><strong>ts_meta_filename</strong><span class="classifier">str, optional</span></dt><dd><p>Path to the metadata file specifying the time info of each 
+timestepped subcorpora, by default “time.yaml”.</p>
+</dd>
+<dt><strong>text_meta_filename</strong><span class="classifier">str, optional</span></dt><dd><p>Path to the metadata file specifying info of each corpus text, 
+by default “text_meta.yaml”.</p>
+</dd>
+<dt><strong>ts_meta_loader</strong><span class="classifier">Callable, optional</span></dt><dd><p>Custom function to parse the file specified in 
+<code class="code docutils literal notranslate"><span class="pre">ts_meta_filename</span></code>, by default None.</p>
+</dd>
+<dt><strong>text_meta_loader</strong><span class="classifier">Callable, optional</span></dt><dd><p>Custom function to parse the file specified in 
+<code class="code docutils literal notranslate"><span class="pre">text_meta_filename</span></code>, by default None.</p>
+</dd>
+<dt><strong>plain_text_reader</strong><span class="classifier">Callable, optional</span></dt><dd><p>Function to read a corpus text file as a sequence of sentences, 
+by default <a class="reference internal" href="#dcctk.UtilsTextProcess.read_text_as_sentences" title="dcctk.UtilsTextProcess.read_text_as_sentences"><code class="xref py py-func docutils literal notranslate"><span class="pre">dcctk.UtilsTextProcess.read_text_as_sentences()</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dcctk.corpusReader.PlainTextReader.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#dcctk.corpusReader.PlainTextReader.__weakref__" title="Permalink to this definition"></a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-dcctk.UtilsTextProcess"></span><dl class="py function">
+<dt class="sig sig-object py" id="dcctk.UtilsTextProcess.read_text_as_sentences">
+<span class="sig-prename descclassname"><span class="pre">dcctk.UtilsTextProcess.</span></span><span class="sig-name descname"><span class="pre">read_text_as_sentences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/UtilsTextProcess.html#read_text_as_sentences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.UtilsTextProcess.read_text_as_sentences" title="Permalink to this definition"></a></dt>
+<dd><p>Read text file as a sequency of sentences</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fp</strong><span class="classifier">str</span></dt><dd><p>Path to UTF-8 encoded plain text file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>A string representing a sentence. A sentence
+corresponds to a line in the file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="1. Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="concordance.html" class="btn btn-neutral float-right" title="3. Corpus Search &amp; Concordancer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Yongfu Liao.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

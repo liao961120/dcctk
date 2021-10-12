@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3. Corpus Search &amp; Concordancer &mdash; dcctk 0.0.32 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. Sense Analysis" href="sense.html" />
+    <link rel="prev" title="2. Corpus Input" href="corpusReader.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> dcctk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">1. Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="corpusReader.html">2. Corpus Input</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Corpus Search &amp; Concordancer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sense.html">4. Sense Analysis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">dcctk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">3. </span>Corpus Search &amp; Concordancer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/concordance.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="corpus-search-concordancer">
+<h1><span class="section-number">3. </span>Corpus Search &amp; Concordancer<a class="headerlink" href="#corpus-search-concordancer" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="dcctk.concordancer.Concordancer">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dcctk.concordancer.</span></span><span class="sig-name descname"><span class="pre">Concordancer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#Concordancer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.Concordancer" title="Permalink to this definition"></a></dt>
+<dd><p>Retrive concordance lines from the corpus with Corpus Query Language</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>all_idx_cache</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dcctk.concordancer.Concordancer.cql_search" title="dcctk.concordancer.Concordancer.cql_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cql_search</span></code></a>(cql[, left, right])</p></td>
+<td><p>Search the corpus with Corpus Query Language</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 67%" />
+<col style="width: 33%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>get_meta</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>get_meta_by_path</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>get_text</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>get_texts</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>index_corpus</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>index_path</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>list_files</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="dcctk.concordancer.Concordancer.cql_search">
+<span class="sig-name descname"><span class="pre">cql_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cql</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#Concordancer.cql_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.Concordancer.cql_search" title="Permalink to this definition"></a></dt>
+<dd><p>Search the corpus with Corpus Query Language</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cql</strong><span class="classifier">str</span></dt><dd><p>A CQL query</p>
+</dd>
+<dt><strong>left</strong><span class="classifier">int, optional</span></dt><dd><p>Left context size, by default 5</p>
+</dd>
+<dt><strong>right</strong><span class="classifier">int, optional</span></dt><dd><p>Right context size, by default 5</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><dl>
+<dt>dict</dt><dd><p>A dictionary with the structure:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">tk</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">tk</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+    <span class="s1">&#39;keyword&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">tk</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">tk</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+    <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">tk</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">tk</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+    <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="p">(</span> <span class="o">&lt;</span><span class="nb">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="nb">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="nb">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="nb">int</span><span class="o">&gt;</span> <span class="p">),</span>
+    <span class="s1">&#39;captureGroups&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;verb&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">tk</span><span class="o">&gt;</span><span class="p">],</span>
+        <span class="s1">&#39;noun&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">tk</span><span class="o">&gt;</span><span class="p">]}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;tk&gt;</span></code> is a token (char), represented as a string,</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dcctk.concordancer.ConcordLine">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dcctk.concordancer.</span></span><span class="sig-name descname"><span class="pre">ConcordLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#ConcordLine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine" title="Permalink to this definition"></a></dt>
+<dd><p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dcctk.concordancer.ConcordLine.get_kwic" title="dcctk.concordancer.ConcordLine.get_kwic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_kwic</span></code></a>([return_keyword_idx])</p></td>
+<td><p>Get string representation of the concordance line</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dcctk.concordancer.ConcordLine.get_timestep" title="dcctk.concordancer.ConcordLine.get_timestep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_timestep</span></code></a>([key])</p></td>
+<td><p>Get time step info of the concordance line</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 48%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>to_json</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="dcctk.concordancer.ConcordLine.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#ConcordLine.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize an instance of concordance line</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>cc</strong><span class="classifier">dict</span></dt><dd><p>A dictionary returned by
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">concordancer.Concordancer._kwic_single()</span></code>.
+It has the following stucture:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="s1">&#39;，又喜&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;keyword&#39;</span><span class="p">:</span> <span class="s1">&#39;將軍之去，&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="s1">&#39;計必乘&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">208</span><span class="p">),</span>
+    <span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;03/三國志_蜀書七.txt&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;time_range&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">221</span><span class="p">,</span> <span class="mi">589</span><span class="p">],</span> 
+            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;魏晉南北&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;ord&#39;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;book&#39;</span><span class="p">:</span> <span class="s1">&#39;三國志&#39;</span><span class="p">,</span> <span class="s1">&#39;sec&#39;</span><span class="p">:</span> <span class="s1">&#39;蜀書七&#39;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;captureGroups&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;obj&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;去，&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcctk.concordancer.ConcordLine.get_kwic">
+<span class="sig-name descname"><span class="pre">get_kwic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_keyword_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#ConcordLine.get_kwic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine.get_kwic" title="Permalink to this definition"></a></dt>
+<dd><p>Get string representation of the concordance line</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>return_keyword_idx</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to return the index of the keywords
+in the concordance line, by default True</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>str or tuple</dt><dd><p>If return keyword_idx is True, returns tuple,
+with the second element being the index of the
+keywords (idx_from, idx_to).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dcctk.concordancer.ConcordLine.get_timestep">
+<span class="sig-name descname"><span class="pre">get_timestep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#ConcordLine.get_timestep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine.get_timestep" title="Permalink to this definition"></a></dt>
+<dd><p>Get time step info of the concordance line</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>key</strong><span class="classifier">Callable, optional</span></dt><dd><p>If specified, applied on self.meta.time to return
+time step data. By default None, which uses 
+subcorp_idx as time step information.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Int</dt><dd><p>The time step that the concordance line belongs to.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="corpusReader.html" class="btn btn-neutral float-left" title="2. Corpus Input" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sense.html" class="btn btn-neutral float-right" title="4. Sense Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Yongfu Liao.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

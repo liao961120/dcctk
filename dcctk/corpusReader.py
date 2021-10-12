@@ -4,20 +4,87 @@ from .UtilsTextProcess import *
 
 
 class PlainTextReader:
+    """Plain text corpus input handler
 
-    def __init__(self, dir_path="data/", ts_meta_filename="time.yaml", text_meta_filename="text_meta.yaml", ts_meta_loader=None, text_meta_loader=None, plain_text_reader=read_text_as_sentences):
+    Examples
+    --------
+    
+    .. code-block:: python
+
+        >>> from pprint import pprint
+        >>> from gdown import cached_download
+        >>> from dcctk.corpusReader import PlainTextReader
+
+        >>> url = 'https://github.com/liao961120/dcctk/raw/main/test/minimal_plaintext_corpus.zip'
+        >>> cached_download(url, "minimal_plaintext_corpus.zip", postprocess=gdown.extractall)
+        >>> corpus = PlainTextReader("minimal_plaintext_corpus/").corpus
+        >>> pprint(corpus)
+        
+        [{'id': '01',
+        'm': {'label': '1st timestep', 'ord': 1, 'time_range': [-1000, -206]},
+        'text': [{'c': ['這是第三篇裡的一個句子。', '這是第二個句子。'],
+                    'id': '01/text3.txt',
+                    'm': {'about': 'Text 3 in 1st timestep'}},
+                {'c': ['這是一個句子。', '這是第二個句子。'],
+                    'id': '01/text1.txt',
+                    'm': {'about': 'Text 1 in 1st timestep'}},
+                {'c': ['這是第二篇裡的一個句子。', '這是第二個句子。'],
+                    'id': '01/text2.txt',
+                    'm': {'about': 'Text 2 in 1st timestep'}}]},
+        {'id': '02',
+        'm': {'label': '2nd timestep', 'ord': 2, 'time_range': [-205, 220]},
+        'text': [{'c': ['這是第三篇裡的一個句子。', '這是第二個句子。'],
+                    'id': '02/text3.txt',
+                    'm': {'about': 'Text 3 in 2nd timestep'}},
+                {'c': ['這是一個句子。', '這是第二個句子。'],
+                    'id': '02/text1.txt',
+                    'm': {'about': 'Text 1 in 2nd timestep'}},
+                {'c': ['這是第二篇裡的一個句子。', '這是第二個句子。'],
+                    'id': '02/text2.txt',
+                    'm': {'about': 'Text 2 in 2nd timestep'}}]}]
+    """
+
+    def __init__(self, dir_path="data/", ts_meta_filename="time.yaml", \
+        text_meta_filename="text_meta.yaml", ts_meta_loader=None, 
+        text_meta_loader=None, plain_text_reader=read_text_as_sentences):
+        """Read in plain text corpus
+
+        Parameters
+        ----------
+        dir_path : str, optional
+            Path to the directory containing the plain text corpus. For the
+            directory structure of the plain text corpus, refer to the example
+            data in the GitHub `repo`_. By default "data/".
+
+            .. _repo: https://github.com/liao961120/dcctk/tree/main/test/data
+        ts_meta_filename : str, optional
+            Path to the metadata file specifying the time info of each 
+            timestepped subcorpora, by default "time.yaml".
+        text_meta_filename : str, optional
+            Path to the metadata file specifying info of each corpus text, 
+            by default "text_meta.yaml".
+        ts_meta_loader : Callable, optional
+            Custom function to parse the file specified in 
+            :code:`ts_meta_filename`, by default None.
+        text_meta_loader : Callable, optional
+            Custom function to parse the file specified in 
+            :code:`text_meta_filename`, by default None.
+        plain_text_reader : Callable, optional
+            Function to read a corpus text file as a sequence of sentences, 
+            by default :func:`dcctk.UtilsTextProcess.read_text_as_sentences`.
+        """
         # Attributes
         self.corp_path = Path(dir_path)
         self.corpus = []
         self.text_meta = {}
         self.timestep_meta = {}
         self.plain_text_reader = plain_text_reader
-        self.timestep_meta = self.get_meta(self.corp_path / ts_meta_filename, custom_loader=ts_meta_loader)
-        self.text_meta = self.get_meta(self.corp_path / text_meta_filename, custom_loader=text_meta_loader)
-        self.read_corpus()
+        self.timestep_meta = self._get_meta(self.corp_path / ts_meta_filename, custom_loader=ts_meta_loader)
+        self.text_meta = self._get_meta(self.corp_path / text_meta_filename, custom_loader=text_meta_loader)
+        self._read_corpus()
 
 
-    def read_corpus(self):
+    def _read_corpus(self):
         for dir_ in sorted(self.corp_path.iterdir()):
             if not dir_.is_dir(): continue
             
@@ -33,7 +100,7 @@ class PlainTextReader:
 
             # Read text
             for fp in dir_.glob("*.txt"):
-                text_id, text_meta, text_content = self.read_text(fp)
+                text_id, text_meta, text_content = self._read_text(fp)
                 text = {
                     'id': text_id,
                     'm': text_meta,
@@ -44,7 +111,7 @@ class PlainTextReader:
             self.corpus.append(corpus)
 
 
-    def read_text(self, fp):
+    def _read_text(self, fp):
         meta = {}
         fp_key = f"{fp.parent.stem}/{fp.name}"
         for k, v in self.text_meta.get(fp_key, {}).items():
@@ -53,8 +120,7 @@ class PlainTextReader:
         return fp_key, meta, self.plain_text_reader(fp)
 
 
-
-    def get_meta(self, fp, custom_loader=None):
+    def _get_meta(self, fp, custom_loader=None):
         with open(fp, encoding="utf-8") as f:
             if custom_loader:
                 return custom_loader()
@@ -63,10 +129,3 @@ class PlainTextReader:
                 return yaml.load(f, Loader=yaml.FullLoader)
             elif fp.name.endswith('json'):
                 return json.load(f)
-
-
-
-
-# if __name__ == '__main__':
-#     for sent in read_text_as_sentences("data/01/儀禮_喪服.txt"):
-#         print(sent)

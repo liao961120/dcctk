@@ -6,10 +6,28 @@ from tqdm.auto import trange
 from .UtilsGeneral import stringify_obj, flatten
 from .UtilsStats import cossim
 
-
 class ConcordSimil:
+    """Similarity analysis of concordance lines
+    """
 
-    def __init__(self, concord_lines:list, bert_model, is_traditional=True, token_idx:tuple=None, hover_df:pd.DataFrame=None):
+    def __init__(self, concord_lines, bert_model, is_traditional=True, 
+        token_idx:tuple=None):
+        """Initialize similarity analysis
+
+        Parameters
+        ----------
+        concord_lines : Sequence
+            A sequence of :class:`dcctk.concordancer.ConcordLine`.
+        bert_model : AnchiBert
+            An intialized :class:`dcctk.embeddings.AnchiBert`. Alternatively,
+            one can write a custom class that has a method 
+            :code:`encode_sentence`, as in 
+            :meth:`dcctk.embeddings.AnchiBert.encode_sentence`.
+        is_traditional : bool, optional
+            Whether to use :meth:`opencc.Opencc.convert` to translate tradional
+            Chinese into simplified Chinese, by default True, which uses the
+            :code:`t2s.json` configuration.
+        """
         
         self.model = bert_model
         self.concords = concord_lines
@@ -20,21 +38,19 @@ class ConcordSimil:
         self.clustering = None
 
         # Plotting info
-        self.hover_df = hover_df
-        if hover_df is None:
-            hover_df = []
-            for i, x in enumerate(self.concords):
-                d = {
-                    'left': x.data['left'],
-                    'keyword': x.data['keyword'],
-                    'right': x.data['right'],
-                    'timestep': x.get_timestep(),
-                }
-                for k, v in flatten(x.data['meta'], parent_key='m').items():
-                    d[k] = stringify_obj(v)
-                d['emb_id'] = i
-                hover_df.append(d)
-            self.hover_df = pd.DataFrame(hover_df)
+        hover_df = []
+        for i, x in enumerate(self.concords):
+            d = {
+                'left': x.data['left'],
+                'keyword': x.data['keyword'],
+                'right': x.data['right'],
+                'timestep': x.get_timestep(),
+            }
+            for k, v in flatten(x.data['meta'], parent_key='m').items():
+                d[k] = stringify_obj(v)
+            d['emb_id'] = i
+            hover_df.append(d)
+        self.hover_df = pd.DataFrame(hover_df)
     
 
     def __repr__(self) -> str:
@@ -42,6 +58,8 @@ class ConcordSimil:
 
 
     def hierarchical_clustering(self, threshold=5, criterion='maxclust', standardize_features=True, method='average', metric='cosine', visualize=True):
+        """Hierarchical clustering of concordance lines
+        """
         from scipy.cluster.hierarchy import fcluster
 
         if self.clustering is None:
@@ -61,8 +79,9 @@ class ConcordSimil:
         self.plot_embeddings(interactive=interactive, labels=labels, **keywords)
 
 
-    def hierarchical_clustering_explore(self, method='average', metric='cosine', standardize_features=True, \
-        dendrogram=True, elbow=True, elbow_metrics="distortion calinski_harabasz silhouette", figsize=(23,7)):
+    def hierarchical_clustering_explore(self, method='average', metric='cosine', \
+        standardize_features=True, dendrogram=True, elbow=True,
+        elbow_metrics="distortion calinski_harabasz silhouette", figsize=(23,7)):
         """Perform hierarchical clustering on the embedding space
 
         Parameters
@@ -162,10 +181,10 @@ class ConcordSimil:
             Whether to convert traditional into simplified Chinese
             before feeding the input to AnchiBert, by default True.
             This parameter is passed to 
-            :meth:`embeddings.AnchiBert.encode_sentence`.
+            :meth:`dcctk.embeddings.AnchiBert.encode_sentence`.
         simil_func : Callable, optional
             Function for computing similarity between two vectors,
-            by default :func:`UtilsStats.cossim`. The function 
+            by default :func:`dcctk.UtilsStats.cossim`. The function 
             should take the input vectors as its two arguments and
             returns a float.
 
@@ -200,7 +219,7 @@ class ConcordSimil:
             Whether to convert traditional into simplified Chinese
             before feeding the input to AnchiBert, by default True.
             This parameter is passed to 
-            :meth:`embeddings.AnchiBert.encode_sentence`.
+            :meth:`dcctk.embeddings.AnchiBert.encode_sentence`.
         token_idx : tuple, optional
             A tuple of length 2, specifying the position 
             :code:`(idx_from, idx_to)` of the keywords in

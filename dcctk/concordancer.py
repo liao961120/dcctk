@@ -10,6 +10,8 @@ from .corpus import IndexedCorpus
 
 
 class Concordancer(IndexedCorpus):
+    """Retrive concordance lines from the corpus with Corpus Query Language
+    """
 
     _cql_default_attr = "char"
     _cql_max_quantity = 5
