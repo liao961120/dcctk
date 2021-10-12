@@ -1,0 +1,13 @@
+# Meta data for the files (leave empty if no metadata)
+01/text1.txt:
+  about: Text 1 in 1st timestep
+01/text2.txt:
+  about: Text 2 in 1st timestep
+01/text3.txt:
+  about: Text 3 in 1st timestep
+02/text1.txt:
+  about: Text 1 in 2nd timestep
+02/text2.txt:
+  about: Text 2 in 2nd timestep
+02/text3.txt:
+  about: Text 3 in 2nd timestep

@@ -1,0 +1,9 @@
+# Meta data for time for each timestepped part of corpus
+"01":
+  time_range: [-1000, -206]
+  label: 1st timestep
+  ord: 1
+"02":
+  time_range: [-205, 220]
+  label: 2nd timestep
+  ord: 2
