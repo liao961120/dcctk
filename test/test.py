@@ -3,6 +3,7 @@ from dcctk.corpusReader import PlainTextReader
 from dcctk.concordancer import Concordancer
 from dcctk.corpus import TextBasedCorpus
 from dcctk.dispersion import Dispersion
+# from dcctk.compoConcordancer import CompoConcordancer
 # from dcctk.embeddings import AnchiBert
 
 # c = Dispersion(PlainTextReader("data/").corpus)
@@ -10,14 +11,21 @@ from dcctk.dispersion import Dispersion
 # c = TextBasedCorpus(PlainTextReader("data/").corpus)
 c = Concordancer(PlainTextReader("data/").corpus)
 
-#%%
-import cqls 
-
-
+# %%
 cql = '''
-"君" "子" [ char!="[。，」』]" ]
-'''.strip()
+[ compo="龜" & idc="vert2" & pos="1" ]
+'''
+cql = '''
+[ radical="龜" ] [char="[一-龜]"]
+'''
+cql = '''
+[char="龜"]
+'''
+results = list(c.cql_search(cql))
+results[:5]
+# %%
 
+#%%
 # queries = cqls.parse(
 #             cql, default_attr='char', max_quant=3)
 
