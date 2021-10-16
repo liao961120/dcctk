@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3. Corpus Search &amp; Concordancer &mdash; dcctk 0.0.32 documentation</title>
+  <title>3. Corpus Search &amp; Concordancer &mdash; dcctk 0.0.40 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -73,11 +73,19 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="dcctk.concordancer.Concordancer">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dcctk.concordancer.</span></span><span class="sig-name descname"><span class="pre">Concordancer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#Concordancer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.Concordancer" title="Permalink to this definition"></a></dt>
-<dd><p>Retrive concordance lines from the corpus with Corpus Query Language</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>all_idx_cache</strong></dt><dd></dd>
+<dt><strong>cql_attrs</strong></dt><dd></dd>
+<dt><strong>idcs</strong></dt><dd></dd>
+<dt><strong>lexicon</strong></dt><dd></dd>
+<dt><strong>phon_initials</strong></dt><dd></dd>
+<dt><strong>phon_rhymes</strong></dt><dd></dd>
+<dt><strong>phon_sys</strong></dt><dd></dd>
+<dt><strong>phon_systems</strong></dt><dd></dd>
+<dt><strong>phon_tones</strong></dt><dd></dd>
+<dt><strong>radicals</strong></dt><dd></dd>
 </dl>
 </dd>
 </dl>
@@ -162,7 +170,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dcctk.concordancer.ConcordLine">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dcctk.concordancer.</span></span><span class="sig-name descname"><span class="pre">ConcordLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#ConcordLine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dcctk.concordancer.</span></span><span class="sig-name descname"><span class="pre">ConcordLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancerBase.html#ConcordLine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine" title="Permalink to this definition"></a></dt>
 <dd><p class="rubric">Methods</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -191,7 +199,7 @@
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="dcctk.concordancer.ConcordLine.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#ConcordLine.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancerBase.html#ConcordLine.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine.__init__" title="Permalink to this definition"></a></dt>
 <dd><p>Initialize an instance of concordance line</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -229,7 +237,7 @@ It has the following stucture:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dcctk.concordancer.ConcordLine.get_kwic">
-<span class="sig-name descname"><span class="pre">get_kwic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_keyword_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#ConcordLine.get_kwic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine.get_kwic" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_kwic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_keyword_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancerBase.html#ConcordLine.get_kwic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine.get_kwic" title="Permalink to this definition"></a></dt>
 <dd><p>Get string representation of the concordance line</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -252,7 +260,7 @@ keywords (idx_from, idx_to).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dcctk.concordancer.ConcordLine.get_timestep">
-<span class="sig-name descname"><span class="pre">get_timestep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#ConcordLine.get_timestep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine.get_timestep" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_timestep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancerBase.html#ConcordLine.get_timestep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine.get_timestep" title="Permalink to this definition"></a></dt>
 <dd><p>Get time step info of the concordance line</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

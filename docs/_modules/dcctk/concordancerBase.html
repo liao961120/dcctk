@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dcctk.concordancerBase &mdash; dcctk 0.0.40 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> dcctk
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">1. Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../corpusReader.html">2. Corpus Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../concordance.html">3. Corpus Search &amp; Concordancer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sense.html">4. Sense Analysis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">dcctk</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>dcctk.concordancerBase</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for dcctk.concordancerBase</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">cqls</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">.UtilsConcord</span> <span class="kn">import</span> <span class="n">queryMatchToken</span><span class="p">,</span> <span class="n">match_mode</span>
+<span class="kn">from</span> <span class="nn">.corpus</span> <span class="kn">import</span> <span class="n">IndexedCorpus</span>
+
+
+<span class="k">class</span> <span class="nc">ConcordancerBase</span><span class="p">(</span><span class="n">IndexedCorpus</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Retrive concordance lines from the corpus with Corpus Query Language</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_cql_default_attr</span> <span class="o">=</span> <span class="s2">&quot;char&quot;</span>
+    <span class="n">_cql_max_quantity</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">all_idx_cache</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">cql_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cql</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Search the corpus with Corpus Query Language</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cql : str</span>
+<span class="sd">            A CQL query</span>
+<span class="sd">        left : int, optional</span>
+<span class="sd">            Left context size, by default 5</span>
+<span class="sd">        right : int, optional</span>
+<span class="sd">            Right context size, by default 5</span>
+
+<span class="sd">        Yields</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary with the structure:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                {</span>
+<span class="sd">                    &#39;left&#39;: [&lt;tk&gt;, &lt;tk&gt;, ...],</span>
+<span class="sd">                    &#39;keyword&#39;: [&lt;tk&gt;, &lt;tk&gt;, ...],</span>
+<span class="sd">                    &#39;right&#39;: [&lt;tk&gt;, &lt;tk&gt;, ...],</span>
+<span class="sd">                    &#39;position&#39;: ( &lt;int&gt;, &lt;int&gt;, &lt;int&gt;, &lt;int&gt; ),</span>
+<span class="sd">                    &#39;captureGroups&#39;: {</span>
+<span class="sd">                        &#39;verb&#39;: [&lt;tk&gt;],</span>
+<span class="sd">                        &#39;noun&#39;: [&lt;tk&gt;]}</span>
+<span class="sd">                }</span>
+
+<span class="sd">            where ``&lt;tk&gt;`` is a token (char), represented as a string,</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">queries</span> <span class="o">=</span> <span class="n">cqls</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+            <span class="n">cql</span><span class="p">,</span> <span class="n">default_attr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cql_default_attr</span><span class="p">,</span> <span class="n">max_quant</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cql_max_quantity</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kwic</span><span class="p">(</span><span class="n">keywords</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">right</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">_kwic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keywords</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="c1"># Get concordance from corpus</span>
+        <span class="n">search_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_keywords</span><span class="p">(</span><span class="n">keywords</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">search_results</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">subcorp_idx</span><span class="p">,</span> <span class="n">text_idx</span><span class="p">,</span> <span class="n">sent_idx</span><span class="p">,</span> <span class="n">tk_idx</span> <span class="ow">in</span> <span class="n">search_results</span><span class="p">:</span>
+            <span class="n">cc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kwic_single</span><span class="p">(</span><span class="n">subcorp_idx</span><span class="p">,</span> <span class="n">text_idx</span><span class="p">,</span> <span class="n">sent_idx</span><span class="p">,</span> <span class="n">tk_idx</span><span class="p">,</span> <span class="n">tk_len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span>
+                <span class="n">keywords</span><span class="p">),</span> <span class="n">left</span><span class="o">=</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">right</span><span class="p">,</span> <span class="n">keywords</span><span class="o">=</span><span class="n">keywords</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">ConcordLine</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_kwic_single</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="p">,</span> <span class="n">text_idx</span><span class="p">,</span> <span class="n">sent_idx</span><span class="p">,</span> <span class="n">tk_idx</span><span class="p">,</span> <span class="n">tk_len</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">keywords</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Flatten doc sentences to a list of tokens</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_corp_data</span><span class="p">(</span><span class="n">subcorp_idx</span><span class="p">,</span> <span class="n">text_idx</span><span class="p">)</span>
+        <span class="n">text</span><span class="p">,</span> <span class="n">keyword_idx</span> <span class="o">=</span> <span class="n">flatten_doc_to_sent</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">])</span>
+
+        <span class="n">tk_start_idx</span> <span class="o">=</span> <span class="n">keyword_idx</span><span class="p">(</span><span class="n">sent_idx</span><span class="p">,</span> <span class="n">tk_idx</span><span class="p">)</span>
+        <span class="n">tk_end_idx</span> <span class="o">=</span> <span class="n">tk_start_idx</span> <span class="o">+</span> <span class="n">tk_len</span>
+        <span class="n">start_idx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">tk_start_idx</span> <span class="o">-</span> <span class="n">left</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">end_idx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">tk_end_idx</span> <span class="o">+</span> <span class="n">right</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+
+        <span class="c1"># Get CQL labeled token positions</span>
+        <span class="n">captureGroups</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">keywords</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;__label__&#39;</span> <span class="ow">in</span> <span class="n">keyword</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">lab</span> <span class="ow">in</span> <span class="n">keyword</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__label__&#39;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">lab</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">captureGroups</span><span class="p">:</span>
+                        <span class="n">captureGroups</span><span class="p">[</span><span class="n">lab</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+                        <span class="p">}</span>
+                    <span class="n">tk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_corp_data</span><span class="p">(</span>
+                        <span class="n">subcorp_idx</span><span class="p">,</span> <span class="n">text_idx</span><span class="p">,</span> <span class="n">sent_idx</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">tk_idx</span><span class="p">)</span>
+                    <span class="n">captureGroups</span><span class="p">[</span><span class="n">lab</span><span class="p">][</span><span class="s1">&#39;s&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">tk</span>
+                    <span class="n">captureGroups</span><span class="p">[</span><span class="n">lab</span><span class="p">][</span><span class="s1">&#39;i&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">[</span><span class="n">start_idx</span><span class="p">:</span><span class="n">tk_start_idx</span><span class="p">],</span>
+            <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">[</span><span class="n">tk_start_idx</span><span class="p">:</span><span class="n">tk_end_idx</span><span class="p">],</span>
+            <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">[</span><span class="n">tk_end_idx</span><span class="p">:</span><span class="n">end_idx</span><span class="p">],</span>
+            <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">subcorp_idx</span><span class="p">,</span> <span class="n">text_idx</span><span class="p">,</span> <span class="n">sent_idx</span><span class="p">,</span> <span class="n">tk_idx</span><span class="p">),</span>
+            <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">subcorp_idx</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">][</span><span class="n">text_idx</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_meta</span><span class="p">(</span><span class="n">subcorp_idx</span><span class="p">,</span> <span class="n">include_id</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_meta</span><span class="p">(</span><span class="n">subcorp_idx</span><span class="p">,</span> <span class="n">text_idx</span><span class="p">,</span> <span class="n">include_id</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;captureGroups&quot;</span><span class="p">:</span> <span class="n">captureGroups</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_search_keywords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keywords</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1">#########################################################</span>
+        <span class="c1"># Find keywords with the least number of matching results</span>
+        <span class="c1">#########################################################</span>
+        <span class="n">best_search_loc</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">keywords</span><span class="p">):</span>
+            <span class="c1"># Skip regex searches</span>
+            <span class="n">has_regex</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">chars</span> <span class="o">=</span> <span class="n">keyword</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;match&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cql_default_attr</span><span class="p">,</span> <span class="p">[])</span> <span class="o">+</span> \
+                <span class="n">keyword</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;not_match&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cql_default_attr</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">chars</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">match_mode</span><span class="p">(</span><span class="n">char</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;regex&#39;</span><span class="p">:</span>
+                    <span class="n">has_regex</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">has_regex</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">continue</span>
+
+            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_keyword</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span>
+            <span class="n">num_of_matched</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">num_of_matched</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">elif</span> <span class="n">num_of_matched</span> <span class="o">&lt;</span> <span class="n">best_search_loc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">best_search_loc</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">num_of_matched</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">best_search_loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">results</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_keyword</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span>
+
+        <span class="c1">#######################################</span>
+        <span class="c1"># Check other tokens around search seed</span>
+        <span class="c1">#######################################</span>
+        <span class="n">keyword_anchor</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;length&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">keywords</span><span class="p">),</span>
+            <span class="s1">&#39;seed_idx&#39;</span><span class="p">:</span> <span class="n">best_search_loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Check all possible matching keywords</span>
+        <span class="n">matched_results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="c1"># Get all possible matching keywords from corpus</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_keywords</span><span class="p">(</span><span class="n">keyword_anchor</span><span class="p">,</span> <span class="o">*</span><span class="n">idx</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">keywords</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="c1"># Check every token in keywords</span>
+            <span class="n">matched_num</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">w_k</span><span class="p">,</span> <span class="n">w_c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">keywords</span><span class="p">,</span> <span class="n">candidates</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">queryMatchToken</span><span class="p">(</span><span class="n">queryTerm</span><span class="o">=</span><span class="n">w_k</span><span class="p">,</span> <span class="n">corpToken</span><span class="o">=</span><span class="n">w_c</span><span class="p">):</span>
+                    <span class="n">matched_num</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">matched_num</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">keywords</span><span class="p">):</span>
+                <span class="n">first_keyword_idx</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">keyword_anchor</span><span class="p">[</span><span class="s1">&#39;seed_idx&#39;</span><span class="p">]</span>
+                <span class="n">matched_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">first_keyword_idx</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">matched_results</span>
+
+    <span class="k">def</span> <span class="nf">_search_keyword</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keyword</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Global search of a keyword to find candidates of correct kwic instances</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        keyword : dict</span>
+<span class="sd">            A dictionary specifying the matching conditions of</span>
+<span class="sd">            the keyword:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                {</span>
+<span class="sd">                    &#39;match&#39;: {</span>
+<span class="sd">                        &#39;word&#39;: [&#39;打&#39;],</span>
+<span class="sd">                        &#39;pos&#39;: [&#39;V.*&#39;]</span>
+<span class="sd">                    }, </span>
+<span class="sd">                    &#39;not_match&#39;: {</span>
+<span class="sd">                        &#39;pos&#39;: [&#39;VH.*&#39;]</span>
+<span class="sd">                    },</span>
+<span class="sd">                    &#39;__label__&#39;: [&#39;l1&#39;]  #labels to attached to search results  </span>
+<span class="sd">                }</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            A list of matching indicies</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">positive_match</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">negative_match</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="c1"># Deal with empty token {}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;match&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keyword</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;not_match&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keyword</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_idx_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">all_idx_cache</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_idx_cache</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">########################################</span>
+            <span class="c1">##########   POSITIVE MATCH   ##########</span>
+            <span class="c1">########################################</span>
+            <span class="n">matching_idicies</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+            <span class="n">chars</span> <span class="o">=</span> <span class="n">keyword</span><span class="p">[</span><span class="s1">&#39;match&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cql_default_attr</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_intersect_search</span><span class="p">(</span><span class="n">chars</span><span class="p">):</span>
+                <span class="n">matching_idicies</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">idx</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+
+            <span class="c1"># Get indicies that matched all given tags</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">matching_idicies</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">keyword</span><span class="p">[</span><span class="s1">&#39;match&#39;</span><span class="p">]):</span>
+                    <span class="n">positive_match</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+            <span class="c1"># Special case: match is empty</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keyword</span><span class="p">[</span><span class="s1">&#39;match&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_idx_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">all_idx_cache</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+                <span class="n">positive_match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_idx_cache</span>
+
+            <span class="c1">########################################</span>
+            <span class="c1">##########   NEGATIVE MATCH   ##########</span>
+            <span class="c1">########################################</span>
+            <span class="n">chars</span> <span class="o">=</span> <span class="n">keyword</span><span class="p">[</span><span class="s1">&#39;not_match&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cql_default_attr</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_union_search</span><span class="p">(</span><span class="n">chars</span><span class="p">):</span>
+                <span class="n">negative_match</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+            <span class="c1">########################################</span>
+            <span class="c1">#####  POSITIVE - NEGATIVE MATCH  ######</span>
+            <span class="c1">########################################</span>
+            <span class="n">positive_match</span><span class="o">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">negative_match</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">positive_match</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2"> not found in corpus&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">positive_match</span>
+
+
+    <span class="k">def</span> <span class="nf">_union_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Given candidates values, return from corpus the </span>
+<span class="sd">        position of tokens matching any of the values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        values : list</span>
+<span class="sd">            A list of values to compare with</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">matched_indicies</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+            <span class="n">value</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">match_mode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;literal&quot;</span><span class="p">:</span>
+                <span class="n">matched_indicies</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">char</span><span class="p">):</span>
+                        <span class="n">matched_indicies</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">char</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">matched_indicies</span>
+
+    <span class="k">def</span> <span class="nf">_intersect_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Given candidates values, return from corpus the</span>
+<span class="sd">        position of tokens matching all values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        values : list</span>
+<span class="sd">            A list of values to compare with</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get intersections of all values</span>
+        <span class="n">match_count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+            <span class="n">value</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">match_mode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;literal&quot;</span><span class="p">:</span>
+                <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">char</span><span class="p">):</span>
+                        <span class="n">indices</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">char</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+                <span class="n">match_count</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">idx</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+
+        <span class="c1"># Filter idicies that match all values given</span>
+        <span class="n">intersect_match</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">match_count</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+                <span class="n">intersect_match</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">intersect_match</span>
+
+    <span class="k">def</span> <span class="nf">_get_keywords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_anchor</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="p">,</span> <span class="n">doc_idx</span><span class="p">,</span> <span class="n">sent_idx</span><span class="p">,</span> <span class="n">tk_idx</span><span class="p">):</span>
+        <span class="n">sent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_corp_data</span><span class="p">(</span><span class="n">subcorp_idx</span><span class="p">,</span> <span class="n">doc_idx</span><span class="p">,</span> <span class="n">sent_idx</span><span class="p">)</span>
+        <span class="n">start_idx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tk_idx</span> <span class="o">-</span> <span class="n">search_anchor</span><span class="p">[</span><span class="s1">&#39;seed_idx&#39;</span><span class="p">])</span>
+        <span class="n">end_idx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start_idx</span> <span class="o">+</span> <span class="n">search_anchor</span><span class="p">[</span><span class="s1">&#39;length&#39;</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">sent</span><span class="p">[</span><span class="n">start_idx</span><span class="p">:</span><span class="n">end_idx</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_get_corp_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="p">,</span> <span class="n">doc_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sent_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tk_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get corpus data by position</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">doc_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">subcorp_idx</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">sent_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">subcorp_idx</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">][</span><span class="n">doc_idx</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">tk_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">subcorp_idx</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">][</span><span class="n">doc_idx</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">][</span><span class="n">sent_idx</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">subcorp_idx</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">][</span><span class="n">doc_idx</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">][</span><span class="n">sent_idx</span><span class="p">][</span><span class="n">tk_idx</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ConcordLine"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.ConcordLine">[docs]</a><span class="k">class</span> <span class="nc">ConcordLine</span><span class="p">:</span>
+
+<div class="viewcode-block" id="ConcordLine.__init__"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.ConcordLine.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize an instance of concordance line</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cc : dict</span>
+<span class="sd">            A dictionary returned by</span>
+<span class="sd">            :meth:`concordancer.Concordancer._kwic_single`.</span>
+<span class="sd">            It has the following stucture:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                {</span>
+<span class="sd">                    &#39;left&#39;: &#39;，又喜&#39;,</span>
+<span class="sd">                    &#39;keyword&#39;: &#39;將軍之去，&#39;,</span>
+<span class="sd">                    &#39;right&#39;: &#39;計必乘&#39;,</span>
+<span class="sd">                    &#39;position&#39;: (2, 55, 5, 208),</span>
+<span class="sd">                    &#39;meta&#39;: {</span>
+<span class="sd">                        &#39;id&#39;: &#39;03/三國志_蜀書七.txt&#39;,</span>
+<span class="sd">                        &#39;time&#39;: {</span>
+<span class="sd">                            &#39;time_range&#39;: [221, 589], </span>
+<span class="sd">                            &#39;label&#39;: &#39;魏晉南北&#39;, </span>
+<span class="sd">                            &#39;ord&#39;: 3</span>
+<span class="sd">                        },</span>
+<span class="sd">                        &#39;text&#39;: {</span>
+<span class="sd">                            &#39;book&#39;: &#39;三國志&#39;, &#39;sec&#39;: &#39;蜀書七&#39;</span>
+<span class="sd">                        }</span>
+<span class="sd">                    },</span>
+<span class="sd">                    &#39;captureGroups&#39;: {</span>
+<span class="sd">                        &#39;obj&#39;: {&#39;s&#39;: &#39;去，&#39;, &#39;i&#39;: [3, 4]}</span>
+<span class="sd">                    }</span>
+<span class="sd">                }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">cc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="n">obj</span><span class="p">(</span><span class="o">**</span><span class="n">cc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;meta&#39;</span><span class="p">))</span></div>
+    
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;keyword&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span>
+        <span class="n">cc</span> <span class="o">=</span> <span class="s1">&#39;&lt;Concord &#39;</span> <span class="o">+</span> <span class="n">l</span> <span class="o">+</span> <span class="s1">&#39;{&#39;</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span> <span class="o">+</span> <span class="n">r</span> <span class="o">+</span> <span class="s1">&#39;&gt;&#39;</span>
+        <span class="k">return</span> <span class="n">cc</span>
+
+
+<div class="viewcode-block" id="ConcordLine.get_kwic"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.ConcordLine.get_kwic">[docs]</a>    <span class="k">def</span> <span class="nf">get_kwic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_keyword_idx</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get string representation of the concordance line</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        return_keyword_idx : bool, optional</span>
+<span class="sd">            Whether to return the index of the keywords</span>
+<span class="sd">            in the concordance line, by default True</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str or tuple</span>
+<span class="sd">            If return keyword_idx is True, returns tuple,</span>
+<span class="sd">            with the second element being the index of the</span>
+<span class="sd">            keywords (idx_from, idx_to).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">l</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;keyword&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">l</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="n">r</span>
+        <span class="k">if</span> <span class="n">return_keyword_idx</span><span class="p">:</span>
+            <span class="n">i_fr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+            <span class="n">i_to</span> <span class="o">=</span> <span class="n">i_fr</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="n">s</span><span class="p">,</span> <span class="p">(</span><span class="n">i_fr</span><span class="p">,</span> <span class="n">i_to</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>        </div>
+
+
+<div class="viewcode-block" id="ConcordLine.get_timestep"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.ConcordLine.get_timestep">[docs]</a>    <span class="k">def</span> <span class="nf">get_timestep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span><span class="n">Callable</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get time step info of the concordance line</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : Callable, optional</span>
+<span class="sd">            If specified, applied on self.meta.time to return</span>
+<span class="sd">            time step data. By default None, which uses </span>
+<span class="sd">            subcorp_idx as time step information.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Int</span>
+<span class="sd">            The time step that the concordance line belongs to.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;position&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="n">ensure_ascii</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">)</span></div>
+
+
+
+<span class="k">class</span> <span class="nc">obj</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">entries</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+<span class="c1">##################</span>
+<span class="c1"># Helper functions</span>
+<span class="c1">##################</span>
+<span class="k">def</span> <span class="nf">flatten_doc_to_sent</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">sent_lengths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">:</span>
+        <span class="n">sent_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">))</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="n">sent</span>
+
+    <span class="k">def</span> <span class="nf">keyword_idx</span><span class="p">(</span><span class="n">sent_idx</span><span class="p">,</span> <span class="n">tk_idx</span><span class="p">):</span>
+        <span class="k">nonlocal</span> <span class="n">sent_lengths</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sent_idx</span><span class="p">):</span>
+            <span class="n">tk_idx</span> <span class="o">+=</span> <span class="n">sent_lengths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">tk_idx</span>
+
+    <span class="k">return</span> <span class="n">text</span><span class="p">,</span> <span class="n">keyword_idx</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Yongfu Liao.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
