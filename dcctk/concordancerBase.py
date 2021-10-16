@@ -9,7 +9,7 @@ from .UtilsConcord import queryMatchToken, match_mode
 from .corpus import IndexedCorpus
 
 
-class Concordancer(IndexedCorpus):
+class ConcordancerBase(IndexedCorpus):
     """Retrive concordance lines from the corpus with Corpus Query Language
     """
 
