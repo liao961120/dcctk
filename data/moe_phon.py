@@ -34,4 +34,4 @@ for i, x in enumerate(d):
 
 
 with open('moe_char_phon.json', "w", encoding="utf-8") as f:
-    json.dump(phon, f, ensure_ascii=False, indent=True)
+    json.dump(phon, f, ensure_ascii=False, separators=(',', ':'))
