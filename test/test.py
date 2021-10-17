@@ -11,7 +11,7 @@ from dcctk.dispersion import Dispersion
 # c = TextBasedCorpus(PlainTextReader("data/").corpus)
 c = Concordancer(PlainTextReader("data/").corpus)
 
-# %%
+#%%
 cql = '''
 [ compo="龜" & idc="vert2" & pos="1" ]
 '''
@@ -21,9 +21,50 @@ cql = '''
 cql = '''
 [char="龜"]
 '''
+cql = '''
+[phon="ㄍㄨㄟ" & tone="2"]
+'''
+cql = '''
+[phon=".ㄨㄥ$" & tone="2"]
+'''
+cql = '''
+[phon="^p" & tone="2" & tp="pinyin"] [phon="^ㄆ"]
+'''
+# cql = '''
+# [phon="^pʰ" & tp="ipa"] [phon="^pʰ" & tp="ipa"] [ compo="亻" & idc="horz2" & pos="0" ]
+# '''
+cql = '''
+[ compo="龜" & idc="vert2" & pos="1" ]
+'''
 results = list(c.cql_search(cql))
 results[:5]
+
+
+
 # %%
+cql = '''
+[ compo="龜" & idc="vert2" & pos="1" ]
+'''
+for i in range(1000):
+    results = list(c.cql_search(cql))
+
+# use cache(1000): 1.5, 1.8, 1.1
+
+# use cache(10): 5.7, 5.7, 6.7, 6.4
+# no cache(10): 5.4, 5.4, 5.4, 5.5
+# no cache(50): 29.9, 27.9, 30.9
+# use cache(50): 28.3, 28.6, 29.3
+
+
+
+
+
+
+
+
+
+
+
 
 #%%
 # queries = cqls.parse(

@@ -25,7 +25,10 @@ setup(name='dcctk',
       license='MIT',
       packages=['dcctk'],
       install_requires=['scikit-learn', 'scipy', 'gdown>=3.10.2', 'pyyaml', 'cqls', 'tqdm'],
-      dependency_links=['https://github.com/liao961120/CompoTree/tarball/main'],  #CompoTree
+      dependency_links=[
+            'https://github.com/liao961120/CompoTree/tarball/main',
+            'https://github.com/liao961120/hanziPhon/tarball/main',
+      ],  
       extras_require=EXTRAS_REQUIRE,
       # tests_require=['deepdiff'],
       zip_safe=False)

@@ -12,7 +12,6 @@ from .UtilsSubchar import all_plain_cql, has_cql_match_type, is_subchar
 class Concordancer(ConcordancerBase):
     
     lexicon = None
-    phon_sys = None
 
     def cql_search(self, cql: str, left=5, right=5):
         queries = cqls.parse(cql, default_attr=self._cql_default_attr, \
@@ -44,11 +43,10 @@ class Concordancer(ConcordancerBase):
             
             # Cond2: no plain char match (compo as anchor)
             else:
-
                 subchar_idx = [i for i, tk in enumerate(query) if is_subchar(tk)]
                 tk0 = query[subchar_idx[0]]
 
-                matched_chars = find_compo(tk0, self.lexicon)
+                matched_chars = find_compo(tk0, self.lexicon, self.__hash__())
 
                 len_query = len(query)
                 keyword_anchor = {
@@ -77,33 +75,24 @@ class Concordancer(ConcordancerBase):
     
 
     @property
-    def idcs(self):
+    def chr_idcs(self):
         return { x.name: x.value for x in IDC }
 
     @property
-    def radicals(self):
+    def chr_radicals(self):
         if self.lexicon is None:
             load_lexicon(self.index.keys())
         return get_radicals(self.lexicon)
         
     @property
-    def phon_initials(self):
-        # based on self.phon_sys
-        return []
-    
-    @property
-    def phon_rhymes(self):
-        # based on self.phon_sys
-        return []
-    
-    @property
-    def phon_tones(self):
-        # based on self.phon_sys
-        return []
-    
-    @property
-    def phon_systems(self):
-        return []
+    def chr_phonetic_systems(self):
+        return {
+            'moe': {
+                'phonetic_repr': 'bpm pinyin ipa'.split(),
+                'tone': list('12345'),
+                'src': 'https://github.com/g0v/moedict-data',
+            }
+        }
 
     @property
     def cql_attrs(self):
@@ -111,22 +100,7 @@ class Concordancer(ConcordancerBase):
             "Default": ['char'],
             "CharComponent": ['compo', 'max_depth', 'idc', 'pos'],
             "CharRadical": ['radical'],
-            "CharPhonetic": ["init", "rhym", "tone", "sys"]
+            "CharPhonetic": ["phon", "tone", "sys"]
         }
 
-
-# from dcctk.corpusReader import PlainTextReader
-# c = SubCharConcordancer(PlainTextReader("data/").corpus)
-# # %%
-# cql = '''
-# [ compo="女" & idc="horz2" & pos="0" ]{2}
-# '''
-# cql = '''
-# [ radical="龜" ] [char="[一-龜]"]
-# '''
-# cql = '''
-# [char="龜"]
-# '''
-# results = list(c.cql_search(cql))
-# results[:5]
 # %%
