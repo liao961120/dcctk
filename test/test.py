@@ -1,8 +1,9 @@
 #%%
 from dcctk.corpusReader import PlainTextReader
 from dcctk.concordancer import Concordancer
-from dcctk.corpus import TextBasedCorpus
+from dcctk.corpus import IndexedCorpus
 from dcctk.dispersion import Dispersion
+from dcctk.compoAnalysis import CompoAnalysis
 # from dcctk.compoConcordancer import CompoConcordancer
 # from dcctk.embeddings import AnchiBert
 
@@ -10,7 +11,11 @@ from dcctk.dispersion import Dispersion
 
 # c = TextBasedCorpus(PlainTextReader("data/").corpus)
 c = Concordancer(PlainTextReader("data/").corpus)
+c2 = CompoAnalysis(c)
 
+c2.freq_distr(tp="chr")
+c2.freq_distr(tp="idc")
+c2.freq_distr(tp="rad")
 #%%
 cql = '''
 [ compo="龜" & idc="vert2" & pos="1" ]
@@ -33,9 +38,9 @@ cql = '''
 # cql = '''
 # [phon="^pʰ" & tp="ipa"] [phon="^pʰ" & tp="ipa"] [ compo="亻" & idc="horz2" & pos="0" ]
 # '''
-cql = '''
-[ compo="龜" & idc="vert2" & pos="1" ]
-'''
+# cql = '''
+# [ compo="龜" & idc="vert2" & pos="1" ]
+# '''
 results = list(c.cql_search(cql))
 results[:5]
 
