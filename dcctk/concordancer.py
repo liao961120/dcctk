@@ -54,7 +54,7 @@ class Concordancer(ConcordancerBase):
                     'seed_idx': subchar_idx[0]
                 }
 
-                for idx in chain(*(self.index[c] for c in matched_chars)):
+                for idx in chain.from_iterable(self.index[c] for c in matched_chars):
                     candidates = self._get_keywords(keyword_anchor, *idx)
                     if len(candidates) != len_query: continue
                     # Check every token in keywords
