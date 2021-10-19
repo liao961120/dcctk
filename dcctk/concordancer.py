@@ -81,7 +81,7 @@ class Concordancer(ConcordancerBase):
     @property
     def chr_radicals(self):
         if self.lexicon is None:
-            load_lexicon(self.index.keys())
+            self.lexicon = load_lexicon(self.index.keys())
         return get_radicals(self.lexicon)
         
     @property
