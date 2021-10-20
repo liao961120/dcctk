@@ -91,7 +91,8 @@ class CompoAnalysis:
 
 
 
-    def freq_distr(self, subcorp_idx=None, text_idx=None, tp="idc"):
+    def freq_distr(self, subcorp_idx=None, text_idx=None, tp="idc", 
+                   compo=None, idc=None, pos=-1, radical=None):
         """Frequency distribution of character (component)
 
         Parameters
@@ -103,8 +104,8 @@ class CompoAnalysis:
             whole subcorpus.
         tp : str, optional
             One of :code:`chr` (Character), :code:`idc` 
-            (Ideographic Description Characters), and :code:`rad` (Radical), 
-            by default :code:`idc`
+            (Ideographic Description Characters), :code:`rad` (Radical), 
+            and None, by default :code:`idc`
 
         Returns
         -------
@@ -112,7 +113,7 @@ class CompoAnalysis:
             A freqeuncy distribution.
         """
         # Use cache
-        k = (subcorp_idx, text_idx, tp)
+        k = (subcorp_idx, text_idx, tp, compo, idc, pos, radical)
         if k in self.fq_distr_cache: return self.fq_distr_cache[k]
 
         # Character frequency distribution
@@ -121,15 +122,26 @@ class CompoAnalysis:
             return self.fq_distr_cache[k]
         
         # Character component frequency distribution
-        fq_compo = Counter()
         fq_ch = self._freq_distr_chr(subcorp_idx, text_idx)
-        for ch, fq in fq_ch.items():
-            k = "noChrData"
-            if ch in self.cc_map:
-                k = self.cc_map[ch].get(tp, "noCompoData")
-            fq_compo.update({k: fq})
-        self.fq_distr_cache[k] = fq_compo
-        return fq_compo
+        if tp == "idc" or tp == "rad":
+            fq_compo = Counter()
+            for ch, fq in fq_ch.items():
+                k = "noChrData"
+                if ch in self.cc_map:
+                    k = self.cc_map[ch].get(tp, "noCompoData")
+                fq_compo.update({k: fq})
+            self.fq_distr_cache[k] = fq_compo
+            return fq_compo
+        
+        # Token distribution within a radical/component
+        if radical:
+            chars = self.rad_map.get(radical, set())
+            chars.intersection_update(fq_ch.keys())
+            return Counter({ch:fq for ch, fq in fq_ch.items() if ch in chars})
+        if compo:
+            chars = self._component_search(compo, idc, pos)
+            chars.intersection_update(fq_ch.keys())
+            return Counter({ch:fq for ch, fq in fq_ch.items() if ch in chars})
 
 
     def _freq_distr_chr(self, subcorp_idx:int=None, text_idx:int=None):

@@ -52,6 +52,17 @@ for i, r in enumerate(c.cql_search(cql)):
 
 #%%
 c2 = CompoAnalysis(c)
+
+#%%
+c2.freq_distr(tp="chr")
+#%%
+c2.freq_distr(tp="idc")
+#%%
+c2.freq_distr(tp="rad")
+#%%
+c2.freq_distr(tp=None, radical="广")
+#%%
+c2.freq_distr(tp=None, compo="水", idc="vert2", pos=-1)
 #%%
 c2.productivity(radical="广", subcorp_idx=2, text_idx=1)
 #%%
