@@ -6,7 +6,7 @@ with open("README.md", encoding="utf-8") as f:
 
 
 with open("VERSION") as f:
-      v = int(f.read().strip()) + 1
+      v = int(f.read().strip())
 
 EXTRAS_REQUIRE = {
       'sense': ['transformers', 'torch', 'opencc', 'umap-learn', 'yellowbrick>=1.3'],
@@ -32,7 +32,3 @@ setup(name='dcctk',
       extras_require=EXTRAS_REQUIRE,
       # tests_require=['deepdiff'],
       zip_safe=False)
-
-
-with open("VERSION", "w") as f:
-      f.write(str(v))
