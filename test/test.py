@@ -11,11 +11,11 @@ from dcctk.compoAnalysis import CompoAnalysis
 
 # c = TextBasedCorpus(PlainTextReader("data/").corpus)
 c = Concordancer(PlainTextReader("data/").corpus)
-c2 = CompoAnalysis(c)
+# c2 = CompoAnalysis(c)
 
-c2.freq_distr(tp="chr")
-c2.freq_distr(tp="idc")
-c2.freq_distr(tp="rad")
+# c2.freq_distr(tp="chr")
+# c2.freq_distr(tp="idc")
+# c2.freq_distr(tp="rad")
 #%%
 cql = '''
 [ compo="龜" & idc="vert2" & pos="1" ]
@@ -41,31 +41,29 @@ cql = '''
 # cql = '''
 # [ compo="龜" & idc="vert2" & pos="1" ]
 # '''
-results = list(c.cql_search(cql))
-results[:5]
-
-
-
-# %%
 cql = '''
-[ compo="龜" & idc="vert2" & pos="1" ]
+[idc="encl"] [idc="encl"]
 '''
-for i in range(1000):
-    results = list(c.cql_search(cql))
+for i, r in enumerate(c.cql_search(cql)):
+    if i == 10: break
+    print(r)
+# results = list(c.cql_search(cql))
+# results[:5]
 
-# use cache(1000): 1.5, 1.8, 1.1
-
-# use cache(10): 5.7, 5.7, 6.7, 6.4
-# no cache(10): 5.4, 5.4, 5.4, 5.5
-# no cache(50): 29.9, 27.9, 30.9
-# use cache(50): 28.3, 28.6, 29.3
-
-
-
-
-
-
-
+#%%
+c2 = CompoAnalysis(c)
+#%%
+c2.productivity(radical="广", subcorp_idx=2, text_idx=1)
+#%%
+c2.productivity(compo="虫", idc="horz2", pos=0)
+#%%
+from CompoTree import IDC
+for idc in IDC:
+    p = c2.productivity(idc=idc.name, subcorp_idx=2)
+    print(idc.name, idc.value)
+    print(p['productivity'])
+    print()
+    
 
 
 
