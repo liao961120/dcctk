@@ -8,3 +8,4 @@ AnchiBERT
 _build
 moe.json
 .ipynb_checkpoints
+data
