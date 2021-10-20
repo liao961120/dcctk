@@ -8,8 +8,10 @@ ctree = ComponentTree.load()
 radicals = Radicals.load()
 match_cache = dict()
 radical_map = None
+idc_rev_map = None
 phon_map = None
-
+idc_val_nm = { x.value:x.name for x in IDC }
+idc_names = set(idc_val_nm.values())
 
 def char_match_compo(char:str, tk:dict, lexicon:CharLexicon, hash):
     key = (char, str(tk), hash)
@@ -24,14 +26,14 @@ def char_match_compo(char:str, tk:dict, lexicon:CharLexicon, hash):
 def find_compo(tk:dict, lexicon:CharLexicon, hash):
     """Search hanzi by sub-character features (component, radical, sound) 
     """
-    global radical_map, phon_map
-
     if 'phon' in tk['match']:
         return phonetic_search(tk, lexicon)
     elif 'radical' in tk['match']:
         return radical_search(tk, lexicon)
     elif 'compo' in tk['match']:
         return component_search(tk, lexicon)
+    elif 'idc' in tk['match']:
+        return idc_search(tk, lexicon)
     else:
         raise Exception('Invalid CQL attributes.')
     
@@ -126,6 +128,27 @@ def component_search(tk, lexicon):
         .tolist() )
 
 
+def idc_search(tk, lexicon):
+    """Search hanzi with character shape
+
+    .. code-block:: python
+        
+        {
+            'match': {
+                'idc': ['horz2'],
+            },
+            'not_match': {}
+        }
+    """
+    global idc_rev_map
+    build_idc_rev_map(lexicon)
+    idc = tk['match']['idc'][0]
+    if idc not in idc_names: 
+        raise Exception(f"Invalid IDC value `{idc}`!", 
+                        f"IDC must be one of {', '.join(idc_names)}")
+    return idc_rev_map.get(idc, set())
+
+
 # Helper functions
 def get_radicals(lexicon:CharLexicon):
     build_radical_map(lexicon)
@@ -140,6 +163,18 @@ def build_radical_map(lexicon:CharLexicon):
         for char in lexicon.lexicon:
             rad = radicals.query(char)[0]
             radical_map.setdefault(rad, set()).add(char)
+
+
+def build_idc_rev_map(lexicon:CharLexicon):
+    global idc_rev_map, idc_val_nm
+    if idc_rev_map is None:
+        print("Building index for character IDCs...")
+        idc_rev_map = {}
+        for ch in lexicon.lexicon:
+            idc = ctree.ids_map.get(ch, [None])[0]
+            if idc is None: continue
+            idc = idc_val_nm.get(idc.idc, '')
+            idc_rev_map.setdefault(idc, set()).add(ch)
 
 
 def build_phon_map(lexicon:CharLexicon):
