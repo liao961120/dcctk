@@ -28,7 +28,13 @@ setup(name='dcctk',
       dependency_links=[
             'https://github.com/liao961120/CompoTree/tarball/main',
             'https://github.com/liao961120/hanziPhon/tarball/main',
-      ],  
+      ],
       extras_require=EXTRAS_REQUIRE,
+      classifiers=[
+            "Programming Language :: Python :: 3",
+            "License :: OSI Approved :: MIT License",
+            "Operating System :: OS Independent",
+      ],
+      python_requires='>=3.7',
       # tests_require=['deepdiff'],
       zip_safe=False)
