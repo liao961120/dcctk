@@ -1,9 +1,9 @@
 #%%
 from dcctk.corpusReader import PlainTextReader
 from dcctk.concordancer import Concordancer
-from dcctk.corpus import IndexedCorpus
-from dcctk.dispersion import Dispersion
-from dcctk.compoAnalysis import CompoAnalysis
+# from dcctk.corpus import IndexedCorpus
+# from dcctk.dispersion import Dispersion
+# from dcctk.compoAnalysis import CompoAnalysis
 # from dcctk.compoConcordancer import CompoConcordancer
 # from dcctk.embeddings import AnchiBert
 
@@ -11,8 +11,15 @@ from dcctk.compoAnalysis import CompoAnalysis
 
 # c = TextBasedCorpus(PlainTextReader("data/").corpus)
 c = Concordancer(PlainTextReader("data/").corpus)
+#%%
+cql = """
+"夫" "妻"
+"""
+left_collo = c.collocates(cql, left=1, right=0, subcorp_idx=0, sort_by="Gsq")
+
+
 # c2 = CompoAnalysis(c)
-c.freq_distr_ngrams(n=2, subcorp_idx=0).most_common(10)
+# c.freq_distr_ngrams(n=2, subcorp_idx=0).most_common(10)
 # c2.freq_distr(tp="chr")
 # c2.freq_distr(tp="idc")
 # c2.freq_distr(tp="rad")

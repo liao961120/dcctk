@@ -2,16 +2,21 @@
 import cqls
 from itertools import chain
 from CompoTree import IDC
+from collections import Counter
 
 from .concordancerBase import ConcordancerBase, ConcordLine
 from .subCharQuery import find_compo, load_lexicon, char_match_compo, get_radicals
 from .UtilsConcord import queryMatchToken
 from .UtilsSubchar import all_plain_cql, has_cql_match_type, is_subchar
+from .UtilsStats import MI, Xsq, Gsq, Dice, DeltaP12, DeltaP21, RawCount, additive_smooth
 
 
 class Concordancer(ConcordancerBase):
     
     lexicon = None
+    association_measures = [
+        MI, Xsq, Gsq, Dice, DeltaP21, DeltaP12, RawCount
+    ]
 
     def cql_search(self, cql: str, left=5, right=5):
         queries = cqls.parse(cql, default_attr=self._cql_default_attr, \
@@ -103,4 +108,61 @@ class Concordancer(ConcordancerBase):
             "CharPhonetic": ["phon", "tone", "sys"]
         }
 
-# %%
+
+    def collocates(self, node_cql:str, left=1, right=1, subcorp_idx=None, sort_by="Gsq", alpha=0.1, chinese_only=True):
+        """
+                     node       ~node
+        collocate    O11         O12    R1 (char index len)
+        ~collocate   O21         O22    R2
+                      C1          C2   CorpSize
+                   (Concord num)
+        """
+        o11 = Counter()
+        C1 = 0
+        for m in self.cql_search(node_cql, left, right):
+            m = m.data
+            if isinstance(subcorp_idx, int):
+                if m['position'][0] != subcorp_idx: continue
+            for w in m["left"] + m["right"]:
+                o11.update({w: 1})
+            C1 += 1
+        
+        collo_margin = {}
+        for w in o11:
+            if chinese_only:
+                if self.pat_ch_chr.search(w) is None: continue
+            if isinstance(subcorp_idx, int):
+                collo_margin[w] = len([1 for i in self.index[w] if i[0] == subcorp_idx])
+            else:
+                collo_margin[w] = len(self.index[w])
+        
+        output = []
+        N = self._get_corp_size(subcorp_idx)
+        for w, R1 in collo_margin.items():
+            R2 = N - R1
+            O11 = o11.get(w, 0)
+            O21 = C1 - O11
+            O12 = R1 - O11
+            O22 = R2 - O21
+            O11, O12, O21, O22, E11, E12, E21, E22 = additive_smooth(O11, O12, O21, O22, alpha=alpha)
+            stats = { 
+                func.__name__: func(O11, O12, O21, O22, E11, E12, E21, E22)\
+                    for func in self.association_measures
+            }
+            if 'RawCount' in stats:
+                stats['RawCount'] = int(O11)
+            output.append((w, stats))
+        
+        return sorted(output, reverse=True, key=lambda x: x[1][sort_by])
+
+
+    corp_size = None
+    def _get_corp_size(self, subcorp_idx=None):
+        if self.corp_size is None:
+            self.corp_size = {}
+            for i in range(len(self.corpus)):
+                corp = (c for t in self.corpus[i]['text'] for c in t['c'])
+                self.corp_size[i] = len(list(chain.from_iterable(corp)))
+        if isinstance(subcorp_idx, int):
+            return self.corp_size[subcorp_idx]
+        return sum(self.corp_size.values())
