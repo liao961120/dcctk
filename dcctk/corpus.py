@@ -1,4 +1,3 @@
-import collections
 import re
 from collections import Counter
 from tqdm.auto import trange
@@ -12,6 +11,7 @@ class TextBasedCorpus:
         self.corpus = corpus
         self.path_index = {}
         self.index_path()
+        self.pat_ch_chr = re.compile("[〇一-\u9fff㐀-\u4dbf豈-\ufaff]")
 
 
     def freq_distr_ngrams(self, n, subcorp_idx=None, chinese_only=True):
@@ -26,9 +26,8 @@ class TextBasedCorpus:
                 else: distr.update(self.ngrams[n][key])
         
         if chinese_only: 
-            pat = re.compile("[〇一-\u9fff㐀-\u4dbf豈-\ufaff]")
             for k in distr.keys():
-                if sum(1 for ch in k if pat.search(ch)) < n:
+                if sum(1 for ch in k if self.pat_ch_chr.search(ch)) < n:
                     del distr[k]
         
         return distr
