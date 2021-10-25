@@ -44,9 +44,6 @@ def DeltaP21(O11, O12, O21, O22, E11, E12, E21, E22):
 def DeltaP12(O11, O12, O21, O22, E11, E12, E21, E22):
     return O11 / (O11 + O21) - O12 / (O12 + O22)
 
-def RawCount(O11, O12, O21, O22, E11, E12, E21, E22):
-    return O11
-
 
 # Helpers for association measures
 def GsqT(O, E):
