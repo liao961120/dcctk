@@ -8,15 +8,12 @@ from .concordancerBase import ConcordancerBase, ConcordLine
 from .subCharQuery import find_compo, load_lexicon, char_match_compo, get_radicals
 from .UtilsConcord import queryMatchToken
 from .UtilsSubchar import all_plain_cql, has_cql_match_type, is_subchar
-from .UtilsStats import MI, Xsq, Gsq, Dice, DeltaP12, DeltaP21, RawCount, additive_smooth
+from .UtilsStats import additive_smooth
 
 
 class Concordancer(ConcordancerBase):
     
     lexicon = None
-    association_measures = [
-        MI, Xsq, Gsq, Dice, DeltaP21, DeltaP12, RawCount
-    ]
 
     def cql_search(self, cql: str, left=5, right=5):
         queries = cqls.parse(cql, default_attr=self._cql_default_attr, \
@@ -149,8 +146,7 @@ class Concordancer(ConcordancerBase):
                 func.__name__: func(O11, O12, O21, O22, E11, E12, E21, E22)\
                     for func in self.association_measures
             }
-            if 'RawCount' in stats:
-                stats['RawCount'] = o11.get(w, 0)
+            stats['RawCount'] = o11.get(w, 0)
             output.append((w, stats))
         
         return sorted(output, reverse=True, key=lambda x: x[1][sort_by])
