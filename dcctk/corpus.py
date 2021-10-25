@@ -26,7 +26,7 @@ class TextBasedCorpus:
                 else: distr.update(self.ngrams[n][key])
         
         if chinese_only: 
-            for k in distr.keys():
+            for k in list(distr.keys()):
                 if sum(1 for ch in k if self.pat_ch_chr.search(ch)) < n:
                     del distr[k]
         
