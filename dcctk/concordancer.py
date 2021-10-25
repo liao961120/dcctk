@@ -150,7 +150,7 @@ class Concordancer(ConcordancerBase):
                     for func in self.association_measures
             }
             if 'RawCount' in stats:
-                stats['RawCount'] = int(O11)
+                stats['RawCount'] = o11.get(w, 0)
             output.append((w, stats))
         
         return sorted(output, reverse=True, key=lambda x: x[1][sort_by])
