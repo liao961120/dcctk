@@ -23,13 +23,8 @@ class Dispersion(IndexedCorpus):
         del self.corpus
 
         # Functions for measures of dispersion
-        self.dispersion_func = [
-            ('range', Range),
-            ('DP', DP), 
-            ('DPnorm', DPnorm), 
-            ('KLdivergence', KLdivergence), 
-            ('JuillandD', JuillandD), 
-            ('RosengrenS', RosengrenS),
+        self.dispersion_func = [ 
+            Range, DP, DPnorm, KLdivergence, JuillandD, RosengrenS
         ]
 
 
@@ -99,7 +94,7 @@ class Dispersion(IndexedCorpus):
 
     def _compute_dispersion(self, v, subcorp_idx, return_raw):
         d = self._get_dispersion_data(v, subcorp_idx)
-        stats = { n: func(d) for n, func in self.dispersion_func }
+        stats = { func.__name__: func(d) for func in self.dispersion_func }
         if return_raw:
             return stats, d
         else:
