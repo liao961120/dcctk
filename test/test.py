@@ -12,7 +12,7 @@ from dcctk.compoAnalysis import CompoAnalysis
 # c = TextBasedCorpus(PlainTextReader("data/").corpus)
 c = Concordancer(PlainTextReader("data/").corpus)
 # c2 = CompoAnalysis(c)
-
+c.freq_distr_ngrams(n=2, subcorp_idx=0).most_common(10)
 # c2.freq_distr(tp="chr")
 # c2.freq_distr(tp="idc")
 # c2.freq_distr(tp="rad")

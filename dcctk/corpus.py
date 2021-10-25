@@ -1,6 +1,8 @@
+import collections
 import re
+from collections import Counter
 from tqdm.auto import trange
-
+from .utils import ngrams
 
 class TextBasedCorpus:
     """Corpus object for text-based (text as unit) analysis
@@ -10,6 +12,39 @@ class TextBasedCorpus:
         self.corpus = corpus
         self.path_index = {}
         self.index_path()
+
+
+    def freq_distr_ngrams(self, n, subcorp_idx=None, chinese_only=True):
+        if (not hasattr(self, 'ngrams')) or (n not in self.ngrams):
+            self._count_ngrams(n)
+        
+        if isinstance(subcorp_idx, int):
+            distr =  self.ngrams[n].get(subcorp_idx, Counter())
+        else:
+            for i, key in enumerate(self.ngrams[n]):
+                if i == 0: distr = self.ngrams[n][key].copy()
+                else: distr.update(self.ngrams[n][key])
+        
+        if chinese_only: 
+            pat = re.compile("[〇一-\u9fff㐀-\u4dbf豈-\ufaff]")
+            for k in distr.keys():
+                if sum(1 for ch in k if pat.search(ch)) < n:
+                    del distr[k]
+        
+        return distr
+
+
+    def _count_ngrams(self, n):
+        print(f'Counting {n}-grams...')
+        if not hasattr(self, 'ngrams'): self.ngrams = {}
+        self.ngrams[n] = {}
+        for i in trange(len(self.corpus)):
+            self.ngrams[n][i] = Counter()
+            for text in self.corpus[i]['text']:
+                for sent in text['c']:
+                    for ngram in ngrams(sent, n=n):
+                        ng = ''.join(ngram)
+                        self.ngrams[n][i].update({ng: 1})
 
 
     def get_texts(self, pattern, texts_as_str=False, sents_as_str=True):
