@@ -26,7 +26,7 @@ def char_match_compo(char:str, tk:dict, lexicon:CharLexicon, hash):
 def find_compo(tk:dict, lexicon:CharLexicon, hash):
     """Search hanzi by sub-character features (component, radical, sound) 
     """
-    if 'phon' in tk['match'] or 'system' in tk['match']:
+    if 'phon' in tk['match'] or 'sys' in tk['match']:
         return phonetic_search(tk, lexicon)
     elif 'radical' in tk['match']:
         return radical_search(tk, lexicon)
@@ -49,14 +49,14 @@ def phonetic_search(tk, lexicon):
                     'phon': ['ㄅㄨ'],
                     'tone': ['1'],
                     'tp': ['pinyin'],  # bpm, pinyin, ipa
-                    'system': ['moe']
+                    'sys': ['moe']
                 },
                 'not_match': {}
             }
     """
-    if tk['match'].get('system') == '廣韻':
+    if tk['match'].get('sys')[0] == '廣韻':
         build_phon_map(lexicon, moe=False, 廣韻=True)
-        params = { k:v[0] for k, v in tk['match'].items() if k != 'system' }
+        params = { k:v[0] for k, v in tk['match'].items() if k != 'sys' }
         return phon_map['廣韻'].find(return_raw=False, **params)
     else:
         build_phon_map(lexicon, moe=True, 廣韻=False)
@@ -182,7 +182,6 @@ def build_idc_rev_map(lexicon:CharLexicon):
 def build_phon_map(lexicon:CharLexicon, moe=False, 廣韻=True):
     global phon_map
     if phon_map is None:
-        print('Building index for character phones...')
         phon_map = {}
     if moe and ('moe' not in phon_map):
         phon_map['moe'] = Moe(lexicon=lexicon.lexicon)
