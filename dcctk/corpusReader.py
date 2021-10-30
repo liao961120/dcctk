@@ -121,6 +121,7 @@ class PlainTextReader:
 
 
     def _get_meta(self, fp, custom_loader=None):
+        if not fp.exists(): return {}
         with open(fp, encoding="utf-8") as f:
             if custom_loader:
                 return custom_loader()
