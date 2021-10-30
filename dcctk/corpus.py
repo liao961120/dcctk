@@ -12,14 +12,15 @@ class TextBasedCorpus:
         MI, Xsq, Gsq, Dice, DeltaP21, DeltaP12, FisherExact
     ]
 
-    def __init__(self, corpus):
+    def __init__(self, corpus, run_index_path=False):
         self.corpus = corpus
-        self.path_index = {}
-        self.index_path()
         self.pat_ch_chr = re.compile("[〇一-\u9fff㐀-\u4dbf豈-\ufaff]")
+        self.path_index = {}
+        if run_index_path:
+            self.index_path()
 
     def bigram_associations(self, subcorp_idx=None, chinese_only=True, 
-        sort_by="Gsq", reverse=True):
+        sort_by="Gsq", reverse=True, fq_thresh=0):
         distr = self.freq_distr_ngrams(2, subcorp_idx, chinese_only)
         N = sum(distr.values())
         R1 = Counter()
@@ -31,6 +32,7 @@ class TextBasedCorpus:
         
         output = []
         for w1w2, o11 in distr.items():
+            if o11 < fq_thresh: continue
             w1, w2 = w1w2[0], w1w2[1]
             r1 = R1.get(w1, 0)
             r2 = N - r1
@@ -147,7 +149,7 @@ class IndexedCorpus(TextBasedCorpus):
     """
 
     def __init__(self, corpus) -> None:
-        TextBasedCorpus.__init__(self, corpus)
+        TextBasedCorpus.__init__(self, corpus, run_index_path=True)
         self.index = {}
         self.index_corpus()
     
