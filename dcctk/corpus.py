@@ -2,14 +2,14 @@ import re
 from collections import Counter
 from tqdm.auto import trange
 from .utils import ngrams
-from .UtilsStats import MI, Xsq, Gsq, Dice, DeltaP12, DeltaP21, additive_smooth
+from .UtilsStats import MI, Xsq, Gsq, Dice, DeltaP12, DeltaP21, FisherExact, additive_smooth
 
 class TextBasedCorpus:
     """Corpus object for text-based (text as unit) analysis
     """
     
     association_measures = [
-        MI, Xsq, Gsq, Dice, DeltaP21, DeltaP12
+        MI, Xsq, Gsq, Dice, DeltaP21, DeltaP12, FisherExact
     ]
 
     def __init__(self, corpus):
@@ -18,7 +18,8 @@ class TextBasedCorpus:
         self.index_path()
         self.pat_ch_chr = re.compile("[〇一-\u9fff㐀-\u4dbf豈-\ufaff]")
 
-    def bigram_associations(self, subcorp_idx=None, chinese_only=True, sort_by="Gsq", alpha=0):
+    def bigram_associations(self, subcorp_idx=None, chinese_only=True, 
+        sort_by="Gsq", reverse=True):
         distr = self.freq_distr_ngrams(2, subcorp_idx, chinese_only)
         N = sum(distr.values())
         R1 = Counter()
@@ -39,7 +40,7 @@ class TextBasedCorpus:
             o22 = r2 - o21
             o11_raw = o11
             o11, o12, o21, o22, e11, e12, e21, e22 = \
-                additive_smooth(o11_raw, o12, o21, o22, alpha)
+                additive_smooth(o11_raw, o12, o21, o22, alpha=0)
             stats = { 
                 func.__name__: func(o11, o12, o21, o22, e11, e12, e21, e22)\
                     for func in self.association_measures
@@ -47,7 +48,7 @@ class TextBasedCorpus:
             stats['RawCount'] = o11_raw
             output.append((w1w2, stats))
 
-        return sorted(output, reverse=True, key=lambda x: x[1][sort_by])
+        return sorted(output, reverse=reverse, key=lambda x: x[1][sort_by])
 
 
     def freq_distr_ngrams(self, n, subcorp_idx=None, chinese_only=True):

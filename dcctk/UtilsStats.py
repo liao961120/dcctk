@@ -1,5 +1,6 @@
 from math import log2, log
 from scipy import spatial
+from scipy.stats import fisher_exact
 
 def cossim(x, y) -> float:
     """[summary]
@@ -43,6 +44,12 @@ def DeltaP21(O11, O12, O21, O22, E11, E12, E21, E22):
 
 def DeltaP12(O11, O12, O21, O22, E11, E12, E21, E22):
     return O11 / (O11 + O21) - O12 / (O12 + O22)
+
+def FisherExact(O11, O12, O21, O22, E11, E12, E21, E22):
+    _, fisher_exact_pvalue = fisher_exact([[O11, O12], [O21, O22]])
+    if O11 < E11: 
+        fisher_exact_pvalue *= -1
+    return fisher_exact_pvalue
 
 
 # Helpers for association measures
