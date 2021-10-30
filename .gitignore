@@ -9,3 +9,6 @@ _build
 moe.json
 .ipynb_checkpoints
 data
+*.bak
+*.dat
+*.dir
