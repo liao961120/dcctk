@@ -22,7 +22,9 @@ class NgramCorpus:
         self.n_subcorp = corpus_reader.n_subcorp
         self.database = {}
         self.pat_ch_chr = re.compile("[〇一-\u9fff㐀-\u4dbf豈-\ufaff]")
-        self.db_dir = Path(db_dir)
+        self.db_dir = db_dir
+        if isinstance(db_dir, str):
+            self.db_dir = Path(db_dir)
         if not self.db_dir.exists(): self.db_dir.mkdir()
         self.chr_fq = {
             # 'chr': [100, 50, 250, 300],
@@ -101,7 +103,9 @@ class NgramCorpus:
         return sum(fq_lst)
 
 
-    def load(self):
+    def load(self, chr_fq=None):
+        if chr_fq is not None:
+            self.chr_fq = chr_fq
         print("[INFO] Connecting to Databases...")
         self._load_db()
         print("[INFO] Counting char freq...")

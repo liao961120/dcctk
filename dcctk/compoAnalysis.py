@@ -21,12 +21,12 @@ class CompoAnalysis:
         """
         self.corpus_reader = corpus_reader
         self.n_subcorp = corpus_reader.n_subcorp
-        self.chars = set(self.freq_distr(tp="chr").keys())
         self.cc_map = {}
         self.rad_map = {}
         self.idc_map = {}
         self.fq_distr_cache = {}
         self.corp_fq_info = {}
+        self.chars = set(self.freq_distr(tp="chr").keys())
         self._build_cc_map()
         self._build_rad_map()
         self._build_idc_map()
@@ -195,7 +195,7 @@ class CompoAnalysis:
 
     def _build_idc_map(self):
         idc_val_nm = { x.value: x.name for x in IDC }
-        for ch in self.index.chars:
+        for ch in self.chars:
             idc = ctree.ids_map.get(ch, [None])[0]
             if idc is None: continue
             idc = idc_val_nm.get(idc.idc)
