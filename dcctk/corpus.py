@@ -70,10 +70,9 @@ class NgramCorpus:
 
     def freq_distr_ngrams(self, n, subcorp_idx=None, chinese_only=True):
         for k, v in self.get_ngrams(n, subcorp_idx).items():
-            k = k.decode('utf-8')
             if chinese_only: 
                 if any(not self.pat_ch_chr.search(ch) for ch in k): continue
-            yield (k, int(v))
+            yield (k, v)
 
     
     def get_ngrams(self, n, subcorp_idx=None):
@@ -106,15 +105,16 @@ class NgramCorpus:
     def load(self, chr_fq=None):
         if chr_fq is not None:
             self.chr_fq = chr_fq
+        else:
+            print("[INFO] Counting char freq...")
+            self._count_chr_fq()
         print("[INFO] Connecting to Databases...")
         self._load_db()
-        print("[INFO] Counting char freq...")
-        self._count_chr_fq()
 
 
     def _load_db(self):
         for db in self.database: self.database[db].close()
-        for fn in set(x.stem for x in self.db_dir.glob("*.db")):
+        for fn in set(x.name for x in self.db_dir.glob("*.db")):
             fp = str(self.db_dir / fn)
             self.database[fn] = dbm.open(fp, flag="r")
         if len(self.database) == 0:
@@ -163,13 +163,12 @@ class NgramCorpus:
                 
                 # Memory to disk
                 for k, v in db_tmp.items():
-                    vs = str(v)
                     if k not in db:
-                        db[k] = vs
-                        if i != 0: db_all[k] = vs
+                        db[k] = v
+                        if i != 0: db_all[k] = v
                     else:
-                        db[k] = str(int(db[k]) + v)
-                        if i != 0: db_all[k] = str(int(db_all[k]) + v)
+                        db[k] = db[k] + v
+                        if i != 0: db_all[k] = db_all[k] + v
             db.commit()
             db.close()
             if n == 2:
