@@ -134,6 +134,7 @@ class NgramCorpus:
         print(f'Counting {n}-grams...')
         if n == 2: self.subcorp_sizes = []
         pbar = tqdm(total=self.n_subcorp)
+        ngram = ('', '')
         for i, sc in enumerate(self.corpus):
             subcorp_size = 0
             subcorp_size_zh = 0
@@ -156,10 +157,11 @@ class NgramCorpus:
                     if n == 2:
                         # Count last character in sentence
                         ch = ngram[1]
-                        self.chr_fq.setdefault(ch, [0]*self.n_subcorp)[i] += 1 
-                        subcorp_size += 1
-                        if self.pat_ch_chr.search(ch):
-                            subcorp_size_zh += 1
+                        if ch != '':
+                            self.chr_fq.setdefault(ch, [0]*self.n_subcorp)[i] += 1 
+                            subcorp_size += 1
+                            if self.pat_ch_chr.search(ch):
+                                subcorp_size_zh += 1
                 
                 # Memory to disk
                 for k, v in db_tmp.items():
