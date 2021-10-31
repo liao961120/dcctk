@@ -1,30 +1,34 @@
 import re
 import dbm
-import json
+from itertools import chain
 from pathlib import Path
-from tqdm.auto import trange
+from collections import Counter
+from shutil import copyfile
+from tqdm.auto import tqdm, trange
 from .utils import ngrams
 from .UtilsStats import MI, Xsq, Gsq, Dice, DeltaP12, DeltaP21, FisherExact, additive_smooth
 
 
 class NgramCorpus:
-    """Memory efficient corpus object for computing n-gram from large corpora
+    """Serialized corpus object for computing ngrams from large corpora
     """
     
     association_measures = [
         MI, Xsq, Gsq, Dice, DeltaP21, DeltaP12, FisherExact
     ]
 
-    def __init__(self, corpus_reader):
+    def __init__(self, corpus_reader, db_dir='dcctk.db/'):
         self.corpus_reader = corpus_reader
+        self.n_subcorp = corpus_reader.n_subcorp
         self.database = {}
-        self.bigram_margins = {
-            'char': {'N': 0, 'R1':0 , 'C1': 0},
-            'zh_only': {'N': 0, 'R1':0 , 'C1': 0}
-        }
         self.pat_ch_chr = re.compile("[〇一-\u9fff㐀-\u4dbf豈-\ufaff]")
-        self.db_dir = Path('dcctk.db/')
+        self.db_dir = Path(db_dir)
         if not self.db_dir.exists(): self.db_dir.mkdir()
+        self.chr_fq = {
+            # 'chr': [100, 50, 250, 300],
+            # 'cha': [100, 50, 250, 30]
+        }
+
 
     @property
     def corpus(self):
@@ -34,11 +38,14 @@ class NgramCorpus:
 
 
     def bigram_associations(self, subcorp_idx=None, chinese_only=True, 
-        sort_by="Gsq", reverse=True, fq_thresh=0, return_gen=False):
+        sort_by="Gsq", reverse=True, fq_thresh=0):
+        return sorted(
+            list(self.bigram_associations_gen(subcorp_idx, chinese_only, fq_thresh)), reverse=reverse, key=lambda x: x[1][sort_by]
+        )
 
-        N = self.get_corpus_size(subcorp_idx, chinese_only)
-        
-        output = []
+
+    def bigram_associations_gen(self, subcorp_idx=None, chinese_only=True,fq_thresh=0):
+        N = self.get_corpus_size(subcorp_idx)
         for w1w2, o11 in self.freq_distr_ngrams(2, subcorp_idx, chinese_only):
             if o11 < fq_thresh: continue
             w1, w2 = w1w2[0], w1w2[1]
@@ -56,13 +63,7 @@ class NgramCorpus:
                     for func in self.association_measures
             }
             stats['RawCount'] = o11_raw
-            if return_gen:
-                yield (w1w2, stats)
-            else:
-                output.append((w1w2, stats))
-
-        if not return_gen:
-            return sorted(output, reverse=reverse, key=lambda x: x[1][sort_by])
+            yield (w1w2, stats)
 
 
     def freq_distr_ngrams(self, n, subcorp_idx=None, chinese_only=True):
@@ -85,96 +86,103 @@ class NgramCorpus:
         return self.database[fn]
 
 
-    def get_corpus_size(self, subcorp_idx=None, chinese_only=True):
-        fn = 'corpsize_all.json'
-        if chinese_only: fn = 'corpsize_zh.json'
-        with open(self.db_dir / fn, encoding="utf-8") as f:
-            if subcorp_idx is None:
-                return sum(json.load(f))
-            return json.load(f)
+    def get_corpus_size(self, subcorp_idx=None):
+        if len(self.chr_fq) == 0: self._count_chr_fq()
+        if isinstance(subcorp_idx, int):
+            return sum(ss[subcorp_idx] for ss in self.chr_fq.values())
+        return sum(chain.from_iterable(self.chr_fq.values()))
 
 
     def get_marginal_fq(self, char, subcorp_idx=None):
-        fn = f'chr_fq_all.db'
+        if len(self.chr_fq) == 0: self._count_chr_fq()
+        fq_lst = self.chr_fq.get(char, [0]*self.n_subcorp)
         if isinstance(subcorp_idx, int):
-            fn = f'chr_fq_sc{subcorp_idx}.db'
-        return int(self.database[fn].get(char, 0))
+            return fq_lst[subcorp_idx]
+        return sum(fq_lst)
 
+
+    def load(self):
+        print("[INFO] Connecting to Databases...")
+        self._load_db()
+        print("[INFO] Counting char freq...")
+        self._count_chr_fq()
+
+
+    def _load_db(self):
+        for db in self.database: self.database[db].close()
+        for fn in set(x.stem for x in self.db_dir.glob("*.db.*")):
+            fp = str(self.db_dir / fn)
+            self.database[fn] = dbm.open(fp, flag="r")
+        if len(self.database) == 0:
+            print("[WARNING] No db found. Run self._count_ngrams() to calculate ngram data.")
+
+
+    def _count_chr_fq(self):
+        for i, sc in enumerate(self.corpus):
+            c = Counter(
+                chain.from_iterable(s for t in sc['text'] for s in t['c'])
+            )
+            for chr, fq in c.items():
+                self.chr_fq.setdefault(chr, [0]*self.n_subcorp)[i] += fq
+    
 
     def _count_ngrams(self, n):
         print(f'Counting {n}-grams...')
-        fp_chr_fq_all = self.db_dir / f'chr_fq_all.db'
-        db_chr_fq_all = dbm.open(fp_chr_fq_all, flag='n')
-        fp_all = self.db_dir / f'{n}-grams_all.db'
-        db_all = dbm.open(fp_all, flag='n')
-        subcorp_sizes = []
+        if n == 2: self.subcorp_sizes = []
+        pbar = tqdm(total=self.n_subcorp)
         for i, sc in enumerate(self.corpus):
             subcorp_size = 0
             subcorp_size_zh = 0
-            fp_chr_fq = self.db_dir / f'chr_fq_sc{i}.db'
-            db_chr_fq = dbm.open(fp_chr_fq, flag='n')
             fp = self.db_dir / f'{n}-grams_sc{i}.db'
-            db = dbm.open(fp, flag='n')
+            db = dbm.open(str(fp), flag='n')
             for text in sc['text']:
+                db_tmp = Counter()
                 for sent in text['c']:
                     for ngram in ngrams(sent, n=n):
                         # Count coocurrence
                         ng = ''.join(ngram)
-                        if ng not in db:
-                            db[ng] = str(1)
-                            db_all[ng] = str(1)
-                        else:
-                            db[ng] = str(int(db[ng]) + 1)
-                            db_all[ng] = str(int(db_all[ng]) + 1)
-                        
-                        # Count marginal
-                        ch = ngram[0]
-                        if ch not in db_chr_fq_all:
-                            db_chr_fq_all[ch] = str(1)
-                        else:
-                            db_chr_fq_all[ch] = str(int(db_chr_fq_all[ch]) + 1)
-                        if ch not in db_chr_fq:
-                            db_chr_fq[ch] = str(1)
-                        else:
-                            db_chr_fq[ch] = str(int(db_chr_fq[ch]) + 1)
+                        db_tmp.update({ng: 1})
+                        if n == 2:
+                            # Count marginal
+                            ch = ngram[0]
+                            self.chr_fq.setdefault(ch, [0]*self.n_subcorp)[i] += 1 
+                            subcorp_size += 1
+                            if self.pat_ch_chr.search(ch):
+                                subcorp_size_zh += 1
+                    if n == 2:
+                        # Count last character in sentence
+                        ch = ngram[1]
+                        self.chr_fq.setdefault(ch, [0]*self.n_subcorp)[i] += 1 
                         subcorp_size += 1
                         if self.pat_ch_chr.search(ch):
                             subcorp_size_zh += 1
-                    # Count last character in sentence
-                    ch = ngram[1]
-                    if ch not in db_chr_fq_all:
-                        db_chr_fq_all[ch] = str(1)
+                
+                # Memory to disk
+                for k, v in db_tmp.items():
+                    vs = str(v)
+                    if k not in db:
+                        db[k] = vs
+                        db_all[k] = vs
                     else:
-                        db_chr_fq_all[ch] = str(int(db_chr_fq_all[ch]) + 1)
-                    if ch not in db_chr_fq:
-                        db_chr_fq[ch] = str(1)
-                    else:
-                        db_chr_fq[ch] = str(int(db_chr_fq[ch]) + 1)
-                    subcorp_size += 1
-                    if self.pat_ch_chr.search(ch):
-                        subcorp_size_zh += 1
+                        db[k] = str(int(db[k]) + v)
+                        db_all[k] = str(int(db_all[k]) + v)
             db.sync()
             db.close()
-            db_chr_fq.sync()
-            db_chr_fq.close()
-            self.database[fp.name] = dbm.open(fp, flag='r')
-            self.database[fp_chr_fq.name] = dbm.open(fp_chr_fq, flag='r')
-            subcorp_sizes.append( (subcorp_size, subcorp_size_zh) )
+            if n == 2:
+                self.subcorp_sizes.append( (subcorp_size, subcorp_size_zh) )
+            pbar.update(1)
 
+            # Copy first subcorp
+            if i == 0:
+                fp_all = self.db_dir / f'{n}-grams_all.db'
+                copyfile(fp, fp_all)
+                db_all = dbm.open(str(fp_all), flag='w')
+                
         db_all.sync()
         db_all.close()
-        db_chr_fq_all.sync()
-        db_chr_fq_all.close()
-        self.database[fp_all.name] = dbm.open(fp_all, flag='r')
-        self.database[fp_chr_fq_all.name] = dbm.open(fp_chr_fq_all, flag='r')
-        self._write_corp_size(subcorp_sizes)
+        pbar.close()
+        self._load_db()
 
-
-    def _write_corp_size(self, subcorp_sizes):
-        with open(self.db_dir / "corpsize_all.json", "w", encoding="utf-8") as f:
-            json.dump([x[0] for x in subcorp_sizes], f, ensure_ascii=False)
-        with open(self.db_dir / "corpsize_zh.json", "w", encoding="utf-8") as f:
-            json.dump([x[1] for x in subcorp_sizes], f, ensure_ascii=False)
 
 
 

@@ -76,6 +76,7 @@ class PlainTextReader:
         # Attributes
         self.corp_path = Path(dir_path)
         self.corpus = []
+        self.n_subcorp = len([1 for x in self.corp_path.iterdir() if x.is_dir()])
         self.text_meta = {}
         self.timestep_meta = {}
         self.plain_text_reader = plain_text_reader

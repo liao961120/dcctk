@@ -1,13 +1,26 @@
 #%%
 from dcctk.corpusReader import PlainTextReader
 # from dcctk.concordancer import Concordancer
-# from dcctk.corpus import IndexedCorpus
+from dcctk.corpus import NgramCorpus, Gsq, DeltaP12, DeltaP21
 # from dcctk.dispersion import Dispersion
 # from dcctk.compoAnalysis import CompoAnalysis
 # from dcctk.compoConcordancer import CompoConcordancer
 # from dcctk.embeddings import AnchiBert
 
-corpus = PlainTextReader('data/', auto_load=False).get_corpus_as_gen()
+corp_reader = PlainTextReader('data2/', auto_load=False)
+NC = NgramCorpus(corp_reader)
+NC.load()
+# NC._count_ngrams(2)
+# Custom association measures
+NC.association_measures = [Gsq, DeltaP12, DeltaP21]
+NC.bigram_associations(fq_thresh=10)
+
+#%%
+bi_asso = NC.bigram_associations()
+#%%
+for i, x in enumerate(NC.bigram_associations_gen()):
+    if i == 5: break
+    print(x)
 # c = Dispersion(PlainTextReader("data/").corpus)
 
 # c = TextBasedCorpus(PlainTextReader("data/").corpus)
