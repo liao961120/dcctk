@@ -1,19 +1,21 @@
 #%%
-from dcctk.dbdict import dbdict
-
-db = dbdict('test.sqlite')
-
-for i in range(100):
-    db[f'foo_{i}'] = 1000
-db.close()    # close the database file
-#%%
+from itertools import chain
+from collections import Counter
 from dcctk.corpusReader import PlainTextReader
 # from dcctk.concordancer import Concordancer
-from dcctk.corpus import NgramCorpus, Gsq, DeltaP12, DeltaP21
+# from dcctk.corpus import NgramCorpus, Gsq, DeltaP12, DeltaP21
 # from dcctk.dispersion import Dispersion
 # from dcctk.compoAnalysis import CompoAnalysis
 # from dcctk.compoConcordancer import CompoConcordancer
 # from dcctk.embeddings import AnchiBert
+corp_reader = PlainTextReader('data/', auto_load=False)
+
+c = (c for sc in corp_reader.get_corpus_as_gen() for t in sc['text'] for c in t['c'])
+fq_dist = Counter(chain.from_iterable(c))
+# for i, ch in enumerate(chain.from_iterable(c)):
+#     if i == 5: break
+#     print(ch)
+#%%
 
 corp_reader = PlainTextReader('data2/', auto_load=False)
 NC = NgramCorpus(corp_reader)
