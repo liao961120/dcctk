@@ -1,16 +1,17 @@
 #%%
 from dcctk.corpusReader import PlainTextReader
-from dcctk.concordancer import Concordancer
+# from dcctk.concordancer import Concordancer
 # from dcctk.corpus import IndexedCorpus
 # from dcctk.dispersion import Dispersion
 # from dcctk.compoAnalysis import CompoAnalysis
 # from dcctk.compoConcordancer import CompoConcordancer
 # from dcctk.embeddings import AnchiBert
 
+corpus = PlainTextReader('data/', auto_load=False).get_corpus_as_gen()
 # c = Dispersion(PlainTextReader("data/").corpus)
 
 # c = TextBasedCorpus(PlainTextReader("data/").corpus)
-c = Concordancer(PlainTextReader("data/").corpus)
+# c = Concordancer(PlainTextReader("data/").corpus)
 #%%
 cql = """
 "夫" "妻"

@@ -2,8 +2,27 @@
 # dbm
 ###########
 #%%
+import re
 import dbm
 from time import time
+
+db = dbm.open('test.db', flag='n')
+db['我們'] = str(1)
+db['我a'] = str(2)
+db.sync()
+db.close()
+
+db = dbm.open('test.db', flag='r')
+pat_ch_chr = re.compile("[〇一-\u9fff㐀-\u4dbf豈-\ufaff]")
+
+for k in db:
+    k = k.decode('utf-8')
+    if any(not pat_ch_chr.search(ch) for ch in k):
+        print('matched:', k, int(db[k]))
+    print()
+
+# db.close()
+#%%
 
 mydict = dbm.open('myfile2.db', flag='n')
 
