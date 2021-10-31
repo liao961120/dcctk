@@ -1,5 +1,4 @@
 import re
-import dbm
 from itertools import chain
 from pathlib import Path
 from collections import Counter
@@ -7,6 +6,7 @@ from shutil import copyfile
 from tqdm.auto import tqdm, trange
 from .utils import ngrams
 from .UtilsStats import MI, Xsq, Gsq, Dice, DeltaP12, DeltaP21, FisherExact, additive_smooth
+from . import database as dbm
 
 
 class NgramCorpus:
@@ -110,7 +110,7 @@ class NgramCorpus:
 
     def _load_db(self):
         for db in self.database: self.database[db].close()
-        for fn in set(x.stem for x in self.db_dir.glob("*.db.*")):
+        for fn in set(x.stem for x in self.db_dir.glob("*.db")):
             fp = str(self.db_dir / fn)
             self.database[fn] = dbm.open(fp, flag="r")
         if len(self.database) == 0:
@@ -166,6 +166,7 @@ class NgramCorpus:
                     else:
                         db[k] = str(int(db[k]) + v)
                         if i != 0: db_all[k] = str(int(db_all[k]) + v)
+            db.commit()
             db.close()
             if n == 2:
                 self.subcorp_sizes.append( (subcorp_size, subcorp_size_zh) )
@@ -174,9 +175,11 @@ class NgramCorpus:
             # Copy first subcorp
             if i == 0:
                 fp_all = self.db_dir / f'{n}-grams_all.db'
+                if fp_all.exists(): fp_all.unlink()
                 copyfile(fp, fp_all)
-                db_all = dbm.open(str(fp_all), flag='w')
-                
+                db_all = dbm.open(str(fp_all), flag='c')
+
+        db_all.commit()        
         db_all.close()
         pbar.close()
         self._load_db()

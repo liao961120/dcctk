@@ -1,4 +1,12 @@
 #%%
+from dcctk.dbdict import dbdict
+
+db = dbdict('test.sqlite')
+
+for i in range(100):
+    db[f'foo_{i}'] = 1000
+db.close()    # close the database file
+#%%
 from dcctk.corpusReader import PlainTextReader
 # from dcctk.concordancer import Concordancer
 from dcctk.corpus import NgramCorpus, Gsq, DeltaP12, DeltaP21

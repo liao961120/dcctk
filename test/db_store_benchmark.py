@@ -52,6 +52,26 @@ mydict.close()
 # Read time: 0.37085318565 sec
 
 
+###################
+# dbdict
+##################
+#%%
+from dcctk.dbdict import dbdict
+from time import time
+
+db = dbdict('test.sqlite')
+
+
+s = time()
+for i in list(range(10000)):
+    if i not in db:
+        db[i] = 1
+    else:
+        db[i] = db[i] + 1
+e = time()
+print(e - s)
+db.close()
+# Write time: 
 
 ###################
 ## SqliteDict
