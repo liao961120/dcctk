@@ -162,11 +162,10 @@ class NgramCorpus:
                     vs = str(v)
                     if k not in db:
                         db[k] = vs
-                        db_all[k] = vs
+                        if i != 0: db_all[k] = vs
                     else:
                         db[k] = str(int(db[k]) + v)
-                        db_all[k] = str(int(db_all[k]) + v)
-            db.sync()
+                        if i != 0: db_all[k] = str(int(db_all[k]) + v)
             db.close()
             if n == 2:
                 self.subcorp_sizes.append( (subcorp_size, subcorp_size_zh) )
@@ -178,7 +177,6 @@ class NgramCorpus:
                 copyfile(fp, fp_all)
                 db_all = dbm.open(str(fp_all), flag='w')
                 
-        db_all.sync()
         db_all.close()
         pbar.close()
         self._load_db()
