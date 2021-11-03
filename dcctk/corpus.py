@@ -1,4 +1,5 @@
 import re
+import json
 from itertools import chain
 from pathlib import Path
 from collections import Counter
@@ -102,9 +103,10 @@ class NgramCorpus:
         return sum(fq_lst)
 
 
-    def load(self, chr_fq=None):
+    def load(self, chr_fq:str=None):
         if chr_fq is not None:
-            self.chr_fq = chr_fq
+            with open(chr_fq, encoding="utf-8") as f:
+                self.chr_fq = json.load(f)
         else:
             print("[INFO] Counting char freq...")
             self._count_chr_fq()
