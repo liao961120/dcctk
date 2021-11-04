@@ -1,6 +1,6 @@
 from .UtilsConcord import match_mode
 
-SUBCHAR_ATTRS = set('compo idc radical phon'.split())
+SUBCHAR_ATTRS = set('compo idc radical phon sys'.split())
 
 
 def is_subchar(tk:dict):

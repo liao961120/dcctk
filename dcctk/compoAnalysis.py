@@ -10,7 +10,7 @@ idc_names = { x.name for x in IDC }
 
 class CompoAnalysis:
 
-    def __init__(self, IndexedCorpus):
+    def __init__(self, corpus_reader):
         """[summary]
 
         Parameters
@@ -19,16 +19,24 @@ class CompoAnalysis:
             A corpus with an index of character positions. Accepts 
             :class:`dcctk.corpus.IndexedCorpus` or its super classes as inputs.
         """
-        self.corpus = IndexedCorpus.corpus
-        self.index = IndexedCorpus.index
+        self.corpus_reader = corpus_reader
+        self.n_subcorp = corpus_reader.n_subcorp
         self.cc_map = {}
         self.rad_map = {}
         self.idc_map = {}
         self.fq_distr_cache = {}
         self.corp_fq_info = {}
+        self.chars = set(self.freq_distr(tp="chr").keys())
         self._build_cc_map()
         self._build_rad_map()
         self._build_idc_map()
+
+
+    @property
+    def corpus(self):
+        """Return a corpus as a generator
+        """
+        return self.corpus_reader.get_corpus_as_gen()
 
 
     def productivity(self, radical=None, compo=None, idc=None, pos=-1, 
@@ -91,9 +99,9 @@ class CompoAnalysis:
 
 
 
-    def freq_distr(self, subcorp_idx=None, text_idx=None, tp="idc", 
+    def freq_distr(self, subcorp_idx=None, text_idx=None, tp="chr", 
                    compo=None, idc=None, pos=-1, radical=None):
-        """Frequency distribution of character (component)
+        """Frequency distribution of character (component/feature)
 
         Parameters
         ----------
@@ -105,7 +113,7 @@ class CompoAnalysis:
         tp : str, optional
             One of :code:`chr` (Character), :code:`idc` 
             (Ideographic Description Characters), :code:`rad` (Radical), 
-            and None, by default :code:`idc`
+            and None (Comonent Search), by default :code:`idc`
 
         Returns
         -------
@@ -146,18 +154,23 @@ class CompoAnalysis:
 
     def _freq_distr_chr(self, subcorp_idx:int=None, text_idx:int=None):
         if isinstance(text_idx, int) and isinstance(subcorp_idx, int):
-            corp = self.corpus[subcorp_idx]['text'][text_idx]['c']
+            for i, sc in enumerate(self.corpus):
+                if subcorp_idx == i: 
+                    for j, text in enumerate(sc['text']):
+                        if j == text_idx:
+                            return Counter(chain.from_iterable(text['c']))
+        elif isinstance(subcorp_idx, int):
+            for i, sc in enumerate(self.corpus):
+                if i == subcorp_idx:
+                    corp = (c for t in sc['text'] for c in t['c'])
+                    return Counter(chain.from_iterable(corp))
+        else:
+            corp = (c for sc in self.corpus for t in sc['text'] for c in t['c'])
             return Counter(chain.from_iterable(corp))
-        if isinstance(subcorp_idx, int):
-            corp = (c for t in self.corpus[subcorp_idx]['text'] for c in t['c'])
-            return Counter(chain.from_iterable(corp))
-        
-        corp = (c for sc in self.corpus for t in sc['text'] for c in t['c'])
-        return Counter(chain.from_iterable(corp))
 
 
     def _build_cc_map(self):
-        for ch in self.index:
+        for ch in self.chars:
             idc = ctree.ids_map.get(ch, [None])[0]
             rad = radicals.query(ch)[0]
             dph = None
@@ -182,7 +195,7 @@ class CompoAnalysis:
 
     def _build_idc_map(self):
         idc_val_nm = { x.value: x.name for x in IDC }
-        for ch in self.index.keys():
+        for ch in self.chars:
             idc = ctree.ids_map.get(ch, [None])[0]
             if idc is None: continue
             idc = idc_val_nm.get(idc.idc)

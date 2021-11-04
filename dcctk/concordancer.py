@@ -85,16 +85,7 @@ class Concordancer(ConcordancerBase):
         if self.lexicon is None:
             self.lexicon = load_lexicon(self.index.keys())
         return get_radicals(self.lexicon)
-        
-    @property
-    def chr_phonetic_systems(self):
-        return {
-            'moe': {
-                'phonetic_repr': 'bpm pinyin ipa'.split(),
-                'tone': list('12345'),
-                'src': 'https://github.com/g0v/moedict-data',
-            }
-        }
+
 
     @property
     def cql_attrs(self):
@@ -102,7 +93,13 @@ class Concordancer(ConcordancerBase):
             "Default": ['char'],
             "CharComponent": ['compo', 'max_depth', 'idc', 'pos'],
             "CharRadical": ['radical'],
-            "CharPhonetic": ["phon", "tone", "sys"]
+            "CharPhonetic": {
+                "moe": ['phon', 'tone', 'tp', 'sys="moe"'],
+                "廣韻": [
+                    '攝', '聲調', '韻母', '聲母', '開合', 
+                    '等第', '反切', '拼音', 'IPA', 'sys="廣韻"'
+                ]
+            }
         }
 
 

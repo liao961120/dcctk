@@ -24,7 +24,7 @@ setup(name='dcctk',
       author_email='liao961120@github.com',
       license='MIT',
       packages=['dcctk'],
-      install_requires=['scikit-learn', 'scipy', 'gdown>=3.10.2', 'pyyaml>=5.1', 'cqls', 'tqdm', 'hanziPhon'],
+      install_requires=['scikit-learn', 'scipy', 'gdown>=3.10.2', 'pyyaml>=5.1', 'cqls', 'tqdm', 'hanziPhon', 'pickle5; python_version < "3.8.0"'],
       dependency_links=[
             'https://github.com/liao961120/CompoTree/tarball/main',
       ],

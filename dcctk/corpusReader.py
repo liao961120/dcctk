@@ -46,7 +46,7 @@ class PlainTextReader:
 
     def __init__(self, dir_path="data/", ts_meta_filename="time.yaml", \
         text_meta_filename="text_meta.yaml", ts_meta_loader=None, 
-        text_meta_loader=None, plain_text_reader=read_text_as_sentences):
+        text_meta_loader=None, plain_text_reader=read_text_as_sentences, auto_load=True):
         """Read in plain text corpus
 
         Parameters
@@ -76,13 +76,39 @@ class PlainTextReader:
         # Attributes
         self.corp_path = Path(dir_path)
         self.corpus = []
+        self.n_subcorp = len([1 for x in self.corp_path.iterdir() if x.is_dir()])
         self.text_meta = {}
         self.timestep_meta = {}
         self.plain_text_reader = plain_text_reader
         self.timestep_meta = self._get_meta(self.corp_path / ts_meta_filename, custom_loader=ts_meta_loader)
         self.text_meta = self._get_meta(self.corp_path / text_meta_filename, custom_loader=text_meta_loader)
-        self._read_corpus()
+        if auto_load:
+            self._read_corpus()
 
+
+    def get_corpus_as_gen(self):
+        for dir_ in sorted(self.corp_path.iterdir()):
+            if not dir_.is_dir(): continue
+            # Construct corpus
+            meta = {}
+            for k, v in self.timestep_meta.get(dir_.stem, {}).items():
+                meta[k] = v
+            yield {
+                'id': dir_.stem,
+                'm': meta,
+                'text': self._get_texts_as_gen(dir_.glob("*.txt"))
+            }
+
+
+    def _get_texts_as_gen(self, fps):
+        for fp in fps:
+            text_id, text_meta, text_content = self._read_text(fp)
+            text = {
+                'id': text_id,
+                'm': text_meta,
+                'c': list(text_content)  # A list of sentences
+            }
+            yield text
 
     def _read_corpus(self):
         for dir_ in sorted(self.corp_path.iterdir()):
@@ -121,6 +147,7 @@ class PlainTextReader:
 
 
     def _get_meta(self, fp, custom_loader=None):
+        if not fp.exists(): return {}
         with open(fp, encoding="utf-8") as f:
             if custom_loader:
                 return custom_loader()

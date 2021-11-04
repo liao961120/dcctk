@@ -1,7 +1,6 @@
 from typing import Sequence
-from CompoTree import ComponentTree, Radicals, CharLexicon, IDC
-from CompoTree import CTFounds
-from hanziPhon import Moe
+from CompoTree import ComponentTree, Radicals, CharLexicon, IDC, CTFounds
+from hanziPhon import Moe, GuangYun
 from .UtilsConcord import match_mode
 
 ctree = ComponentTree.load()
@@ -12,6 +11,7 @@ idc_rev_map = None
 phon_map = None
 idc_val_nm = { x.value:x.name for x in IDC }
 idc_names = set(idc_val_nm.values())
+
 
 def char_match_compo(char:str, tk:dict, lexicon:CharLexicon, hash):
     key = (char, str(tk), hash)
@@ -26,7 +26,7 @@ def char_match_compo(char:str, tk:dict, lexicon:CharLexicon, hash):
 def find_compo(tk:dict, lexicon:CharLexicon, hash):
     """Search hanzi by sub-character features (component, radical, sound) 
     """
-    if 'phon' in tk['match']:
+    if 'phon' in tk['match'] or 'sys' in tk['match']:
         return phonetic_search(tk, lexicon)
     elif 'radical' in tk['match']:
         return radical_search(tk, lexicon)
@@ -49,26 +49,28 @@ def phonetic_search(tk, lexicon):
                     'phon': ['ㄅㄨ'],
                     'tone': ['1'],
                     'tp': ['pinyin'],  # bpm, pinyin, ipa
-                    'system': ['moe']
+                    'sys': ['moe']
                 },
                 'not_match': {}
             }
     """
-    build_phon_map(lexicon)
-    sp = {
-        'phon': '',
-        'tone': None,
-        'tp': "bpm",
-        'system': 'moe'
-    }
-    for k, v in tk['match'].items():
-        if k in sp: sp[k] = v[0]
-    sys = phon_map.get(sp['system'])
-    if sys is None: 
-        raise Exception('Unsupported phonetic system')
-    phon, mode = match_mode(sp['phon'])
-    exact = mode == 'literal'
-    return sys.find(repr=phon, tone=sp['tone'], tp=sp['tp'], exact=exact)
+    if tk['match'].get('sys')[0] == '廣韻':
+        build_phon_map(lexicon, moe=False, 廣韻=True)
+        params = { k:v[0] for k, v in tk['match'].items() if k != 'sys' }
+        return phon_map['廣韻'].find(return_raw=False, **params)
+    else:
+        build_phon_map(lexicon, moe=True, 廣韻=False)
+        sp = {
+            'phon': '',
+            'tone': None,
+            'tp': "bpm",
+        }
+        for k, v in tk['match'].items():
+            if k in sp: sp[k] = v[0]
+        sys = phon_map['moe']
+        phon, mode = match_mode(sp['phon'])
+        exact = mode == 'literal'
+        return sys.find(repr=phon, tone=sp['tone'], tp=sp['tp'], exact=exact)
 
 
 def radical_search(tk, lexicon):
@@ -177,12 +179,14 @@ def build_idc_rev_map(lexicon:CharLexicon):
             idc_rev_map.setdefault(idc, set()).add(ch)
 
 
-def build_phon_map(lexicon:CharLexicon):
+def build_phon_map(lexicon:CharLexicon, moe=False, 廣韻=True):
     global phon_map
     if phon_map is None:
         phon_map = {}
-        print('Building index for character phones...')
+    if moe and ('moe' not in phon_map):
         phon_map['moe'] = Moe(lexicon=lexicon.lexicon)
+    if 廣韻 and ('廣韻' not in phon_map):
+        phon_map['廣韻'] = GuangYun(lexicon=lexicon.lexicon)
 
 
 def load_lexicon(lexicon: Sequence):
