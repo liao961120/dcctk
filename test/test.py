@@ -36,6 +36,10 @@ for i, x in enumerate(NC.bigram_associations_gen()):
 # c = TextBasedCorpus(PlainTextReader("data/").corpus)
 # c = Concordancer(PlainTextReader("data/").corpus)
 #%%
+bi_asso = c.bigram_associations(subcorp_idx=0, sort_by="DeltaP21")
+
+[x for x in bi_asso if x[1].get('RawCount', 0) > 100][:10]
+#%%
 cql = """
 "夫" "妻"
 """
