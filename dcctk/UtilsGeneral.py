@@ -1,5 +1,7 @@
+import re
 import collections
 
+PAT_CH_CHR = re.compile("[〇一-\u9fff㐀-\u4dbf豈-\ufaff]")
 
 def stringify_obj(x):
     """Stringify complex built-in data structure

@@ -52,6 +52,13 @@ def FisherExact(O11, O12, O21, O22, E11, E12, E21, E22):
         pval *= -1
     return pval
 
+def FisherAttract(O11, O12, O21, O22, E11, E12, E21, E22):
+    pval = fisher_exact(O11, O12, O21, O22)
+    fisher_attract = -log(pval)
+    if O11 < E11:
+        fisher_attract = -fisher_attract
+    return fisher_attract
+
 
 # Helpers for association measures
 def GsqT(O, E):
