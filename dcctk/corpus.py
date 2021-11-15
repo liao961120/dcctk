@@ -18,8 +18,11 @@ class NgramCorpus:
         MI, Xsq, Gsq, Dice, DeltaP21, DeltaP12, FisherExact
     ]
 
-    def __init__(self, corpus_reader, db_dir='dcctk.db/'):
+    def __init__(self, corpus_reader=None, corpus=None, db_dir='dcctk.db/'):
         self.corpus_reader = corpus_reader
+        self.corpus_mem = None
+        if isinstance(corpus, list):
+            self.corpus_mem = corpus
         self.n_subcorp = corpus_reader.n_subcorp
         self.database = {}
         self.pat_ch_chr = re.compile("[〇一-\u9fff㐀-\u4dbf豈-\ufaff]")
@@ -37,7 +40,9 @@ class NgramCorpus:
     def corpus(self):
         """Return a corpus as a generator
         """
-        return self.corpus_reader.get_corpus_as_gen()
+        if self.corpus_mem is None:
+            return self.corpus_reader.get_corpus_as_gen()
+        return self.corpus_mem
 
 
     def bigram_associations(self, subcorp_idx=None, chinese_only=True, 
