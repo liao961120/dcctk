@@ -1,2 +1,2 @@
-# Diachronic Character-based Corpus Toolkit
+# Hanzi Corpus toolkit
 

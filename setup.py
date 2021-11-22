@@ -16,7 +16,7 @@ EXTRAS_REQUIRE['all'] = list(set(chain(*EXTRAS_REQUIRE.values())))
 
 setup(name='hctk',
       version=f'0.0.{v}',
-      description="Hanzi Character Corpus toolkit",
+      description="Hanzi Corpus toolkit",
       long_description=long_description,
       long_description_content_type='text/markdown',
       url='http://github.com/liao961120/hctk',
