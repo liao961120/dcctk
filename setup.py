@@ -14,16 +14,16 @@ EXTRAS_REQUIRE = {
 }
 EXTRAS_REQUIRE['all'] = list(set(chain(*EXTRAS_REQUIRE.values())))
 
-setup(name='dcctk',
+setup(name='hctk',
       version=f'0.0.{v}',
-      description="Diachronic Character-based Corpus toolkit",
+      description="Hanzi Character Corpus toolkit",
       long_description=long_description,
       long_description_content_type='text/markdown',
-      url='http://github.com/liao961120/dcctk',
+      url='http://github.com/liao961120/hctk',
       author='Yongfu Liao',
       author_email='liao961120@github.com',
       license='MIT',
-      packages=['dcctk'],
+      packages=['hctk'],
       install_requires=['scikit-learn', 'scipy', 'gdown>=3.10.2', 'pyyaml>=5.1', 'cqls', 'tqdm', 'hanziPhon', 'pickle5; python_version < "3.8.0"'],
       dependency_links=[
             'https://github.com/liao961120/CompoTree/tarball/main',
