@@ -1,10 +1,15 @@
-rm -r img/ _build/
-pandoc nb/dcctk_test.ipynb -f ipynb -t rst --extract-media img/ -s -o temp.rst
+pandoc nb/query.ipynb -f ipynb -t rst --extract-media img/ -s -o temp.rst
+pandoc nb/stats.ipynb -f ipynb -t rst --extract-media img/ -s -o temp2.rst
 
-echo -e 'Quick Start\n================\n\n' > usage.rst
-cat temp.rst >> usage.rst
+echo -e 'Query\n================\n\n' > query.rst
+cat temp.rst >> query.rst
 rm temp.rst
+
+echo -e 'Stats\n================\n\n' > stats.rst
+cat temp2.rst >> stats.rst
+rm temp2.rst
 
 make html
 
 cp -r _build/html/* ../docs/
+rm -r img/ _build/

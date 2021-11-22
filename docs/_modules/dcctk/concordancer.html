@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dcctk.concordancer &mdash; dcctk 0.0.40 documentation</title>
+  <title>dcctk.concordancer &mdash; cctk 0.0.9 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -24,7 +24,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> dcctk
+            <a href="../../index.html" class="icon icon-home"> cctk
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -36,10 +36,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../usage.html">1. Quick Start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../corpusReader.html">2. Corpus Input</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../concordance.html">3. Corpus Search &amp; Concordancer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sense.html">4. Sense Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../query.html">1. Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stats.html">2. Stats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../corpusReader.html">3. Corpus Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../concordance.html">4. Corpus Search &amp; Concordancer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sense.html">5. Sense Analysis</a></li>
 </ul>
 
         </div>
@@ -48,7 +49,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">dcctk</a>
+          <a href="../../index.html">cctk</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -71,17 +72,18 @@
 <span class="kn">import</span> <span class="nn">cqls</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
 <span class="kn">from</span> <span class="nn">CompoTree</span> <span class="kn">import</span> <span class="n">IDC</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
 
 <span class="kn">from</span> <span class="nn">.concordancerBase</span> <span class="kn">import</span> <span class="n">ConcordancerBase</span><span class="p">,</span> <span class="n">ConcordLine</span>
 <span class="kn">from</span> <span class="nn">.subCharQuery</span> <span class="kn">import</span> <span class="n">find_compo</span><span class="p">,</span> <span class="n">load_lexicon</span><span class="p">,</span> <span class="n">char_match_compo</span><span class="p">,</span> <span class="n">get_radicals</span>
 <span class="kn">from</span> <span class="nn">.UtilsConcord</span> <span class="kn">import</span> <span class="n">queryMatchToken</span>
 <span class="kn">from</span> <span class="nn">.UtilsSubchar</span> <span class="kn">import</span> <span class="n">all_plain_cql</span><span class="p">,</span> <span class="n">has_cql_match_type</span><span class="p">,</span> <span class="n">is_subchar</span>
+<span class="kn">from</span> <span class="nn">.UtilsStats</span> <span class="kn">import</span> <span class="n">additive_smooth</span>
 
 
 <div class="viewcode-block" id="Concordancer"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.Concordancer">[docs]</a><span class="k">class</span> <span class="nc">Concordancer</span><span class="p">(</span><span class="n">ConcordancerBase</span><span class="p">):</span>
     
     <span class="n">lexicon</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">phon_sys</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="Concordancer.cql_search"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.Concordancer.cql_search">[docs]</a>    <span class="k">def</span> <span class="nf">cql_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cql</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
         <span class="n">queries</span> <span class="o">=</span> <span class="n">cqls</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="n">default_attr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cql_default_attr</span><span class="p">,</span> \
@@ -113,11 +115,10 @@
             
             <span class="c1"># Cond2: no plain char match (compo as anchor)</span>
             <span class="k">else</span><span class="p">:</span>
-
                 <span class="n">subchar_idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">tk</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">query</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_subchar</span><span class="p">(</span><span class="n">tk</span><span class="p">)]</span>
                 <span class="n">tk0</span> <span class="o">=</span> <span class="n">query</span><span class="p">[</span><span class="n">subchar_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 
-                <span class="n">matched_chars</span> <span class="o">=</span> <span class="n">find_compo</span><span class="p">(</span><span class="n">tk0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lexicon</span><span class="p">)</span>
+                <span class="n">matched_chars</span> <span class="o">=</span> <span class="n">find_compo</span><span class="p">(</span><span class="n">tk0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lexicon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__hash__</span><span class="p">())</span>
 
                 <span class="n">len_query</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
                 <span class="n">keyword_anchor</span> <span class="o">=</span> <span class="p">{</span>
@@ -125,7 +126,7 @@
                     <span class="s1">&#39;seed_idx&#39;</span><span class="p">:</span> <span class="n">subchar_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="p">}</span>
 
-                <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">matched_chars</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">matched_chars</span><span class="p">):</span>
                     <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_keywords</span><span class="p">(</span><span class="n">keyword_anchor</span><span class="p">,</span> <span class="o">*</span><span class="n">idx</span><span class="p">)</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span> <span class="o">!=</span> <span class="n">len_query</span><span class="p">:</span> <span class="k">continue</span>
                     <span class="c1"># Check every token in keywords</span>
@@ -146,33 +147,24 @@
     
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">idcs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">chr_idcs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">IDC</span> <span class="p">}</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">radicals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">chr_radicals</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lexicon</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">load_lexicon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lexicon</span> <span class="o">=</span> <span class="n">load_lexicon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">get_radicals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lexicon</span><span class="p">)</span>
         
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">phon_initials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># based on self.phon_sys</span>
-        <span class="k">return</span> <span class="p">[]</span>
-    
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">phon_rhymes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># based on self.phon_sys</span>
-        <span class="k">return</span> <span class="p">[]</span>
-    
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">phon_tones</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># based on self.phon_sys</span>
-        <span class="k">return</span> <span class="p">[]</span>
-    
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">phon_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">def</span> <span class="nf">chr_phonetic_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;moe&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;phonetic_repr&#39;</span><span class="p">:</span> <span class="s1">&#39;bpm pinyin ipa&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span>
+                <span class="s1">&#39;tone&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="s1">&#39;12345&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;src&#39;</span><span class="p">:</span> <span class="s1">&#39;https://github.com/g0v/moedict-data&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cql_attrs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -180,25 +172,66 @@
             <span class="s2">&quot;Default&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;char&#39;</span><span class="p">],</span>
             <span class="s2">&quot;CharComponent&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;compo&#39;</span><span class="p">,</span> <span class="s1">&#39;max_depth&#39;</span><span class="p">,</span> <span class="s1">&#39;idc&#39;</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">],</span>
             <span class="s2">&quot;CharRadical&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;radical&#39;</span><span class="p">],</span>
-            <span class="s2">&quot;CharPhonetic&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">,</span> <span class="s2">&quot;rhym&quot;</span><span class="p">,</span> <span class="s2">&quot;tone&quot;</span><span class="p">,</span> <span class="s2">&quot;sys&quot;</span><span class="p">]</span>
-        <span class="p">}</span></div>
+            <span class="s2">&quot;CharPhonetic&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;phon&quot;</span><span class="p">,</span> <span class="s2">&quot;tone&quot;</span><span class="p">,</span> <span class="s2">&quot;sys&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
 
 
-<span class="c1"># from dcctk.corpusReader import PlainTextReader</span>
-<span class="c1"># c = SubCharConcordancer(PlainTextReader(&quot;data/&quot;).corpus)</span>
-<span class="c1"># # %%</span>
-<span class="c1"># cql = &#39;&#39;&#39;</span>
-<span class="c1"># [ compo=&quot;女&quot; &amp; idc=&quot;horz2&quot; &amp; pos=&quot;0&quot; ]{2}</span>
-<span class="c1"># &#39;&#39;&#39;</span>
-<span class="c1"># cql = &#39;&#39;&#39;</span>
-<span class="c1"># [ radical=&quot;龜&quot; ] [char=&quot;[一-龜]&quot;]</span>
-<span class="c1"># &#39;&#39;&#39;</span>
-<span class="c1"># cql = &#39;&#39;&#39;</span>
-<span class="c1"># [char=&quot;龜&quot;]</span>
-<span class="c1"># &#39;&#39;&#39;</span>
-<span class="c1"># results = list(c.cql_search(cql))</span>
-<span class="c1"># results[:5]</span>
-<span class="c1"># %%</span>
+<div class="viewcode-block" id="Concordancer.collocates"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.Concordancer.collocates">[docs]</a>    <span class="k">def</span> <span class="nf">collocates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_cql</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;Gsq&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">chinese_only</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                     node       ~node</span>
+<span class="sd">        collocate    O11         O12    R1 (char index len)</span>
+<span class="sd">        ~collocate   O21         O22    R2</span>
+<span class="sd">                      C1          C2   CorpSize</span>
+<span class="sd">                   (Concord num)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">o11</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="n">C1</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cql_search</span><span class="p">(</span><span class="n">node_cql</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">data</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subcorp_idx</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">m</span><span class="p">[</span><span class="s1">&#39;position&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">subcorp_idx</span><span class="p">:</span> <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]:</span>
+                <span class="n">o11</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">w</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+            <span class="n">C1</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="n">collo_margin</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">o11</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">chinese_only</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pat_ch_chr</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subcorp_idx</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">collo_margin</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">subcorp_idx</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">collo_margin</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">w</span><span class="p">])</span>
+        
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_corp_size</span><span class="p">(</span><span class="n">subcorp_idx</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">R1</span> <span class="ow">in</span> <span class="n">collo_margin</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">R2</span> <span class="o">=</span> <span class="n">N</span> <span class="o">-</span> <span class="n">R1</span>
+            <span class="n">O11</span> <span class="o">=</span> <span class="n">o11</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">O21</span> <span class="o">=</span> <span class="n">C1</span> <span class="o">-</span> <span class="n">O11</span>
+            <span class="n">O12</span> <span class="o">=</span> <span class="n">R1</span> <span class="o">-</span> <span class="n">O11</span>
+            <span class="n">O22</span> <span class="o">=</span> <span class="n">R2</span> <span class="o">-</span> <span class="n">O21</span>
+            <span class="n">O11</span><span class="p">,</span> <span class="n">O12</span><span class="p">,</span> <span class="n">O21</span><span class="p">,</span> <span class="n">O22</span><span class="p">,</span> <span class="n">E11</span><span class="p">,</span> <span class="n">E12</span><span class="p">,</span> <span class="n">E21</span><span class="p">,</span> <span class="n">E22</span> <span class="o">=</span> <span class="n">additive_smooth</span><span class="p">(</span><span class="n">O11</span><span class="p">,</span> <span class="n">O12</span><span class="p">,</span> <span class="n">O21</span><span class="p">,</span> <span class="n">O22</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="p">{</span> 
+                <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="n">func</span><span class="p">(</span><span class="n">O11</span><span class="p">,</span> <span class="n">O12</span><span class="p">,</span> <span class="n">O21</span><span class="p">,</span> <span class="n">O22</span><span class="p">,</span> <span class="n">E11</span><span class="p">,</span> <span class="n">E12</span><span class="p">,</span> <span class="n">E21</span><span class="p">,</span> <span class="n">E22</span><span class="p">)</span>\
+                    <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">association_measures</span>
+            <span class="p">}</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;RawCount&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">o11</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">w</span><span class="p">,</span> <span class="n">stats</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">sort_by</span><span class="p">])</span></div>
+
+
+    <span class="n">corp_size</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">def</span> <span class="nf">_get_corp_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">corp_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">corp_size</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)):</span>
+                <span class="n">corp</span> <span class="o">=</span> <span class="p">(</span><span class="n">c</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">corp_size</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">corp</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subcorp_idx</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">corp_size</span><span class="p">[</span><span class="n">subcorp_idx</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corp_size</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
 </pre></div>
 
            </div>

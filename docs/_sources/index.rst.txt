@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Diachronic Character-based Corpus Toolkit
+Hanzi Corpus Toolkit
 =========================================
 
 .. toctree::
@@ -11,7 +11,8 @@ Diachronic Character-based Corpus Toolkit
    :caption: Contents:
    :numbered:
 
-   usage
+   query
+   stats
    corpusReader
    concordance
    sense
@@ -22,7 +23,7 @@ Installation
 
 .. code-block:: bash
 
-   pip install -U dcctk[all]
+   pip install -U hctk
 
 
 Jupter Notebooks (Colab)
@@ -42,6 +43,7 @@ Chinese fonts, interactive visualizing package setup) need to be done:
    !mv /tmp/fonts/NotoSansMonoCJKtc-Regular.otf /usr/share/fonts/truetype/NotoSansMonoCJKtc-Regular.otf -f
    !rm -rf /tmp/fonts
    !rm NotoSansCJKtc-hinted.zip
+
 
 .. code-block:: python
 

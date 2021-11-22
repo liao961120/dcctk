@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>4. Sense Analysis &mdash; dcctk 0.0.40 documentation</title>
+  <title>5. Sense Analysis &mdash; cctk 0.0.9 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="3. Corpus Search &amp; Concordancer" href="concordance.html" /> 
+    <link rel="prev" title="4. Corpus Search &amp; Concordancer" href="concordance.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -25,7 +26,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> dcctk
+            <a href="index.html" class="icon icon-home"> cctk
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -37,10 +38,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="usage.html">1. Quick Start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="corpusReader.html">2. Corpus Input</a></li>
-<li class="toctree-l1"><a class="reference internal" href="concordance.html">3. Corpus Search &amp; Concordancer</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Sense Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query.html">1. Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.html">2. Stats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="corpusReader.html">3. Corpus Input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concordance.html">4. Corpus Search &amp; Concordancer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Sense Analysis</a></li>
 </ul>
 
         </div>
@@ -49,7 +51,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">dcctk</a>
+          <a href="index.html">cctk</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -57,7 +59,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">4. </span>Sense Analysis</li>
+      <li><span class="section-number">5. </span>Sense Analysis</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/sense.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -67,11 +69,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="sense-analysis">
-<h1><span class="section-number">4. </span>Sense Analysis<a class="headerlink" href="#sense-analysis" title="Permalink to this headline"></a></h1>
+  <section id="sense-analysis">
+<h1><span class="section-number">5. </span>Sense Analysis<a class="headerlink" href="#sense-analysis" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="dcctk.concordSimil.ConcordSimil">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dcctk.concordSimil.</span></span><span class="sig-name descname"><span class="pre">ConcordSimil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concord_lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bert_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_traditional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_idx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordSimil.html#ConcordSimil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordSimil.ConcordSimil" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dcctk.concordSimil.</span></span><span class="sig-name descname"><span class="pre">ConcordSimil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concord_lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bert_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_traditional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordSimil.html#ConcordSimil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordSimil.ConcordSimil" title="Permalink to this definition"></a></dt>
 <dd><p>Similarity analysis of concordance lines</p>
 <p class="rubric">Methods</p>
 <table class="longtable docutils align-default">
@@ -116,7 +118,7 @@
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="dcctk.concordSimil.ConcordSimil.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concord_lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bert_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_traditional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_idx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordSimil.html#ConcordSimil.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordSimil.ConcordSimil.__init__" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">concord_lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bert_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_traditional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordSimil.html#ConcordSimil.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordSimil.ConcordSimil.__init__" title="Permalink to this definition"></a></dt>
 <dd><p>Initialize similarity analysis</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -160,7 +162,7 @@ Bert model, by default True</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dcctk.concordSimil.ConcordSimil.semantic_sort">
-<span class="sig-name descname"><span class="pre">semantic_sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">base_sent:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">base_tk:</span> <span class="pre">Optional[tuple]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">is_traditional=True</span></em>, <em class="sig-param"><span class="pre">simil_func:</span> <span class="pre">Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">cossim&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordSimil.html#ConcordSimil.semantic_sort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordSimil.ConcordSimil.semantic_sort" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">semantic_sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_sent:</span> <span class="pre">Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_tk:</span> <span class="pre">Optional[tuple]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_traditional=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simil_func:</span> <span class="pre">Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">cossim&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordSimil.html#ConcordSimil.semantic_sort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordSimil.ConcordSimil.semantic_sort" title="Permalink to this definition"></a></dt>
 <dd><p>Sort concordance lines based on Bert vector similarities</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -201,7 +203,7 @@ to <code class="code docutils literal notranslate"><span class="pre">base_sent</
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dcctk.senseAnalysis.SenseAnalysis">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">dcctk.senseAnalysis.</span></span><span class="sig-name descname"><span class="pre">SenseAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CS</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/senseAnalysis.html#SenseAnalysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.senseAnalysis.SenseAnalysis" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dcctk.senseAnalysis.</span></span><span class="sig-name descname"><span class="pre">SenseAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CS</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/senseAnalysis.html#SenseAnalysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.senseAnalysis.SenseAnalysis" title="Permalink to this definition"></a></dt>
 <dd><p>Sense distribution based on sense clustering of concordance lines</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
@@ -251,7 +253,7 @@ hierarchical clustering has been performed on.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dcctk.senseAnalysis.SenseAnalysis.plot_sense_distribution">
-<span class="sig-name descname"><span class="pre">plot_sense_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timelabel</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/senseAnalysis.html#SenseAnalysis.plot_sense_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.senseAnalysis.SenseAnalysis.plot_sense_distribution" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_sense_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timelabel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/senseAnalysis.html#SenseAnalysis.plot_sense_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.senseAnalysis.SenseAnalysis.plot_sense_distribution" title="Permalink to this definition"></a></dt>
 <dd><p>Plot distribution of sense clusters across time</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -266,19 +268,19 @@ are found in <a class="reference internal" href="#dcctk.senseAnalysis.SenseAnaly
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dcctk.senseAnalysis.SenseAnalysis.ts_label_map">
-<span class="sig-name descname"><span class="pre">ts_label_map</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[]</span></em><a class="headerlink" href="#dcctk.senseAnalysis.SenseAnalysis.ts_label_map" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ts_label_map</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#dcctk.senseAnalysis.SenseAnalysis.ts_label_map" title="Permalink to this definition"></a></dt>
 <dd><p>Timestep meta info</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="concordance.html" class="btn btn-neutral float-left" title="3. Corpus Search &amp; Concordancer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="concordance.html" class="btn btn-neutral float-left" title="4. Corpus Search &amp; Concordancer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
