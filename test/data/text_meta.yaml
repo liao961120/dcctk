@@ -18069,7 +18069,10 @@
 01/莊子_雜篇.txt:
   book: 莊子
   sec: 雜篇
-08/asbc_sub.txt:
+08/asbc1.txt:
+  book: asbc
+  sec: asbc
+08/asbc2.txt:
   book: asbc
   sec: asbc
 10/dispersion1.txt:
