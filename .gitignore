@@ -8,8 +8,9 @@ AnchiBERT
 _build
 moe.json
 .ipynb_checkpoints
-data
+data/moe.json
 *.bak
 *.dat
 *.dir
 Unihan
+docs_source/nb/data
