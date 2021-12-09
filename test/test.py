@@ -1,13 +1,25 @@
 #%%
 from itertools import chain
 from collections import Counter
-from dcctk.corpusReader import PlainTextReader
-# from dcctk.concordancer import Concordancer
+from hctk.corpusReader import PlainTextReader
+from hctk.concordancer import Concordancer
 # from dcctk.corpus import NgramCorpus, Gsq, DeltaP12, DeltaP21
 # from dcctk.dispersion import Dispersion
 # from dcctk.compoAnalysis import CompoAnalysis
 # from dcctk.compoConcordancer import CompoConcordancer
 # from dcctk.embeddings import AnchiBert
+
+C = Concordancer(PlainTextReader('data/').corpus)
+
+#%%
+cql = """
+[semtag="人體精神"] [semtag="植物"]
+"""
+for i, x in enumerate(C.cql_search(cql)): 
+    print(x)
+    if i == 10: break
+
+#%%
 corp_reader = PlainTextReader('data/', auto_load=False)
 
 c = (c for sc in corp_reader.get_corpus_as_gen() for t in sc['text'] for c in t['c'])
