@@ -3,7 +3,6 @@ import cqls
 from itertools import chain
 from CompoTree import IDC
 from collections import Counter
-
 from .concordancerBase import ConcordancerBase, ConcordLine
 from .subCharQuery import find_compo, load_lexicon, char_match_compo, get_radicals
 from .UtilsConcord import queryMatchToken
@@ -93,6 +92,7 @@ class Concordancer(ConcordancerBase):
             "Default": ['char'],
             "CharComponent": ['compo', 'max_depth', 'idc', 'pos'],
             "CharRadical": ['radical'],
+            "CharSemantic": ['semtag'],
             "CharPhonetic": {
                 "moe": ['phon', 'tone', 'tp', 'sys="moe"'],
                 "廣韻": [
@@ -159,3 +159,5 @@ class Concordancer(ConcordancerBase):
         if isinstance(subcorp_idx, int):
             return self.corp_size[subcorp_idx]
         return sum(self.corp_size.values())
+
+# %%

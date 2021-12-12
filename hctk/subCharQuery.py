@@ -1,7 +1,9 @@
+import re
 from typing import Sequence
 from CompoTree import ComponentTree, Radicals, CharLexicon, IDC, CTFounds
 from hanziPhon import Moe, GuangYun
 from .UtilsConcord import match_mode
+from .shallowSemanticTag import CharacterTagger
 
 ctree = ComponentTree.load()
 radicals = Radicals.load()
@@ -9,6 +11,7 @@ match_cache = dict()
 radical_map = None
 idc_rev_map = None
 phon_map = None
+charTagger = None
 idc_val_nm = { x.value:x.name for x in IDC }
 idc_names = set(idc_val_nm.values())
 
@@ -30,12 +33,35 @@ def find_compo(tk:dict, lexicon:CharLexicon, hash):
         return phonetic_search(tk, lexicon)
     elif 'radical' in tk['match']:
         return radical_search(tk, lexicon)
+    elif 'semtag' in tk['match']:
+        return semanticTag_search(tk, lexicon)
     elif 'compo' in tk['match']:
         return component_search(tk, lexicon)
     elif 'idc' in tk['match']:
         return idc_search(tk, lexicon)
     else:
         raise Exception('Invalid CQL attributes.')
+    
+
+def semanticTag_search(tk, lexicon):
+    """Search hanzi by semantic tag
+
+    .. code-block:: python
+        
+        {
+            'match': {
+                'semtag': ['無生命|心理狀態']
+            },
+            'not_match': {}
+        }
+    """
+    init_charTagger(lexicon)
+    global charTagger
+    pat = re.compile(tk['match']['semtag'][0])
+    return { 
+        ch for ch, tags in charTagger.chr2tag.items() 
+           if any(pat.match(t) for t in tags) 
+    }
     
 
 # Sub-character search functions
@@ -187,6 +213,12 @@ def build_phon_map(lexicon:CharLexicon, moe=False, 廣韻=True):
         phon_map['moe'] = Moe(lexicon=lexicon.lexicon)
     if 廣韻 and ('廣韻' not in phon_map):
         phon_map['廣韻'] = GuangYun(lexicon=lexicon.lexicon)
+
+
+def init_charTagger(lexicon):
+    global charTagger
+    if charTagger is None:
+        charTagger = CharacterTagger(all_words=lexicon.lexicon, radicals=radicals)
 
 
 def load_lexicon(lexicon: Sequence):
