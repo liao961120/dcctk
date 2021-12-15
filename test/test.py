@@ -1,15 +1,27 @@
 #%%
 from itertools import chain
 from collections import Counter
-from hctk.corpusReader import PlainTextReader
-from hctk.concordancer import Concordancer
-# from dcctk.corpus import NgramCorpus, Gsq, DeltaP12, DeltaP21
-# from dcctk.dispersion import Dispersion
-# from dcctk.compoAnalysis import CompoAnalysis
-# from dcctk.compoConcordancer import CompoConcordancer
-# from dcctk.embeddings import AnchiBert
+from hang.corpusReader import PlainTextReader
+from hang.concordancer import Concordancer
+# from hang.corpus import NgramCorpus, Gsq, DeltaP12, DeltaP21
+# from hang.dispersion import Dispersion
+# from hang.compoAnalysis import CompoAnalysis
+# from hang.compoConcordancer import CompoConcordancer
+# from hang.embeddings import AnchiBert
 
 C = Concordancer(PlainTextReader('data/').corpus)
+
+#%%
+from hang import CompoAnalysis, PlainTextReader
+
+C = CompoAnalysis(PlainTextReader("data", auto_load=False))
+
+#%%
+C.freq_distr(tp="chr", )
+
+
+
+
 
 #%%
 cql = """
