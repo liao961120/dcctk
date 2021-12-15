@@ -1,2 +1,2 @@
-# Hanzi Corpus toolkit
+# Hanzi Glyph Corpus toolkit
 
