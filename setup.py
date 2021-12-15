@@ -14,16 +14,16 @@ EXTRAS_REQUIRE = {
 }
 EXTRAS_REQUIRE['all'] = list(set(chain(*EXTRAS_REQUIRE.values())))
 
-setup(name='hang',
+setup(name='hgct',
       version=f'0.0.{v}',
       description="Hanzi Glyph Corpus Toolkit",
       long_description=long_description,
       long_description_content_type='text/markdown',
-      url='http://github.com/liao961120/hang',
+      url='http://github.com/liao961120/hgct',
       author='Yongfu Liao',
       author_email='liao961120@github.com',
       license='MIT',
-      packages=['hang'],
+      packages=['hgct'],
       package_data={
             "": ["../data/radical_semantic_tag.json"],
       },

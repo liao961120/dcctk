@@ -17,7 +17,7 @@ from hang import CompoAnalysis, PlainTextReader
 C = CompoAnalysis(PlainTextReader("data", auto_load=False))
 
 #%%
-C.freq_distr(tp="chr", )
+C.freq_distr(tp="rad", prob=True, chinese_only=True, use_chr_types=True, subcorp_idx=3)
 
 
 
