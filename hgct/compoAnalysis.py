@@ -44,11 +44,11 @@ class CompoAnalysis:
                      subcorp_idx:int=None, text_idx:int=None):
 
         chr_fq = self.freq_distr(subcorp_idx, text_idx, "chr")
-        if radical:
+        if isinstance(radical, str):
             chars = self.rad_map.get(radical, set())
-        elif compo:
+        elif isinstance(compo, str):
             chars = self._component_search(compo, idc, pos)
-        elif idc:
+        elif isinstance(idc, str):
             chars = self._idc_search(idc)
         else:
             raise Exception("One of `radical`, `compo`, or `idc` must be given")
@@ -92,6 +92,8 @@ class CompoAnalysis:
 
     
     def _idc_search(self, idc:str="vert2"):
+        if idc == "" or idc.upper() == "NULL":
+            return self.idc_map.get("NULL")
         global idc_names
         if idc not in idc_names: 
             raise Exception(f"Invalid IDC value `{idc}`!", 
@@ -213,10 +215,12 @@ class CompoAnalysis:
         idc_val_nm = { x.value: x.name for x in IDC }
         for ch in self.chars:
             idc = ctree.ids_map.get(ch, [None])[0]
-            if idc is None: continue
-            idc = idc_val_nm.get(idc.idc)
-            if idc:
-                self.idc_map.setdefault(idc, set()).add(ch)
+            if idc is None: 
+                idc = "NULL"
+            else:
+                idc = idc.idc
+            idc_nm = idc_val_nm.get(idc, "NULL")
+            self.idc_map.setdefault(idc_nm, set()).add(ch)
 
 
 def prun(x: Counter, chinese=True):
