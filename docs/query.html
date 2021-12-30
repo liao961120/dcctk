@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>1. Query &mdash; cctk 0.0.9 documentation</title>
+  <title>1. Query &mdash; hgct 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="2. Stats" href="stats.html" />
-    <link rel="prev" title="Hanzi Corpus Toolkit" href="index.html" /> 
+    <link rel="prev" title="Hanzi Glyph Corpus Toolkit" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -27,7 +27,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> cctk
+            <a href="index.html" class="icon icon-home"> hgct
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -43,7 +43,6 @@
 <li class="toctree-l1"><a class="reference internal" href="stats.html">2. Stats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="corpusReader.html">3. Corpus Input</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concordance.html">4. Corpus Search &amp; Concordancer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sense.html">5. Sense Analysis</a></li>
 </ul>
 
         </div>
@@ -52,7 +51,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cctk</a>
+          <a href="index.html">hgct</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -73,26 +72,67 @@
   <section id="query">
 <h1><span class="section-number">1. </span>Query<a class="headerlink" href="#query" title="Permalink to this headline"></a></h1>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gdown https://github.com/liao961120/hctk/raw/main/test/data.zip
-!unzip -q data.zip
-!pip install -q https://github.com/liao961120/CompoTree/tarball/main
-!pip install -qU hctk
-</pre></div>
-</div>
-<div class="output stream stdout docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Downloading</span><span class="o">...</span>
-<span class="n">From</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">liao961120</span><span class="o">/</span><span class="n">hctk</span><span class="o">/</span><span class="n">raw</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">test</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
-<span class="n">To</span><span class="p">:</span> <span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
-<span class="mi">100</span><span class="o">%</span> <span class="mf">11.5</span><span class="n">M</span><span class="o">/</span><span class="mf">11.5</span><span class="n">M</span> <span class="p">[</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">&lt;</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">,</span> <span class="mf">99.7</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">]</span>
-<span class="n">poTree</span> <span class="p">(</span><span class="n">setup</span><span class="o">.</span><span class="n">py</span><span class="p">)</span> <span class="o">...</span> <span class="n">ents</span> <span class="n">to</span> <span class="n">build</span> <span class="n">wheel</span> <span class="o">...</span> <span class="n">etadata</span> <span class="o">...</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Colab setup</span>
+<span class="c1"># !gdown https://github.com/liao961120/hgct/raw/main/test/data.zip</span>
+<span class="c1"># !unzip -q data.zip</span>
+<span class="c1"># !pip install -qU hgct</span>
 </pre></div>
 </div>
 </div>
+<div class="cell markdown docutils container">
+<!-- Hide section entries in toc --><p class="rubric" id="search-api-in-hgtk">Search API in <em>hgtk</em></p>
+</div>
+<div class="cell markdown docutils container">
+<p>In the following tutorials (Appendix A and B), we will use a small
+collection of texts as the example corpus. The text data is available
+on GitHub at
+<a class="reference external" href="https://github.com/liao961120/hgct/raw/main/test/data.zip">https://github.com/liao961120/hgct/raw/main/test/data.zip</a>. After
+extracting <code class="docutils literal notranslate"><span class="pre">data.zip</span></code> to the directory <code class="docutils literal notranslate"><span class="pre">data</span></code>, it should have the
+following structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data
+├── 01
+│   ├── 儀禮_公食大夫禮.txt
+│   ├── ...
+│   └── 黃帝內經_靈樞經.txt
+├── 02
+│   ├── ...
+│   └── 鹽鐵論_卷四.txt
+├── 03
+│   ├── 三國志_吳書一.txt
+│   ├── ...
+│   └── 魯勝墨辯注敘_魯勝墨辯注敘.txt
+├── 08
+│   ├── asbc1.txt
+│   └── asbc2.txt
+└── 10
+    ├── dispersion1.txt
+    ├── ...
+    └── dispersion5.txt
+</pre></div>
+</div>
+<p>The directory <code class="docutils literal notranslate"><span class="pre">data</span></code> corresponds to the corpus in <em>hgct</em>’s corpus
+representation. It contains five directories, each of which
+corresponds to a subcorpus. Directory <code class="docutils literal notranslate"><span class="pre">01</span></code>, <code class="docutils literal notranslate"><span class="pre">02</span></code>, and <code class="docutils literal notranslate"><span class="pre">03</span></code>
+consists of small samples of Literary Chinese texts collected from
+the Chinese Text Project (<a class="reference external" href="https://ctext.org">https://ctext.org</a>). Directory <code class="docutils literal notranslate"><span class="pre">08</span></code> holds
+modern Chinese texts sampled from ASBC. The directory <code class="docutils literal notranslate"><span class="pre">10</span></code> is a toy
+corpus in &#64;gries2020 [p. 102] used for illustrating calculations of
+dispersion measures.</p>
+</div>
+<div class="cell markdown docutils container">
+<p>In this tutorial, we demonstrate the supported functionalities in
+<em>hgct</em> for searching the corpus.</p>
+<p class="rubric" id="loading-corpus-data-into-concordancer">Loading Corpus Data into Concordancer</p>
+<p>Provided that the input corpus follows the required directory
+structure mentioned in &#64;sec:corpus-structure-and-input-data, users
+could convert the input corpus to the internal corpus representation
+with <code class="docutils literal notranslate"><span class="pre">PlainTextReader()</span></code> as in the following code block. Since we
+are now demonstrating the search functions, we immediately pass the
+corpus to <code class="docutils literal notranslate"><span class="pre">Concordancer()</span></code>, which is the object used in <em>hgct</em> for
+searching the corpus.</p>
 </div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hctk</span> <span class="kn">import</span> <span class="n">PlainTextReader</span>
-<span class="kn">from</span> <span class="nn">hctk</span> <span class="kn">import</span> <span class="n">Concordancer</span>
-
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hgct</span> <span class="kn">import</span> <span class="n">PlainTextReader</span><span class="p">,</span> <span class="n">Concordancer</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">Concordancer</span><span class="p">(</span><span class="n">PlainTextReader</span><span class="p">(</span><span class="s2">&quot;data/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -102,7 +142,7 @@
 </div>
 </div>
 <div class="output display-data docutils container">
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;88734e113f194da29701f2d8f90a1dfa&quot;</span><span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;fb6872ef86e3446da7140a66c9108fc0&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -112,49 +152,111 @@
 </div>
 </div>
 <div class="output display-data docutils container">
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;1115561dfd004ccd85328a09458d1a42&quot;</span><span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;3502b87c9fab4b1aabfd8a07bcf460dc&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 </div>
+<div class="cell markdown docutils container">
+<p>The <code class="docutils literal notranslate"><span class="pre">Concordancer</span></code> object could be used to retrieve results
+matching the search pattern as a sequence[1] of concordance lines.
+Since many of the search patterns would return plenty of results, we
+define a wrapper function <code class="docutils literal notranslate"><span class="pre">get_first_n()</span></code> here for the purpose of
+demonstration.</p>
+<p>[1] More precisely, a <em>generator</em> of concordance lines.</p>
+</div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_first_n</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_first_n</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">cql_search</span><span class="p">(</span><span class="n">cql</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">cql_search</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">right</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">n</span><span class="p">:</span> <span class="k">break</span>
-        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">out</span>
 </pre></div>
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="search-by-character">1 Search by Character</p>
+<p class="rubric" id="search-by-character">Search by Character</p>
+<p>In our first example, we define the search pattern as
+<code class="docutils literal notranslate"><span class="pre">[char=&quot;龜&quot;]</span> <span class="pre">[char=&quot;[一-龜]&quot;]</span></code>, which roughly means</p>
+<blockquote>
+<div><p>a sequence of two characters starting with “龜” and ending with
+any Chinese characters (not, e.g., punctuations)</p>
+</div></blockquote>
+<p>Passing this pattern to <code class="docutils literal notranslate"><span class="pre">get_first_n()</span></code> (or
+<code class="docutils literal notranslate"><span class="pre">Concordancer.cql_search()</span></code> gives us a sequence of <code class="docutils literal notranslate"><span class="pre">Concord</span></code>
+objects. A <code class="docutils literal notranslate"><span class="pre">Concord</span></code> object is used to represent a matched result
+returned from the corpus in <em>hgct</em>.</p>
 </div>
 <div class="cell code docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">[char=&quot;龜&quot;] [char=&quot;[一-龜]&quot;]</span>
 <span class="s1">&#39;&#39;&#39;</span>
-<span class="n">get_first_n</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="c1"># left/right: left/right context size around the keyword</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">get_first_n</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">results</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 曰：「十戰{龜熸}，是荊人也&gt;,
- &lt;Concord 坤之卦，蓍{龜者}則卜筮之數&gt;,
- &lt;Concord ，毛蚡蜦；{龜知}，背負文。&gt;,
- &lt;Concord 尚生不死。{龜能}行氣導引。&gt;,
- &lt;Concord 為兒時，以{龜枝}床，至後老&gt;,
- &lt;Concord 死，移床，{龜尚}生不死。龜&gt;,
- &lt;Concord 為寶貨。元{龜為}蔡，非四民&gt;,
- &lt;Concord 也。脩肱而{龜背}，長九尺有&gt;,
- &lt;Concord 妖。時則有{龜孽}。時則有雞&gt;,
- &lt;Concord 起離體泉，{龜蛟}珠蛤。土為&gt;]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 遷有無，貨自{龜貝}，至此&gt;,
+ &lt;Concord 山在西北。有{龜山}。有龍&gt;,
+ &lt;Concord ，故獸不狘；{龜以}為畜，&gt;,
+ &lt;Concord 江郡常歲時生{龜長}尺二寸&gt;,
+ &lt;Concord 無為頓復卜三{龜知}。聖人&gt;]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="search-by-character-component">2 Search by Character Component</p>
-<p class="rubric" id="radicals-of-all-characters-found-in-the-corpus">2.1 Radicals of all characters found in the corpus</p>
+<p>To get more information about a particular matching result, we can
+look at the <code class="docutils literal notranslate"><span class="pre">data</span></code> attribute in a <code class="docutils literal notranslate"><span class="pre">Concord</span></code> object, which is a
+dictionary holding the relevant information of the matching result.</p>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result_1</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">result_1</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;captureGroups&#39;</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="s1">&#39;keyword&#39;</span><span class="p">:</span> <span class="s1">&#39;龜貝&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="s1">&#39;遷有無，貨自&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;02/漢書_傳.txt&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;book&#39;</span><span class="p">:</span> <span class="s1">&#39;漢書&#39;</span><span class="p">,</span> <span class="s1">&#39;sec&#39;</span><span class="p">:</span> <span class="s1">&#39;傳&#39;</span><span class="p">},</span>
+  <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;漢&#39;</span><span class="p">,</span> <span class="s1">&#39;ord&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;time_range&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">205</span><span class="p">,</span> <span class="mi">220</span><span class="p">]}},</span>
+ <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3482</span><span class="p">,</span> <span class="mi">42</span><span class="p">),</span>
+ <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="s1">&#39;，至此&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell markdown docutils container">
+<p>Note the <code class="docutils literal notranslate"><span class="pre">position</span></code> key in <code class="docutils literal notranslate"><span class="pre">Concord.data</span></code>. It holds the position
+of the matched keyword in the corpus. The elements in the 4-tuple
+<code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">6,</span> <span class="pre">3482,</span> <span class="pre">32)</span></code> correspond respectively to the indices of
+<code class="docutils literal notranslate"><span class="pre">(subcorpus,</span> <span class="pre">text,</span> <span class="pre">sentence,</span> <span class="pre">character)</span></code>.</p>
+<p>We did not mention above how the index of a subcorpus is determined.
+The index of a subcorpus is automatically determined according to the
+<strong>character order of the directory names</strong>. Remember that there are
+four directories (subcorpora) in our input corpus—<code class="docutils literal notranslate"><span class="pre">01</span></code>, <code class="docutils literal notranslate"><span class="pre">02</span></code>,
+<code class="docutils literal notranslate"><span class="pre">03</span></code>, <code class="docutils literal notranslate"><span class="pre">08</span></code>, and <code class="docutils literal notranslate"><span class="pre">10</span></code>. So by character order, <code class="docutils literal notranslate"><span class="pre">01</span></code> appears
+before <code class="docutils literal notranslate"><span class="pre">02</span></code>, <code class="docutils literal notranslate"><span class="pre">02</span></code> before <code class="docutils literal notranslate"><span class="pre">03</span></code>, <code class="docutils literal notranslate"><span class="pre">03</span></code> before <code class="docutils literal notranslate"><span class="pre">08</span></code>, and so on.
+Hence, the first directory <code class="docutils literal notranslate"><span class="pre">01</span></code> is given the index of 0, the second
+is given the index of 1, and so on. These indices of the subcorpora,
+as seen later in Appendix B, could be used for limiting the scope of
+the functions in <em>hgct</em> in computing corpus statistical measures.</p>
+</div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="search-by-character-components">Search by Character Components</p>
+<p>In addition to character forms, we can also describe search patterns
+in terms of character compositions, such as the Kangxi Radical or
+Ideographic Descriptions of a character.</p>
+</div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="kangxi-radicals">Kangxi Radicals</p>
+<p>To take a look at all the present Kangxi radicals in the characters
+of the corpus, the attribute <code class="docutils literal notranslate"><span class="pre">Concordancer.chr_radicals</span></code> could be
+used:</p>
 </div>
 <div class="cell code docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">chr_radicals</span><span class="p">)</span>
@@ -162,35 +264,38 @@
 </div>
 <div class="output stream stdout docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Building</span> <span class="n">index</span> <span class="k">for</span> <span class="n">character</span> <span class="n">radicals</span><span class="o">...</span>
-<span class="p">{</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;風&#39;</span><span class="p">,</span> <span class="s1">&#39;長&#39;</span><span class="p">,</span> <span class="s1">&#39;齿&#39;</span><span class="p">,</span> <span class="s1">&#39;鬥&#39;</span><span class="p">,</span> <span class="s1">&#39;米&#39;</span><span class="p">,</span> <span class="s1">&#39;鳥&#39;</span><span class="p">,</span> <span class="s1">&#39;皮&#39;</span><span class="p">,</span> <span class="s1">&#39;干&#39;</span><span class="p">,</span> <span class="s1">&#39;阜&#39;</span><span class="p">,</span> <span class="s1">&#39;木&#39;</span><span class="p">,</span> <span class="s1">&#39;鬼&#39;</span><span class="p">,</span> <span class="s1">&#39;韋&#39;</span><span class="p">,</span> <span class="s1">&#39;釆&#39;</span><span class="p">,</span> <span class="s1">&#39;亅&#39;</span><span class="p">,</span> <span class="s1">&#39;玄&#39;</span><span class="p">,</span> <span class="s1">&#39;辰&#39;</span><span class="p">,</span> <span class="s1">&#39;宀&#39;</span><span class="p">,</span> <span class="s1">&#39;刀&#39;</span><span class="p">,</span> <span class="s1">&#39;支&#39;</span><span class="p">,</span> <span class="s1">&#39;韭&#39;</span><span class="p">,</span> <span class="s1">&#39;舟&#39;</span><span class="p">,</span> <span class="s1">&#39;田&#39;</span><span class="p">,</span> <span class="s1">&#39;饣&#39;</span><span class="p">,</span> <span class="s1">&#39;止&#39;</span><span class="p">,</span> <span class="s1">&#39;癶&#39;</span><span class="p">,</span> <span class="s1">&#39;辵&#39;</span><span class="p">,</span> <span class="s1">&#39;鱼&#39;</span><span class="p">,</span> <span class="s1">&#39;夕&#39;</span><span class="p">,</span> <span class="s1">&#39;馬&#39;</span><span class="p">,</span> <span class="s1">&#39;弓&#39;</span><span class="p">,</span> <span class="s1">&#39;示&#39;</span><span class="p">,</span> <span class="s1">&#39;欠&#39;</span><span class="p">,</span> <span class="s1">&#39;疋&#39;</span><span class="p">,</span> <span class="s1">&#39;车&#39;</span><span class="p">,</span> <span class="s1">&#39;龙&#39;</span><span class="p">,</span> <span class="s1">&#39;方&#39;</span><span class="p">,</span> <span class="s1">&#39;缶&#39;</span><span class="p">,</span> <span class="s1">&#39;己&#39;</span><span class="p">,</span> <span class="s1">&#39;爿&#39;</span><span class="p">,</span> <span class="s1">&#39;隹&#39;</span><span class="p">,</span> <span class="s1">&#39;鸟&#39;</span><span class="p">,</span> <span class="s1">&#39;非&#39;</span><span class="p">,</span> <span class="s1">&#39;士&#39;</span><span class="p">,</span> <span class="s1">&#39;纟&#39;</span><span class="p">,</span> <span class="s1">&#39;卜&#39;</span><span class="p">,</span> <span class="s1">&#39;鼎&#39;</span><span class="p">,</span> <span class="s1">&#39;乙&#39;</span><span class="p">,</span> <span class="s1">&#39;革&#39;</span><span class="p">,</span> <span class="s1">&#39;見&#39;</span><span class="p">,</span> <span class="s1">&#39;豸&#39;</span><span class="p">,</span> <span class="s1">&#39;走&#39;</span><span class="p">,</span> <span class="s1">&#39;羊&#39;</span><span class="p">,</span> <span class="s1">&#39;匕&#39;</span><span class="p">,</span> <span class="s1">&#39;马&#39;</span><span class="p">,</span> <span class="s1">&#39;麥&#39;</span><span class="p">,</span> <span class="s1">&#39;寸&#39;</span><span class="p">,</span> <span class="s1">&#39;麦&#39;</span><span class="p">,</span> <span class="s1">&#39;身&#39;</span><span class="p">,</span> <span class="s1">&#39;黑&#39;</span><span class="p">,</span> <span class="s1">&#39;殳&#39;</span><span class="p">,</span> <span class="s1">&#39;犬&#39;</span><span class="p">,</span> <span class="s1">&#39;隶&#39;</span><span class="p">,</span> <span class="s1">&#39;女&#39;</span><span class="p">,</span> <span class="s1">&#39;黾&#39;</span><span class="p">,</span> <span class="s1">&#39;甘&#39;</span><span class="p">,</span> <span class="s1">&#39;亠&#39;</span><span class="p">,</span> <span class="s1">&#39;页&#39;</span><span class="p">,</span> <span class="s1">&#39;酉&#39;</span><span class="p">,</span> <span class="s1">&#39;火&#39;</span><span class="p">,</span> <span class="s1">&#39;心&#39;</span><span class="p">,</span> <span class="s1">&#39;龍&#39;</span><span class="p">,</span> <span class="s1">&#39;水&#39;</span><span class="p">,</span> <span class="s1">&#39;韦&#39;</span><span class="p">,</span> <span class="s1">&#39;卩&#39;</span><span class="p">,</span> <span class="s1">&#39;氏&#39;</span><span class="p">,</span> <span class="s1">&#39;虫&#39;</span><span class="p">,</span> <span class="s1">&#39;豕&#39;</span><span class="p">,</span> <span class="s1">&#39;人&#39;</span><span class="p">,</span> <span class="s1">&#39;瓜&#39;</span><span class="p">,</span> <span class="s1">&#39;爻&#39;</span><span class="p">,</span> <span class="s1">&#39;牛&#39;</span><span class="p">,</span> <span class="s1">&#39;口&#39;</span><span class="p">,</span> <span class="s1">&#39;小&#39;</span><span class="p">,</span> <span class="s1">&#39;毋&#39;</span><span class="p">,</span> <span class="s1">&#39;儿&#39;</span><span class="p">,</span> <span class="s1">&#39;目&#39;</span><span class="p">,</span> <span class="s1">&#39;矛&#39;</span><span class="p">,</span> <span class="s1">&#39;而&#39;</span><span class="p">,</span> <span class="s1">&#39;玉&#39;</span><span class="p">,</span> <span class="s1">&#39;鬯&#39;</span><span class="p">,</span> <span class="s1">&#39;香&#39;</span><span class="p">,</span> <span class="s1">&#39;廾&#39;</span><span class="p">,</span> <span class="s1">&#39;雨&#39;</span><span class="p">,</span> <span class="s1">&#39;龠&#39;</span><span class="p">,</span> <span class="s1">&#39;手&#39;</span><span class="p">,</span> <span class="s1">&#39;囗&#39;</span><span class="p">,</span> <span class="s1">&#39;黍&#39;</span><span class="p">,</span> <span class="s1">&#39;气&#39;</span><span class="p">,</span> <span class="s1">&#39;角&#39;</span><span class="p">,</span> <span class="s1">&#39;广&#39;</span><span class="p">,</span> <span class="s1">&#39;文&#39;</span><span class="p">,</span> <span class="s1">&#39;山&#39;</span><span class="p">,</span> <span class="s1">&#39;戈&#39;</span><span class="p">,</span> <span class="s1">&#39;邑&#39;</span><span class="p">,</span> <span class="s1">&#39;门&#39;</span><span class="p">,</span> <span class="s1">&#39;赤&#39;</span><span class="p">,</span> <span class="s1">&#39;髟&#39;</span><span class="p">,</span> <span class="s1">&#39;鼠&#39;</span><span class="p">,</span> <span class="s1">&#39;几&#39;</span><span class="p">,</span> <span class="s1">&#39;廴&#39;</span><span class="p">,</span> <span class="s1">&#39;門&#39;</span><span class="p">,</span> <span class="s1">&#39;里&#39;</span><span class="p">,</span> <span class="s1">&#39;白&#39;</span><span class="p">,</span> <span class="s1">&#39;鼻&#39;</span><span class="p">,</span> <span class="s1">&#39;生&#39;</span><span class="p">,</span> <span class="s1">&#39;麻&#39;</span><span class="p">,</span> <span class="s1">&#39;见&#39;</span><span class="p">,</span> <span class="s1">&#39;丶&#39;</span><span class="p">,</span> <span class="s1">&#39;老&#39;</span><span class="p">,</span> <span class="s1">&#39;臣&#39;</span><span class="p">,</span> <span class="s1">&#39;土&#39;</span><span class="p">,</span> <span class="s1">&#39;肉&#39;</span><span class="p">,</span> <span class="s1">&#39;钅&#39;</span><span class="p">,</span> <span class="s1">&#39;无&#39;</span><span class="p">,</span> <span class="s1">&#39;襾&#39;</span><span class="p">,</span> <span class="s1">&#39;艸&#39;</span><span class="p">,</span> <span class="s1">&#39;日&#39;</span><span class="p">,</span> <span class="s1">&#39;齒&#39;</span><span class="p">,</span> <span class="s1">&#39;大&#39;</span><span class="p">,</span> <span class="s1">&#39;爪&#39;</span><span class="p">,</span> <span class="s1">&#39;鹿&#39;</span><span class="p">,</span> <span class="s1">&#39;丿&#39;</span><span class="p">,</span> <span class="s1">&#39;攴&#39;</span><span class="p">,</span> <span class="s1">&#39;冂&#39;</span><span class="p">,</span> <span class="s1">&#39;匚&#39;</span><span class="p">,</span> <span class="s1">&#39;入&#39;</span><span class="p">,</span> <span class="s1">&#39;言&#39;</span><span class="p">,</span> <span class="s1">&#39;竹&#39;</span><span class="p">,</span> <span class="s1">&#39;厂&#39;</span><span class="p">,</span> <span class="s1">&#39;工&#39;</span><span class="p">,</span> <span class="s1">&#39;黹&#39;</span><span class="p">,</span> <span class="s1">&#39;自&#39;</span><span class="p">,</span> <span class="s1">&#39;片&#39;</span><span class="p">,</span> <span class="s1">&#39;足&#39;</span><span class="p">,</span> <span class="s1">&#39;又&#39;</span><span class="p">,</span> <span class="s1">&#39;谷&#39;</span><span class="p">,</span> <span class="s1">&#39;耳&#39;</span><span class="p">,</span> <span class="s1">&#39;斗&#39;</span><span class="p">,</span> <span class="s1">&#39;弋&#39;</span><span class="p">,</span> <span class="s1">&#39;一&#39;</span><span class="p">,</span> <span class="s1">&#39;巾&#39;</span><span class="p">,</span> <span class="s1">&#39;瓦&#39;</span><span class="p">,</span> <span class="s1">&#39;子&#39;</span><span class="p">,</span> <span class="s1">&#39;夊&#39;</span><span class="p">,</span> <span class="s1">&#39;鼓&#39;</span><span class="p">,</span> <span class="s1">&#39;彐&#39;</span><span class="p">,</span> <span class="s1">&#39;石&#39;</span><span class="p">,</span> <span class="s1">&#39;夂&#39;</span><span class="p">,</span> <span class="s1">&#39;禸&#39;</span><span class="p">,</span> <span class="s1">&#39;八&#39;</span><span class="p">,</span> <span class="s1">&#39;豆&#39;</span><span class="p">,</span> <span class="s1">&#39;彡&#39;</span><span class="p">,</span> <span class="s1">&#39;禾&#39;</span><span class="p">,</span> <span class="s1">&#39;月&#39;</span><span class="p">,</span> <span class="s1">&#39;二&#39;</span><span class="p">,</span> <span class="s1">&#39;高&#39;</span><span class="p">,</span> <span class="s1">&#39;黽&#39;</span><span class="p">,</span> <span class="s1">&#39;鬲&#39;</span><span class="p">,</span> <span class="s1">&#39;勹&#39;</span><span class="p">,</span> <span class="s1">&#39;皿&#39;</span><span class="p">,</span> <span class="s1">&#39;飛&#39;</span><span class="p">,</span> <span class="s1">&#39;矢&#39;</span><span class="p">,</span> <span class="s1">&#39;毛&#39;</span><span class="p">,</span> <span class="s1">&#39;臼&#39;</span><span class="p">,</span> <span class="s1">&#39;尢&#39;</span><span class="p">,</span> <span class="s1">&#39;力&#39;</span><span class="p">,</span> <span class="s1">&#39;网&#39;</span><span class="p">,</span> <span class="s1">&#39;聿&#39;</span><span class="p">,</span> <span class="s1">&#39;风&#39;</span><span class="p">,</span> <span class="s1">&#39;齊&#39;</span><span class="p">,</span> <span class="s1">&#39;牙&#39;</span><span class="p">,</span> <span class="s1">&#39;父&#39;</span><span class="p">,</span> <span class="s1">&#39;龟&#39;</span><span class="p">,</span> <span class="s1">&#39;至&#39;</span><span class="p">,</span> <span class="s1">&#39;巛&#39;</span><span class="p">,</span> <span class="s1">&#39;魚&#39;</span><span class="p">,</span> <span class="s1">&#39;疒&#39;</span><span class="p">,</span> <span class="s1">&#39;彳&#39;</span><span class="p">,</span> <span class="s1">&#39;血&#39;</span><span class="p">,</span> <span class="s1">&#39;衣&#39;</span><span class="p">,</span> <span class="s1">&#39;車&#39;</span><span class="p">,</span> <span class="s1">&#39;舛&#39;</span><span class="p">,</span> <span class="s1">&#39;音&#39;</span><span class="p">,</span> <span class="s1">&#39;色&#39;</span><span class="p">,</span> <span class="s1">&#39;丨&#39;</span><span class="p">,</span> <span class="s1">&#39;舌&#39;</span><span class="p">,</span> <span class="s1">&#39;斤&#39;</span><span class="p">,</span> <span class="s1">&#39;厶&#39;</span><span class="p">,</span> <span class="s1">&#39;鹵&#39;</span><span class="p">,</span> <span class="s1">&#39;屮&#39;</span><span class="p">,</span> <span class="s1">&#39;虍&#39;</span><span class="p">,</span> <span class="s1">&#39;曰&#39;</span><span class="p">,</span> <span class="s1">&#39;頁&#39;</span><span class="p">,</span> <span class="s1">&#39;辛&#39;</span><span class="p">,</span> <span class="s1">&#39;靑&#39;</span><span class="p">,</span> <span class="s1">&#39;贝&#39;</span><span class="p">,</span> <span class="s1">&#39;冫&#39;</span><span class="p">,</span> <span class="s1">&#39;首&#39;</span><span class="p">,</span> <span class="s1">&#39;糸&#39;</span><span class="p">,</span> <span class="s1">&#39;匸&#39;</span><span class="p">,</span> <span class="s1">&#39;食&#39;</span><span class="p">,</span> <span class="s1">&#39;冖&#39;</span><span class="p">,</span> <span class="s1">&#39;骨&#39;</span><span class="p">,</span> <span class="s1">&#39;艮&#39;</span><span class="p">,</span> <span class="s1">&#39;黃&#39;</span><span class="p">,</span> <span class="s1">&#39;龜&#39;</span><span class="p">,</span> <span class="s1">&#39;耒&#39;</span><span class="p">,</span> <span class="s1">&#39;凵&#39;</span><span class="p">,</span> <span class="s1">&#39;比&#39;</span><span class="p">,</span> <span class="s1">&#39;立&#39;</span><span class="p">,</span> <span class="s1">&#39;幺&#39;</span><span class="p">,</span> <span class="s1">&#39;用&#39;</span><span class="p">,</span> <span class="s1">&#39;十&#39;</span><span class="p">,</span> <span class="s1">&#39;讠&#39;</span><span class="p">,</span> <span class="s1">&#39;面&#39;</span><span class="p">,</span> <span class="s1">&#39;尸&#39;</span><span class="p">,</span> <span class="s1">&#39;羽&#39;</span><span class="p">,</span> <span class="s1">&#39;戶&#39;</span><span class="p">,</span> <span class="s1">&#39;歹&#39;</span><span class="p">,</span> <span class="s1">&#39;貝&#39;</span><span class="p">,</span> <span class="s1">&#39;金&#39;</span><span class="p">,</span> <span class="s1">&#39;穴&#39;</span><span class="p">,</span> <span class="s1">&#39;行&#39;</span><span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">[radical=&quot;立&quot;]</span>
-<span class="s1">&#39;&#39;&#39;</span>
-<span class="n">get_first_n</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 从立昔聲。{䇑}：短人立䇑&gt;,
- &lt;Concord 䇑：短人立{䇑}䇑皃。从立&gt;,
- &lt;Concord ：短人立䇑{䇑}皃。从立卑&gt;,
- &lt;Concord 屬皆从立。{䇐}：臨也。从&gt;,
- &lt;Concord 琳就不會有{站}在台上的我&gt;,
- &lt;Concord 過一個急救{站}時，我看到&gt;,
- &lt;Concord 級的邊沿，{站}在那裡，好&gt;,
- &lt;Concord 雙腿發軟，{站}著打盹，重&gt;,
- &lt;Concord 錢其琛下一{站}的目的地。&gt;,
- &lt;Concord ，你並沒有{站}在我這一邊&gt;]
+<span class="p">{</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;钅&#39;</span><span class="p">,</span> <span class="s1">&#39;鬲&#39;</span><span class="p">,</span> <span class="s1">&#39;高&#39;</span><span class="p">,</span> <span class="s1">&#39;見&#39;</span><span class="p">,</span> <span class="s1">&#39;广&#39;</span><span class="p">,</span> <span class="s1">&#39;片&#39;</span><span class="p">,</span> <span class="s1">&#39;黹&#39;</span><span class="p">,</span> <span class="s1">&#39;自&#39;</span><span class="p">,</span> <span class="s1">&#39;尸&#39;</span><span class="p">,</span> <span class="s1">&#39;鬥&#39;</span><span class="p">,</span> <span class="s1">&#39;屮&#39;</span><span class="p">,</span> <span class="s1">&#39;面&#39;</span><span class="p">,</span> <span class="s1">&#39;麦&#39;</span><span class="p">,</span> <span class="s1">&#39;攴&#39;</span><span class="p">,</span> <span class="s1">&#39;糸&#39;</span><span class="p">,</span> <span class="s1">&#39;臣&#39;</span><span class="p">,</span> <span class="s1">&#39;丨&#39;</span><span class="p">,</span> <span class="s1">&#39;車&#39;</span><span class="p">,</span> <span class="s1">&#39;鱼&#39;</span><span class="p">,</span> <span class="s1">&#39;毛&#39;</span><span class="p">,</span> <span class="s1">&#39;饣&#39;</span><span class="p">,</span> <span class="s1">&#39;癶&#39;</span><span class="p">,</span> <span class="s1">&#39;舟&#39;</span><span class="p">,</span> <span class="s1">&#39;鼓&#39;</span><span class="p">,</span> <span class="s1">&#39;襾&#39;</span><span class="p">,</span> <span class="s1">&#39;鹿&#39;</span><span class="p">,</span> <span class="s1">&#39;龜&#39;</span><span class="p">,</span> <span class="s1">&#39;欠&#39;</span><span class="p">,</span> <span class="s1">&#39;香&#39;</span><span class="p">,</span> <span class="s1">&#39;鼻&#39;</span><span class="p">,</span> <span class="s1">&#39;干&#39;</span><span class="p">,</span> <span class="s1">&#39;臼&#39;</span><span class="p">,</span> <span class="s1">&#39;爪&#39;</span><span class="p">,</span> <span class="s1">&#39;缶&#39;</span><span class="p">,</span> <span class="s1">&#39;隶&#39;</span><span class="p">,</span> <span class="s1">&#39;用&#39;</span><span class="p">,</span> <span class="s1">&#39;走&#39;</span><span class="p">,</span> <span class="s1">&#39;爻&#39;</span><span class="p">,</span> <span class="s1">&#39;风&#39;</span><span class="p">,</span> <span class="s1">&#39;食&#39;</span><span class="p">,</span> <span class="s1">&#39;貝&#39;</span><span class="p">,</span> <span class="s1">&#39;夕&#39;</span><span class="p">,</span> <span class="s1">&#39;刀&#39;</span><span class="p">,</span> <span class="s1">&#39;丿&#39;</span><span class="p">,</span> <span class="s1">&#39;黍&#39;</span><span class="p">,</span> <span class="s1">&#39;匸&#39;</span><span class="p">,</span> <span class="s1">&#39;女&#39;</span><span class="p">,</span> <span class="s1">&#39;疒&#39;</span><span class="p">,</span> <span class="s1">&#39;火&#39;</span><span class="p">,</span> <span class="s1">&#39;目&#39;</span><span class="p">,</span> <span class="s1">&#39;穴&#39;</span><span class="p">,</span> <span class="s1">&#39;卜&#39;</span><span class="p">,</span> <span class="s1">&#39;白&#39;</span><span class="p">,</span> <span class="s1">&#39;宀&#39;</span><span class="p">,</span> <span class="s1">&#39;耒&#39;</span><span class="p">,</span> <span class="s1">&#39;曰&#39;</span><span class="p">,</span> <span class="s1">&#39;冖&#39;</span><span class="p">,</span> <span class="s1">&#39;廾&#39;</span><span class="p">,</span> <span class="s1">&#39;力&#39;</span><span class="p">,</span> <span class="s1">&#39;支&#39;</span><span class="p">,</span> <span class="s1">&#39;老&#39;</span><span class="p">,</span> <span class="s1">&#39;匚&#39;</span><span class="p">,</span> <span class="s1">&#39;方&#39;</span><span class="p">,</span> <span class="s1">&#39;長&#39;</span><span class="p">,</span> <span class="s1">&#39;冂&#39;</span><span class="p">,</span> <span class="s1">&#39;黽&#39;</span><span class="p">,</span> <span class="s1">&#39;冫&#39;</span><span class="p">,</span> <span class="s1">&#39;巾&#39;</span><span class="p">,</span> <span class="s1">&#39;而&#39;</span><span class="p">,</span> <span class="s1">&#39;虫&#39;</span><span class="p">,</span> <span class="s1">&#39;尢&#39;</span><span class="p">,</span> <span class="s1">&#39;齒&#39;</span><span class="p">,</span> <span class="s1">&#39;耳&#39;</span><span class="p">,</span> <span class="s1">&#39;入&#39;</span><span class="p">,</span> <span class="s1">&#39;手&#39;</span><span class="p">,</span> <span class="s1">&#39;鸟&#39;</span><span class="p">,</span> <span class="s1">&#39;鳥&#39;</span><span class="p">,</span> <span class="s1">&#39;厶&#39;</span><span class="p">,</span> <span class="s1">&#39;瓦&#39;</span><span class="p">,</span> <span class="s1">&#39;勹&#39;</span><span class="p">,</span> <span class="s1">&#39;彐&#39;</span><span class="p">,</span> <span class="s1">&#39;车&#39;</span><span class="p">,</span> <span class="s1">&#39;凵&#39;</span><span class="p">,</span> <span class="s1">&#39;气&#39;</span><span class="p">,</span> <span class="s1">&#39;辵&#39;</span><span class="p">,</span> <span class="s1">&#39;田&#39;</span><span class="p">,</span> <span class="s1">&#39;牙&#39;</span><span class="p">,</span> <span class="s1">&#39;龙&#39;</span><span class="p">,</span> <span class="s1">&#39;羽&#39;</span><span class="p">,</span> <span class="s1">&#39;十&#39;</span><span class="p">,</span> <span class="s1">&#39;网&#39;</span><span class="p">,</span> <span class="s1">&#39;匕&#39;</span><span class="p">,</span> <span class="s1">&#39;辰&#39;</span><span class="p">,</span> <span class="s1">&#39;氏&#39;</span><span class="p">,</span> <span class="s1">&#39;皮&#39;</span><span class="p">,</span> <span class="s1">&#39;角&#39;</span><span class="p">,</span> <span class="s1">&#39;豆&#39;</span><span class="p">,</span> <span class="s1">&#39;齿&#39;</span><span class="p">,</span> <span class="s1">&#39;衣&#39;</span><span class="p">,</span> <span class="s1">&#39;首&#39;</span><span class="p">,</span> <span class="s1">&#39;矛&#39;</span><span class="p">,</span> <span class="s1">&#39;革&#39;</span><span class="p">,</span> <span class="s1">&#39;犬&#39;</span><span class="p">,</span> <span class="s1">&#39;米&#39;</span><span class="p">,</span> <span class="s1">&#39;禾&#39;</span><span class="p">,</span> <span class="s1">&#39;生&#39;</span><span class="p">,</span> <span class="s1">&#39;豸&#39;</span><span class="p">,</span> <span class="s1">&#39;页&#39;</span><span class="p">,</span> <span class="s1">&#39;非&#39;</span><span class="p">,</span> <span class="s1">&#39;羊&#39;</span><span class="p">,</span> <span class="s1">&#39;贝&#39;</span><span class="p">,</span> <span class="s1">&#39;玄&#39;</span><span class="p">,</span> <span class="s1">&#39;毋&#39;</span><span class="p">,</span> <span class="s1">&#39;卩&#39;</span><span class="p">,</span> <span class="s1">&#39;歹&#39;</span><span class="p">,</span> <span class="s1">&#39;隹&#39;</span><span class="p">,</span> <span class="s1">&#39;色&#39;</span><span class="p">,</span> <span class="s1">&#39;见&#39;</span><span class="p">,</span> <span class="s1">&#39;龟&#39;</span><span class="p">,</span> <span class="s1">&#39;禸&#39;</span><span class="p">,</span> <span class="s1">&#39;鼎&#39;</span><span class="p">,</span> <span class="s1">&#39;鼠&#39;</span><span class="p">,</span> <span class="s1">&#39;木&#39;</span><span class="p">,</span> <span class="s1">&#39;弓&#39;</span><span class="p">,</span> <span class="s1">&#39;至&#39;</span><span class="p">,</span> <span class="s1">&#39;皿&#39;</span><span class="p">,</span> <span class="s1">&#39;谷&#39;</span><span class="p">,</span> <span class="s1">&#39;馬&#39;</span><span class="p">,</span> <span class="s1">&#39;韦&#39;</span><span class="p">,</span> <span class="s1">&#39;魚&#39;</span><span class="p">,</span> <span class="s1">&#39;辛&#39;</span><span class="p">,</span> <span class="s1">&#39;彳&#39;</span><span class="p">,</span> <span class="s1">&#39;二&#39;</span><span class="p">,</span> <span class="s1">&#39;血&#39;</span><span class="p">,</span> <span class="s1">&#39;廴&#39;</span><span class="p">,</span> <span class="s1">&#39;瓜&#39;</span><span class="p">,</span> <span class="s1">&#39;殳&#39;</span><span class="p">,</span> <span class="s1">&#39;夂&#39;</span><span class="p">,</span> <span class="s1">&#39;言&#39;</span><span class="p">,</span> <span class="s1">&#39;厂&#39;</span><span class="p">,</span> <span class="s1">&#39;讠&#39;</span><span class="p">,</span> <span class="s1">&#39;肉&#39;</span><span class="p">,</span> <span class="s1">&#39;靑&#39;</span><span class="p">,</span> <span class="s1">&#39;虍&#39;</span><span class="p">,</span> <span class="s1">&#39;音&#39;</span><span class="p">,</span> <span class="s1">&#39;牛&#39;</span><span class="p">,</span> <span class="s1">&#39;豕&#39;</span><span class="p">,</span> <span class="s1">&#39;髟&#39;</span><span class="p">,</span> <span class="s1">&#39;囗&#39;</span><span class="p">,</span> <span class="s1">&#39;石&#39;</span><span class="p">,</span> <span class="s1">&#39;龠&#39;</span><span class="p">,</span> <span class="s1">&#39;斤&#39;</span><span class="p">,</span> <span class="s1">&#39;黑&#39;</span><span class="p">,</span> <span class="s1">&#39;玉&#39;</span><span class="p">,</span> <span class="s1">&#39;甘&#39;</span><span class="p">,</span> <span class="s1">&#39;水&#39;</span><span class="p">,</span> <span class="s1">&#39;竹&#39;</span><span class="p">,</span> <span class="s1">&#39;雨&#39;</span><span class="p">,</span> <span class="s1">&#39;小&#39;</span><span class="p">,</span> <span class="s1">&#39;止&#39;</span><span class="p">,</span> <span class="s1">&#39;黃&#39;</span><span class="p">,</span> <span class="s1">&#39;示&#39;</span><span class="p">,</span> <span class="s1">&#39;亠&#39;</span><span class="p">,</span> <span class="s1">&#39;麥&#39;</span><span class="p">,</span> <span class="s1">&#39;士&#39;</span><span class="p">,</span> <span class="s1">&#39;邑&#39;</span><span class="p">,</span> <span class="s1">&#39;齊&#39;</span><span class="p">,</span> <span class="s1">&#39;土&#39;</span><span class="p">,</span> <span class="s1">&#39;鬯&#39;</span><span class="p">,</span> <span class="s1">&#39;釆&#39;</span><span class="p">,</span> <span class="s1">&#39;戈&#39;</span><span class="p">,</span> <span class="s1">&#39;足&#39;</span><span class="p">,</span> <span class="s1">&#39;心&#39;</span><span class="p">,</span> <span class="s1">&#39;月&#39;</span><span class="p">,</span> <span class="s1">&#39;口&#39;</span><span class="p">,</span> <span class="s1">&#39;乙&#39;</span><span class="p">,</span> <span class="s1">&#39;舛&#39;</span><span class="p">,</span> <span class="s1">&#39;亅&#39;</span><span class="p">,</span> <span class="s1">&#39;頁&#39;</span><span class="p">,</span> <span class="s1">&#39;龍&#39;</span><span class="p">,</span> <span class="s1">&#39;酉&#39;</span><span class="p">,</span> <span class="s1">&#39;工&#39;</span><span class="p">,</span> <span class="s1">&#39;阜&#39;</span><span class="p">,</span> <span class="s1">&#39;立&#39;</span><span class="p">,</span> <span class="s1">&#39;弋&#39;</span><span class="p">,</span> <span class="s1">&#39;日&#39;</span><span class="p">,</span> <span class="s1">&#39;黾&#39;</span><span class="p">,</span> <span class="s1">&#39;矢&#39;</span><span class="p">,</span> <span class="s1">&#39;纟&#39;</span><span class="p">,</span> <span class="s1">&#39;寸&#39;</span><span class="p">,</span> <span class="s1">&#39;无&#39;</span><span class="p">,</span> <span class="s1">&#39;人&#39;</span><span class="p">,</span> <span class="s1">&#39;彡&#39;</span><span class="p">,</span> <span class="s1">&#39;丶&#39;</span><span class="p">,</span> <span class="s1">&#39;己&#39;</span><span class="p">,</span> <span class="s1">&#39;麻&#39;</span><span class="p">,</span> <span class="s1">&#39;聿&#39;</span><span class="p">,</span> <span class="s1">&#39;鹵&#39;</span><span class="p">,</span> <span class="s1">&#39;儿&#39;</span><span class="p">,</span> <span class="s1">&#39;艮&#39;</span><span class="p">,</span> <span class="s1">&#39;几&#39;</span><span class="p">,</span> <span class="s1">&#39;艸&#39;</span><span class="p">,</span> <span class="s1">&#39;骨&#39;</span><span class="p">,</span> <span class="s1">&#39;门&#39;</span><span class="p">,</span> <span class="s1">&#39;韋&#39;</span><span class="p">,</span> <span class="s1">&#39;巛&#39;</span><span class="p">,</span> <span class="s1">&#39;韭&#39;</span><span class="p">,</span> <span class="s1">&#39;山&#39;</span><span class="p">,</span> <span class="s1">&#39;文&#39;</span><span class="p">,</span> <span class="s1">&#39;風&#39;</span><span class="p">,</span> <span class="s1">&#39;門&#39;</span><span class="p">,</span> <span class="s1">&#39;行&#39;</span><span class="p">,</span> <span class="s1">&#39;疋&#39;</span><span class="p">,</span> <span class="s1">&#39;马&#39;</span><span class="p">,</span> <span class="s1">&#39;身&#39;</span><span class="p">,</span> <span class="s1">&#39;又&#39;</span><span class="p">,</span> <span class="s1">&#39;斗&#39;</span><span class="p">,</span> <span class="s1">&#39;戶&#39;</span><span class="p">,</span> <span class="s1">&#39;幺&#39;</span><span class="p">,</span> <span class="s1">&#39;赤&#39;</span><span class="p">,</span> <span class="s1">&#39;金&#39;</span><span class="p">,</span> <span class="s1">&#39;舌&#39;</span><span class="p">,</span> <span class="s1">&#39;子&#39;</span><span class="p">,</span> <span class="s1">&#39;爿&#39;</span><span class="p">,</span> <span class="s1">&#39;鬼&#39;</span><span class="p">,</span> <span class="s1">&#39;一&#39;</span><span class="p">,</span> <span class="s1">&#39;里&#39;</span><span class="p">,</span> <span class="s1">&#39;大&#39;</span><span class="p">,</span> <span class="s1">&#39;飛&#39;</span><span class="p">,</span> <span class="s1">&#39;夊&#39;</span><span class="p">,</span> <span class="s1">&#39;比&#39;</span><span class="p">,</span> <span class="s1">&#39;父&#39;</span><span class="p">,</span> <span class="s1">&#39;八&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="ideographic-description-characters-idcs">2.2 Ideographic Description Characters (IDCs)</p>
+<p>To search the corpus with Kangxi radicals, simply use the attribute
+<code class="docutils literal notranslate"><span class="pre">radical</span></code> in the description of the search pattern.</p>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">[radical=&quot;立&quot;]</span>
+<span class="s1">&#39;&#39;&#39;</span>
+<span class="n">get_first_n</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 屬皆从立。{䇐}：臨也。从&gt;,
+ &lt;Concord 从立卑聲。{竲}：北地高樓&gt;,
+ &lt;Concord 也。从口歫{䇂}。䇂，惡聲&gt;,
+ &lt;Concord 从口歫䇂。{䇂}，惡聲也。&gt;,
+ &lt;Concord 曰語。从口{䇂}聲。凡言之&gt;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="ideographic-description-characters-idcs">Ideographic Description Characters (IDCs)</p>
+<p>Character components defined according to the Unicode’s Ideographic
+Description Characters (IDCs) could also be used for searching. The
+IDCs and their names in <em>hgct</em> are found in
+<code class="docutils literal notranslate"><span class="pre">Concordancer.chr_idcs</span></code>:</p>
 </div>
 <div class="cell code docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">chr_idcs</span>
@@ -213,56 +318,87 @@
 </div>
 </div>
 </div>
+<div class="cell markdown docutils container">
+<p>To search according to Ideographic Descriptions, use the attributes
+<code class="docutils literal notranslate"><span class="pre">compo</span></code> and/or <code class="docutils literal notranslate"><span class="pre">idc</span></code>.</p>
+</div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">CompoTree</span> <span class="kn">import</span> <span class="n">ComponentTree</span>
-<span class="n">ctree</span> <span class="o">=</span> <span class="n">ComponentTree</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-
-<span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="s2">&quot;杜李国叵&quot;</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">ctree</span><span class="o">.</span><span class="n">ids_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ch</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;: &quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">[compo=&quot;木&quot; &amp; idc=&quot;vert2&quot; &amp; pos=&quot;0&quot;]</span>
+<span class="s1">&#39;&#39;&#39;</span>
+<span class="n">get_first_n</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="output stream stdout docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>杜: [&lt;⿰:木土&gt;]
-李: [&lt;⿱:木子&gt;]
-国: [&lt;⿴:囗玉&gt;]
-叵: [&lt;⿷:匚口&gt;]
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 城。趙國豪{杰}之士，多在&gt;,
+ &lt;Concord ，百人者曰{杰}，十人者曰&gt;,
+ &lt;Concord 者曰豪。豪{杰}俊英不相陵&gt;,
+ &lt;Concord ：并當時之{杰}筆也。觀伯&gt;,
+ &lt;Concord 并辭賦之英{杰}也。及仲宣&gt;]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell code docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">[compo=&quot;木&quot; &amp; idc=&quot;horz2&quot; &amp; pos=&quot;0&quot;]</span>
+<span class="s1">[compo=&quot;木&quot; &amp; idc=&quot;vert2&quot; &amp; pos=&quot;1&quot;]</span>
 <span class="s1">&#39;&#39;&#39;</span>
 <span class="n">get_first_n</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 梓。桋，赤{梀}，白者梀。&gt;,
- &lt;Concord 赤梀，白者{梀}。終，牛棘&gt;,
- &lt;Concord 謂之梁。」{梀}：短椽也。&gt;,
- &lt;Concord 、海楊、無{杧}；稀有長城&gt;,
- &lt;Concord 从木聖聲。{桺}：小楊也。&gt;]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 有甬，官食{槩}，不可以辟&gt;,
+ &lt;Concord 从木午聲。{槩}：𣏙斗斛。&gt;,
+ &lt;Concord 郢，而封夫{槩}於堂谿，為&gt;,
+ &lt;Concord 幾夷、皓之{槩}。周羣占天&gt;,
+ &lt;Concord 質直，皆節{槩}梗梗，有大&gt;]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell code docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">[compo=&quot;木&quot; &amp; idc=&quot;horz2&quot; &amp; pos=&quot;1&quot;]</span>
+<span class="s1">[compo=&quot;木&quot; &amp; idc=&quot;vert2&quot;]</span>
 <span class="s1">&#39;&#39;&#39;</span>
 <span class="n">get_first_n</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord ，寒蜩。蜓{蚞}，螇螰。蛣&gt;,
- &lt;Concord ，或謂之蜓{蚞}，西楚與秦&gt;,
- &lt;Concord ─昔者禹一{沐}而三捉髮，&gt;,
- &lt;Concord 吾聞之，新{沐}者必彈冠，&gt;,
- &lt;Concord 、饋羞、湯{沐}之饌，如他&gt;]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 子國為客，{樂}及遍舞。鄭&gt;,
+ &lt;Concord 舉，而況敢{樂}禍乎！今吾&gt;,
+ &lt;Concord 歌舞不息，{樂}禍也。夫出&gt;,
+ &lt;Concord 忘憂，是謂{樂}禍，禍必及&gt;,
+ &lt;Concord ，君欣欣兮{樂}康。浴蘭湯&gt;]
 </pre></div>
 </div>
 </div>
+</div>
+<div class="cell markdown docutils container">
+<p>Either <code class="docutils literal notranslate"><span class="pre">compo</span></code> or <code class="docutils literal notranslate"><span class="pre">idc</span></code> could be left out if a more abstract
+search pattern is preferred. For instance, if the shape (<code class="docutils literal notranslate"><span class="pre">idc</span></code>) and
+the position (<code class="docutils literal notranslate"><span class="pre">pos</span></code>) are not of interest, these attributes could be
+left out.</p>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">[compo=&quot;木&quot;]</span>
+<span class="s1">&#39;&#39;&#39;</span>
+<span class="n">get_first_n</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 藟，施于條{枚}；凱弟君子&gt;,
+ &lt;Concord 四綍，皆銜{枚}，司馬執鐸&gt;,
+ &lt;Concord 後。兩軍𠾑{枚}，或左或右&gt;,
+ &lt;Concord 徒二人。銜{枚}氏：下士二&gt;,
+ &lt;Concord 矢射之。銜{枚}氏：掌司囂&gt;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell markdown docutils container">
+<p>If one is interested only in the shape of the character, <code class="docutils literal notranslate"><span class="pre">idc</span></code>
+could be specified while all other attributes could be left out.</p>
 </div>
 <div class="cell code docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
@@ -277,17 +413,45 @@
 </div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 。命有司省{囹圄}，去桎梏，&gt;,
- &lt;Concord 修法制，繕{囹圄}，具桎梏，&gt;,
- &lt;Concord 廷門閭，筑{囹圄}，此所以助&gt;,
- &lt;Concord 加於民，而{囹圄}雖實，殺戮&gt;,
- &lt;Concord 。至於守司{囹圄}，禁制刑罰&gt;]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord ：『始舍之{圉圉}焉，少則洋&gt;,
+ &lt;Concord 公朝虜而子{圉夕}立，更始尚&gt;,
+ &lt;Concord 𢦔聲。軍：{圜圍}也。四千人&gt;,
+ &lt;Concord 永昌」，方{圜四}寸，上紐交&gt;,
+ &lt;Concord 行天下，雖{困四}夷，人莫不&gt;]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="search-by-phonetic-properties">3 Search by Phonetic Properties</p>
+<p class="rubric" id="radical-semantic-type">Radical Semantic Type</p>
+<p>Ma’s (2016) semantic type classification of Kangxi Radicals is also
+incorporated in <em>hgct</em>’s search function. Use the attribute
+<code class="docutils literal notranslate"><span class="pre">semtag</span></code> to specify a radical semantic type. Refer to
+&#64;tbl:ma2016-radical for the 22 available semantic types.</p>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">[semtag=&quot;植物&quot;] [semtag=&quot;植物&quot;]</span>
+<span class="s1">&#39;&#39;&#39;</span>
+<span class="n">get_first_n</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 兮水中，搴{芙蓉}兮木末。心&gt;,
+ &lt;Concord 兮陳坐，援{芙蕖}兮為蓋。水&gt;,
+ &lt;Concord 宿兮石城。{芙蓉}蓋而蔆華車&gt;,
+ &lt;Concord 而緣木。因{芙蓉}而為媒兮，&gt;,
+ &lt;Concord 為衣兮，集{芙蓉}以為裳。不&gt;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="search-by-phonetic-properties">Search by Phonetic Properties</p>
+<p><em>hgct</em> also provides searching the corpus with sound properties. The
+sound properties are defined according to the data from two
+system—Guanyun 廣韻 (Middle Chinese) and Chinese Dictionary compiled
+by the Ministry of Education (MOE) in Taiwan (Mandarin).</p>
 </div>
 <div class="cell code docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">cql_attrs</span><span class="p">[</span><span class="s1">&#39;CharPhonetic&#39;</span><span class="p">]</span>
@@ -301,8 +465,7 @@
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="mandarin-based-on">3.1 Mandarin (based on
-<a class="reference external" href="https://github.com/g0v/moedict-data/blob/master/dict-revised.json">萌典</a>)</p>
+<p class="rubric" id="mandarin-based-on">Mandarin (based on 萌典)</p>
 </div>
 <div class="cell code docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
@@ -312,35 +475,34 @@
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 哭泣不秩聲{翁}，縗絰垂涕&gt;,
- &lt;Concord ，黑文而赤{翁}，名曰櫟，&gt;,
- &lt;Concord 發猛，塤篪{翁}博，瑟易良&gt;,
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 」耳邊不斷{嗡}嗡的縈繞著&gt;,
+ &lt;Concord 耳邊不斷嗡{嗡}的縈繞著類&gt;,
  &lt;Concord 市朝也。而{翁}不爭焉，顧&gt;,
- &lt;Concord 昆吾；是使{翁}難卜於白若&gt;]
+ &lt;Concord 發猛，塤篪{翁}博，瑟易良&gt;,
+ &lt;Concord ，黑文而赤{翁}，名曰櫟，&gt;]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell code docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">[phon=&quot;^pʰ&quot; &amp; tp=&quot;ipa&quot; &amp; sys=&quot;moe&quot;] [phon=&quot;^pʰ&quot; &amp; tp=&quot;ipa&quot; &amp; sys=&quot;moe&quot;]</span>
+<span class="s1">[phon=&quot;^p&quot; &amp; tp=&quot;ipa&quot; &amp; sys=&quot;moe&quot;] [phon=&quot;^p&quot; &amp; tp=&quot;ipa&quot; &amp; sys=&quot;moe&quot;]</span>
 <span class="s1">&#39;&#39;&#39;</span>
 <span class="n">get_first_n</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 之可化。志{怦怦}而內直兮，&gt;,
- &lt;Concord 兮何極？心{怦怦}兮諒直。皇&gt;,
- &lt;Concord 提到，唐文{標批}評這篇以日&gt;,
- &lt;Concord 轉騰潎洌，{澎濞}沆瀣，穹隆&gt;,
- &lt;Concord 茫，在廣漠{澎湃}的黑暗深處&gt;]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 荒亂，以十{破百}。器備不行&gt;,
+ &lt;Concord 戰而赴圍。{破伯}牙之號鍾兮&gt;,
+ &lt;Concord 應弱燕，燕{破必}矣。燕破則&gt;,
+ &lt;Concord 分離，陰陽{破敗}，經絡厥絕&gt;,
+ &lt;Concord 而弓秦，秦{破必}矣。今見破&gt;]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="based-on">3.2 中古漢語 (based on
-<a class="reference external" href="https://zhuanlan.zhihu.com/p/20430939">廣韻</a>)</p>
+<p class="rubric" id="middle-chinese-based-on">Middle Chinese (based on 廣韻)</p>
 </div>
 <div class="cell code docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
@@ -350,11 +512,11 @@
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 堵牆，動如{風}雨，車不結&gt;,
- &lt;Concord 于大麓，烈{風}雷雨弗迷。&gt;,
- &lt;Concord 以治，四方{風}動，惟乃之&gt;,
- &lt;Concord ，大雷電以{風}，王逆周文&gt;,
- &lt;Concord 澤有九藪，{風}有八等，水&gt;]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[&lt;Concord 曾參之參。{梵}：出自西域&gt;,
+ &lt;Concord 薨奏焉。樊{梵}，字文高，&gt;,
+ &lt;Concord 曆編訢、李{梵}等綜校其狀&gt;,
+ &lt;Concord 行。而訢、{梵}猶以為元首&gt;,
+ &lt;Concord 蘇統及訢、{梵}等十人。以&gt;]
 </pre></div>
 </div>
 </div>
@@ -365,7 +527,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Hanzi Corpus Toolkit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Hanzi Glyph Corpus Toolkit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="stats.html" class="btn btn-neutral float-right" title="2. Stats" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

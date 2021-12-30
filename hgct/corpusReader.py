@@ -58,8 +58,7 @@ class PlainTextReader:
 
             .. _repo: https://github.com/liao961120/dcctk/tree/main/test/data
         ts_meta_filename : str, optional
-            Path to the metadata file specifying the time info of each 
-            timestepped subcorpora, by default "time.yaml".
+            Path to the metadata file of each subcorpus, by default "time.yaml".
         text_meta_filename : str, optional
             Path to the metadata file specifying info of each corpus text, 
             by default "text_meta.yaml".

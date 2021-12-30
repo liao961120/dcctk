@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'cctk'
+project = 'hgct'
 copyright = '2021, Yongfu Liao'
 author = 'Yongfu Liao'
 

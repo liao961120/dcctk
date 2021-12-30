@@ -8,124 +8,46 @@ Stats
 
    .. code:: python
 
-      !gdown https://github.com/liao961120/hctk/raw/main/test/data.zip
-      !unzip -q data.zip
-      !pip install -qU hctk
-
-   .. container:: output stream stdout
-
-      ::
-
-         Downloading...
-         From: https://github.com/liao961120/hctk/raw/main/test/data.zip
-         To: /content/data.zip
-         100% 11.5M/11.5M [00:00<00:00, 70.2MB/s]
-         ents to build wheel ... etadata ... 
+      ## Colab setup
+      # !gdown https://github.com/liao961120/hgct/raw/main/test/data.zip
+      # !unzip -q data.zip
+      # !pip install -qU hgct
 
 .. container:: cell markdown
 
-   .. rubric:: 1 Dispersion
-      :name: 1-dispersion
-
-.. container:: cell code
-
-   .. code:: python
-
-      from pprint import pprint
-      from hctk import PlainTextReader, Dispersion
-
-      dp = Dispersion(PlainTextReader("data").corpus)
-
-   .. container:: output stream stdout
-
-      ::
-
-         Indexing corpus for text retrival...
-
-   .. container:: output display_data
-
-      .. code:: json
-
-         {"version_major":2,"version_minor":0,"model_id":"6edf85bb5c074d658d5b95482ec8e353"}
-
-   .. container:: output stream stdout
-
-      ::
-
-         Indexing corpus for concordance search...
-
-   .. container:: output display_data
-
-      .. code:: json
-
-         {"version_major":2,"version_minor":0,"model_id":"ee96a5c61b2e4f69a823d8371933afe4"}
+   .. rubric:: Corpus Analysis API in *hgtk*
+      :name: corpus-analysis-api-in-hgtk
 
 .. container:: cell markdown
 
-   .. rubric:: 1.1 Dispersion Measures of Characters
-      :name: 11-dispersion-measures-of-characters
+   In this second tutorial, we demonstrate functions for quantitative
+   analysis of the corpus in *hgct*. To get started, we need two
+   additional objects ``CompoAnalysis`` and ``Dispersion`` in addition
+   to the ``Concordancer`` object introduced in the previous tutorial.
+   The corpus used is identical to the one in Appendix A.
 
-.. container:: cell code
+   Note that when initializing with ``CompoAnalysis()`` and
+   ``PlainTextReader()``, the argument ``auto_load=False`` needs to be
+   given to ``PlainTextReader()``. This prevents the full corpus to be
+   loaded into the memory, such that functionalities provided by
+   ``CompoAnalysis`` could be used to analyze large data that do not fit
+   into the computer’s memory. For more information, refer to the source
+   code on GitHub[1].
 
-   .. code:: python
-
-      for ch in '之也水火':
-          print(ch)
-          pprint(dp.char_dispersion(char=ch))
-
-   .. container:: output stream stdout
-
-      ::
-
-         之
-         {'DP': 0.20221115044151497,
-          'DPnorm': 0.2022113683260698,
-          'JuillandD': 0.9852586807096999,
-          'KLdivergence': 0.19438584134276882,
-          'Range': 1845,
-          'RosengrenS': 0.9263264076180923}
-         也
-         {'DP': 0.35839650852771193,
-          'DPnorm': 0.35839689470356595,
-          'JuillandD': 0.9762985043690171,
-          'KLdivergence': 0.5790626716815067,
-          'Range': 1657,
-          'RosengrenS': 0.8017462266655788}
-         水
-         {'DP': 0.4248753877868117,
-          'DPnorm': 0.4248758455943289,
-          'JuillandD': 0.9419817581882376,
-          'KLdivergence': 1.2093306326342055,
-          'Range': 1032,
-          'RosengrenS': 0.6599676413503003}
-         火
-         {'DP': 0.5258856218700372,
-          'DPnorm': 0.5258861885171008,
-          'JuillandD': 0.9082169168517871,
-          'KLdivergence': 1.5125799798374882,
-          'Range': 630,
-          'RosengrenS': 0.5227475458444708}
-
-.. container:: cell markdown
-
-   .. rubric:: 1.2 Dispersion Measures of Complex Forms (defined by CQL)
-      :name: 12-dispersion-measures-of-complex-forms-defined-by-cql
+   [1]
+   https://github.com/liao961120/hgct/blob/main/hgct/compoAnalysis.py
 
 .. container:: cell code
 
    .. code:: python
 
       import pandas as pd
-      from hctk import Concordancer
+      from hgct import PlainTextReader, Concordancer
+      from hgct import CompoAnalysis, Dispersion
 
-      c = Concordancer(PlainTextReader("data").corpus)
-      cql = """
-      [compo="氵" & idc="horz2" & pos="0"] [compo="氵" & idc="horz2" & pos="0"]
-      """.strip()
-      results = list(c.cql_search(cql, left=5, right=5))
-
-      print('Num of results:', len(results))
-      for r in results[:5]: print(r)
+      CC = Concordancer(PlainTextReader("data/").corpus)
+      CA = CompoAnalysis(PlainTextReader("data/", auto_load=False))
+      DP = Dispersion(PlainTextReader("data/").corpus)
 
    .. container:: output stream stdout
 
@@ -137,7 +59,7 @@ Stats
 
       .. code:: json
 
-         {"version_major":2,"version_minor":0,"model_id":"231c8e09bef640c5965d4bc5e293b65c"}
+         {"version_major":2,"version_minor":0,"model_id":"58de1c717dba4b13b447b9c9d19e02b7"}
 
    .. container:: output stream stdout
 
@@ -149,167 +71,224 @@ Stats
 
       .. code:: json
 
-         {"version_major":2,"version_minor":0,"model_id":"9bbbfb3fb87946afa4b8bb655c54f8fa"}
+         {"version_major":2,"version_minor":0,"model_id":"638bc9b3e1e740fcb0332d33fd692876"}
 
    .. container:: output stream stdout
 
       ::
 
-         Num of results: 9782
-         <Concord 其中軍銜枚{潛涉}，不鼓不譟>
-         <Concord 也？《春秋{潛潭}巴》曰：「>
-         <Concord 舟之魚不居{潛澤}，度量之士>
-         <Concord 色親也。』{潛潭}巴曰：『虹>
-         <Concord 之厚德也。{潛潭}巴曰：『有>
+         Indexing corpus for text retrival...
 
-.. container:: cell code
+   .. container:: output display_data
 
-   .. code:: python
+      .. code:: json
 
-      # Compute separate dispersion measures for each subcorpus (time-sliced)
-      df = []
-      for i in range(dp.num_of_subcorp):
-          stats, data = dp.pattern_dispersion(data=results, subcorp_idx=i, return_raw=True)
-          stats['time'] = i
-          stats['freq'] = data['f']
-          stats['range (%)'] = stats['Range'] / data['n']
-          stats['num_of_texts'] = data['n']
-          stats['corpus_size'] = data['corpus_size']
-          df.append(stats)
+         {"version_major":2,"version_minor":0,"model_id":"23eb85e2194a4cbb82db8031596b9b29"}
 
-      pd.DataFrame(df)
-
-   .. container:: output execute_result
+   .. container:: output stream stdout
 
       ::
 
-            Range        DP    DPnorm  ...  range (%)  num_of_texts  corpus_size
-         0    346  0.464641  0.464645  ...   0.472678           732      1858228
-         1    621  0.276959  0.276960  ...   0.591992          1049      3938310
-         2    130  0.181770  0.181792  ...   0.833333           156      2097273
-         3      2  0.127389  0.235377  ...   1.000000             2       458738
-         4      0  0.000000  0.000000  ...   0.000000             5           50
+         Indexing corpus for concordance search...
 
-         [5 rows x 11 columns]
+   .. container:: output display_data
+
+      .. code:: json
+
+         {"version_major":2,"version_minor":0,"model_id":"dbe1ae734bfa43baac59822da8c1059b"}
 
 .. container:: cell markdown
 
-   .. rubric:: 2 Hanzi Component
-      :name: 2-hanzi-component
+   .. rubric:: Frequency List (Distribution)
+      :name: frequency-list-distribution
 
-.. container:: cell code
-
-   .. code:: python
-
-      from hctk import PlainTextReader
-      from hctk.compoAnalysis import CompoAnalysis
-
-      reader = PlainTextReader("data/", auto_load=False)
-      c2 = CompoAnalysis(reader)
+   Frequency lists are provided by the function
+   ``CompoAnalysis.freq_distr()``. Based on the arguments passed, this
+   function computes and returns the frequency distribution of either
+   the characters, IDCs, Kangxi radicals, or characters with a given
+   radical/component. Below, we demonstrate each of these types of
+   frequency distributions.
 
 .. container:: cell markdown
 
-   .. rubric:: 2.1 Frequency Distribution
-      :name: 21-frequency-distribution
+   .. rubric:: Character
+      :name: character
+
+   To return the frequency distribution of the characters in the corpus,
+   set the argument ``tp`` to ``"chr"``. ``CompoAnalysis.freq_distr()``
+   by default returns a ``Counter``\ [1], which has the convenient
+   method ``most_common()`` that could be used to retrieve the terms
+   with the highest frequencies.
+
+   [1]
+   https://docs.python.org/3/library/collections.html#collections.Counter
 
 .. container:: cell code
 
    .. code:: python
 
-      # Hanzi
-      c2.freq_distr(tp="chr", subcorp_idx=0).most_common(10)
+      CA.freq_distr(tp="chr").most_common(4)
 
    .. container:: output execute_result
 
       ::
 
-         [('，', 178802),
-          ('。', 83819),
-          ('之', 64665),
-          ('不', 37264),
-          ('也', 32634),
-          ('而', 32035),
-          ('以', 27556),
-          ('其', 25931),
-          ('者', 23304),
-          ('曰', 21763)]
+         [('之', 210608), ('不', 129212), ('也', 107639), ('以', 104578)]
+
+.. container:: cell markdown
+
+   As mentioned in @sec:app-search-by-character, we could limit the
+   scope of calculation to a particular subcorpus by specifying its
+   index. To do this, pass the argument ``subcorp_idx`` to the function.
+   The example below sets the subcorpus to ``3``, which is the subcorpus
+   of modern Chinese (ASBC).
 
 .. container:: cell code
 
    .. code:: python
 
-      # Shape of hanzi (IDC)
-      c2.freq_distr(tp="idc", subcorp_idx=0)
+      CA.freq_distr(tp="chr", subcorp_idx=3).most_common(4)
 
    .. container:: output execute_result
 
       ::
 
-         Counter({'': 256312,
-                  'noChrData': 351898,
-                  '⿰': 438079,
-                  '⿱': 561453,
-                  '⿲': 6242,
-                  '⿳': 14381,
-                  '⿴': 14409,
-                  '⿵': 25234,
-                  '⿶': 7275,
-                  '⿷': 1641,
-                  '⿸': 91226,
-                  '⿹': 25384,
-                  '⿺': 26847,
-                  '⿻': 37847})
+         [('的', 15826), ('一', 5537), ('是', 5130), ('不', 4469)]
+
+.. container:: cell markdown
+
+   .. rubric:: IDC
+      :name: idc
+
+   Frequency distributions of the Ideographic Description Characters
+   (IDCs) could similarly be retrieved by setting ``tp`` to ``"idc"``.
+   Note that there is an argument ``use_chr_types`` that applies when
+   ``tp="idc"`` (IDC) or ``tp="rad"`` (radical). ``use_chr_types`` is
+   used to determine how to compute the frequencies. If it is set to
+   ``False``, character frequencies are considered. If it is ``True``,
+   character frequencies are discarded. In other words, when
+   ``use_chr_types=False``, an IDC or a radical would only be counted
+   once for each type of character. See @sec:frequency-lists for a toy
+   example.
 
 .. container:: cell code
 
    .. code:: python
 
-      # Radical of hanzi
-      c2.freq_distr(tp="rad").most_common(10)
+      CA.freq_distr(tp="idc", subcorp_idx=3)
 
    .. container:: output execute_result
 
       ::
 
-         [('noChrData', 1517367),
-          ('人', 422649),
-          ('一', 281707),
-          ('丿', 252723),
-          ('口', 249345),
-          ('火', 165875),
-          ('言', 157936),
-          ('水', 155632),
-          ('八', 151539),
-          ('心', 145208)]
+         Counter({'': 48725,
+                  '⿰': 167681,
+                  '⿱': 120035,
+                  '⿲': 1965,
+                  '⿳': 4068,
+                  '⿴': 5744,
+                  '⿵': 7834,
+                  '⿶': 1637,
+                  '⿷': 537,
+                  '⿸': 18511,
+                  '⿹': 4412,
+                  '⿺': 13451,
+                  '⿻': 10324})
 
 .. container:: cell code
 
    .. code:: python
 
-      # Hanzi with a certain radical
-      c2.freq_distr(tp=None, radical="广").most_common(10)
+      CA.freq_distr(tp="idc", use_chr_types=True, subcorp_idx=3)
 
    .. container:: output execute_result
 
       ::
 
-         [('度', 4757),
-          ('廣', 4050),
-          ('廟', 3067),
-          ('府', 3064),
-          ('廢', 2542),
-          ('庶', 2281),
-          ('廉', 1594),
-          ('康', 1570),
-          ('序', 1213),
-          ('庭', 1155)]
+         Counter({'': 119,
+                  '⿰': 2454,
+                  '⿱': 1019,
+                  '⿲': 26,
+                  '⿳': 39,
+                  '⿴': 18,
+                  '⿵': 45,
+                  '⿶': 6,
+                  '⿷': 12,
+                  '⿸': 176,
+                  '⿹': 41,
+                  '⿺': 123,
+                  '⿻': 32})
+
+.. container:: cell markdown
+
+   .. rubric:: Radical
+      :name: radical
+
+   To retrieve frequency distributions for radicals, set ``tp="rad"``.
+   The usage of ``use_chr_types`` here is similar to the IDC described
+   above.
 
 .. container:: cell code
 
    .. code:: python
 
-      # Hanzi with a certain component
-      c2.freq_distr(tp=None, compo="水", idc="vert2", pos=-1)
+      CA.freq_distr(tp="rad", subcorp_idx=3).most_common(4)
+
+   .. container:: output execute_result
+
+      ::
+
+         [('人', 28149), ('白', 16640), ('一', 15567), ('口', 15443)]
+
+.. container:: cell code
+
+   .. code:: python
+
+      CA.freq_distr(tp="rad", use_chr_types=True, subcorp_idx=3).most_common(4)
+
+   .. container:: output execute_result
+
+      ::
+
+         [('水', 233), ('口', 207), ('手', 201), ('人', 172)]
+
+.. container:: cell markdown
+
+   .. rubric:: Characters with a given radical
+      :name: characters-with-a-given-radical
+
+   It is also possible to look into characters of a specific type. By
+   setting ``tp=None``, one could then pass in a radical to the argument
+   ``radical`` to look at the frequency distribution of the characters
+   with this particular radical.
+
+.. container:: cell code
+
+   .. code:: python
+
+      CA.freq_distr(tp=None, radical="广").most_common(4)
+
+   .. container:: output execute_result
+
+      ::
+
+         [('度', 4757), ('廣', 4050), ('廟', 3067), ('府', 3064)]
+
+.. container:: cell markdown
+
+   .. rubric:: Characters with a given IDC component
+      :name: characters-with-a-given-idc-component
+
+   Similarly, a frequency distribution of characters of a specific type
+   defined according to a component and an optional IDC describing the
+   the shape could also be retrieved by specifying ``tp=None`` and the
+   arguments ``compo`` and ``idc`` (optional).
+
+.. container:: cell code
+
+   .. code:: python
+
+      CA.freq_distr(tp=None, compo="水", idc="vert2")
 
    .. container:: output execute_result
 
@@ -330,136 +309,201 @@ Stats
 
 .. container:: cell markdown
 
-   .. rubric:: 2.2 Productivity
-      :name: 22-productivity
+   .. rubric:: Dispersion
+      :name: dispersion
 
-   -  Realized Productivity: :math:`V(C, N)`
-   -  Expanding Productivity: :math:`\frac{V(1, C, N)}{V(1, N)}`
-   -  Potential Productivity: :math:`\frac{V(1, C, N)}{N(C)}`
-
-.. container:: cell code
-
-   .. code:: python
-
-      # Productivity of a radical
-      c2.productivity(radical="广", subcorp_idx=0)
-
-   .. container:: output execute_result
-
-      ::
-
-         {'N': 1858228,
-          'NC': 5897,
-          'V1': 2083,
-          'V1C': 9,
-          'productivity': {'expanding': 0.0043206913106096975,
-           'potential': 0.001526199762591148,
-           'realized': 62}}
-
-.. container:: cell code
-
-   .. code:: python
-
-      # Productivity of a component
-      c2.productivity(compo="虫", idc="horz2", pos=0, subcorp_idx=0)
-
-   .. container:: output execute_result
-
-      ::
-
-         {'N': 1858228,
-          'NC': 1027,
-          'V1': 2083,
-          'V1C': 72,
-          'productivity': {'expanding': 0.03456553048487758,
-           'potential': 0.07010710808179163,
-           'realized': 178}}
-
-.. container:: cell code
-
-   .. code:: python
-
-      # Productivity of Hanzi shapes (IDCs)
-      import pandas as pd
-      from CompoTree import IDC
-
-      df = []
-      for idc in IDC:   
-          p = c2.productivity(idc=idc.name, subcorp_idx=0)
-          df.append({
-              'name': idc.name, 
-              'shape': idc.value, 
-              **p['productivity'],
-              'V1C': p['V1C'],
-              'V1': p['V1'],
-              'NC': p['NC'],
-              'N': p['N'],
-          })
-
-      df = pd.DataFrame(df)
-      df
-
-   .. container:: output execute_result
-
-      ::
-
-              name shape  realized  expanding  potential   V1C    V1      NC        N
-         0   horz2     ⿰      5580   0.709073   0.003372  1477  2083  438079  1858228
-         1   vert2     ⿱      2110   0.223236   0.000828   465  2083  561453  1858228
-         2   horz3     ⿲        37   0.002400   0.000801     5  2083    6242  1858228
-         3   vert3     ⿳        85   0.006721   0.000974    14  2083   14381  1858228
-         4    encl     ⿴        27   0.001440   0.000208     3  2083   14409  1858228
-         5    surN     ⿵        87   0.005761   0.000476    12  2083   25234  1858228
-         6    surU     ⿶         6   0.000000   0.000000     0  2083    7275  1858228
-         7    curC     ⿷        20   0.001920   0.002438     4  2083    1641  1858228
-         8    surT     ⿸       342   0.026884   0.000614    56  2083   91226  1858228
-         9    sur7     ⿹        51   0.002880   0.000236     6  2083   25384  1858228
-         10   surL     ⿺       180   0.012482   0.000968    26  2083   26847  1858228
-         11   over     ⿻        44   0.000960   0.000053     2  2083   37847  1858228
+   Measures of dispersion could be calculated based on a character or a
+   search pattern.
 
 .. container:: cell markdown
 
-   .. rubric:: 3 Ngram Frequency
-      :name: 3-ngram-frequency
+   .. rubric:: Dispersion Measures for Characters
+      :name: dispersion-measures-for-characters
+
+   ``Dispersion.char_dispersion()`` is used for calculating dispersion
+   measures for a character. The examples below—using the toy corpus in
+   Gries (2020)—demonstrate the validity of the returned measure. The
+   values should be identical to those in Table 1 of Gries (2020).
 
 .. container:: cell code
 
    .. code:: python
 
-      from hctk import PlainTextReader, Concordancer
+      # Gries (2020, Table 1)
+      DP.char_dispersion(char='a', subcorp_idx=4)
 
-      c = Concordancer(PlainTextReader("data/").corpus)
-
-   .. container:: output stream stdout
-
-      ::
-
-         Indexing corpus for text retrival...
-
-   .. container:: output display_data
-
-      .. code:: json
-
-         {"version_major":2,"version_minor":0,"model_id":"139312fcf88f4d288ed2420f4e845446"}
-
-   .. container:: output stream stdout
+   .. container:: output execute_result
 
       ::
 
-         Indexing corpus for concordance search...
-
-   .. container:: output display_data
-
-      .. code:: json
-
-         {"version_major":2,"version_minor":0,"model_id":"241d4cf67ffd42648fcee02c8d4d6a1e"}
+         {'DP': 0.18,
+          'DPnorm': 0.2195121951219512,
+          'JuillandD': 0.7851504534504508,
+          'KLdivergence': 0.13697172936522078,
+          'Range': 5,
+          'RosengrenS': 0.9498163423042408}
 
 .. container:: cell code
 
    .. code:: python
 
-      # Bigram frequency
-      c.freq_distr_ngrams(n=2, subcorp_idx=0).most_common(10)
+      # return_raw=True to get the raw data for dispersion calculation
+      DP.char_dispersion(char='a', return_raw=True, subcorp_idx=4)
+
+   .. container:: output execute_result
+
+      ::
+
+         ({'DP': 0.18,
+           'DPnorm': 0.2195121951219512,
+           'JuillandD': 0.7851504534504508,
+           'KLdivergence': 0.13697172936522078,
+           'Range': 5,
+           'RosengrenS': 0.9498163423042408},
+          {'corpus_size': 50,
+           'f': 15,
+           'n': 5,
+           'p': [0.1111111111111111, 0.45454545454545453, 0.3, 0.2, 0.4],
+           's': [0.18, 0.22, 0.2, 0.2, 0.2],
+           'v': [1, 5, 3, 2, 4]})
+
+.. container:: cell markdown
+
+   To see how dispersion measures behave on real data, we calculate
+   dispersion measures for four characters (之, 也, 草, and 巾) in a
+   corpus of Literary Chinese texts. The first two characters 之 and 也
+   are often used as function words and the last two as content words in
+   Literary Chinese. Hence, we would expect the first two to be
+   distributed evenly, and the latter two unevenly in the corpus.
+
+.. container:: cell code
+
+   .. code:: python
+
+      subcorp_idx = 0
+      df_disp = []
+      for ch in '之也草巾':
+          stats, raw = DP.char_dispersion(
+              char=ch, subcorp_idx=subcorp_idx, return_raw=True
+          )
+          d = {
+              'char': ch,
+              'Range(%)': '{:.2f}'.format(100 * stats['Range'] / raw['n']),
+              **stats
+          }
+          df_disp.append(d)
+      df_disp = pd.DataFrame(df_disp)
+      df_disp
+
+   .. container:: output execute_result
+
+      ::
+
+           char Range(%)  Range        DP    DPnorm  KLdivergence  JuillandD  RosengrenS
+         0    之    90.98    666  0.128508  0.128509      0.095890   0.977316    0.961405
+         1    也    77.05    564  0.251459  0.251462      0.401038   0.962913    0.823893
+         2    草    22.40    164  0.649643  0.649649      2.331477   0.863829    0.320790
+         3    巾     3.69     27  0.844676  0.844683      4.077689   0.541787    0.101871
+
+.. container:: cell markdown
+
+   .. rubric:: Dispersion Measures of Complex Forms (defined by CQL)
+      :name: dispersion-measures-of-complex-forms-defined-by-cql
+
+   Dispersion measures for abstract units could also be calculated with
+   the returned concordance lines provided by
+   ``Concordancer.cql_search()``. The function
+   ``DP.pattern_dispersion()`` is designed to take the queried results
+   from ``Concordancer.cql_search()`` to calculate dispersion measures.
+
+.. container:: cell code
+
+   .. code:: python
+
+      cql = """
+      [semtag="人體精神"] [semtag="人體精神"]
+      """
+      results = list(CC.cql_search(cql, left=3, right=3))
+      print('Num of results:', len(results))
+      for r in results[:3]: print(r)
+
+   .. container:: output stream stdout
+
+      ::
+
+         Num of results: 8459
+         <Concord 。有孚{惠心}，勿問>
+         <Concord 大澤則{惠必}及下，>
+         <Concord 「仁義{惠愛}而已矣>
+
+.. container:: cell code
+
+   .. code:: python
+
+      DP.pattern_dispersion(data=results, subcorp_idx=2)
+
+   .. container:: output execute_result
+
+      ::
+
+         {'DP': 0.1504848557289626,
+          'DPnorm': 0.15050344195568013,
+          'JuillandD': 0.9387038720245429,
+          'KLdivergence': 0.135483902941753,
+          'Range': 134,
+          'RosengrenS': 0.9428568965311757}
+
+.. container:: cell markdown
+
+   The example below calculates dispersion measures for **each subcorpus
+   0, 1, and 2**. This is useful when the user is interested in
+   contrasting dispersion measures in different corpora (e.g.,
+   genre/diachronic comparison).
+
+.. container:: cell code
+
+   .. code:: python
+
+      # Compute separate dispersion measures for each subcorpus
+      df_pat_disp = []
+      for i in range(3):
+          stats, raw = DP.pattern_dispersion(
+              data=results, subcorp_idx=i, return_raw=True
+          )
+          d = {
+              'Range(%)': '{:.2f}'.format(100 * stats['Range'] / raw['n']),
+              **stats,
+              'freq': raw['f'],
+              'corp_size': raw['corpus_size']
+          }
+          df_pat_disp.append(d)
+      df_pat_disp = pd.DataFrame(df_pat_disp)
+      df_pat_disp
+
+   .. container:: output execute_result
+
+      ::
+
+           Range(%)  Range        DP    DPnorm  ...  JuillandD  RosengrenS  freq  corp_size
+         0    44.40    325  0.399226  0.399229  ...   0.907705    0.629630  1689    1858228
+         1    53.38    560  0.325007  0.325008  ...   0.950161    0.753668  3500    3938310
+         2    85.90    134  0.150485  0.150503  ...   0.938704    0.942857  2489    2097273
+
+         [3 rows x 9 columns]
+
+.. container:: cell markdown
+
+   .. rubric:: Ngram Frequency
+      :name: ngram-frequency
+
+   We now turn to the relationships across characters. To compute
+   character n-grams, one can use ``Concordancer.freq_distr_ngrams()``.
+
+.. container:: cell code
+
+   .. code:: python
+
+      CC.freq_distr_ngrams(n=2, subcorp_idx=0).most_common(4)
 
    .. container:: output stream stdout
 
@@ -471,29 +515,19 @@ Stats
 
       .. code:: json
 
-         {"version_major":2,"version_minor":0,"model_id":"253235628fd84bc5896ae35eae437e7b"}
+         {"version_major":2,"version_minor":0,"model_id":"bb5037e60ea8460abcc2e2050bd94200"}
 
    .. container:: output execute_result
 
       ::
 
-         [('而不', 3913),
-          ('天下', 3661),
-          ('不可', 2985),
-          ('之所', 2723),
-          ('子曰', 2581),
-          ('人之', 2317),
-          ('以為', 2231),
-          ('所以', 2023),
-          ('不能', 1934),
-          ('可以', 1667)]
+         [('而不', 3913), ('天下', 3661), ('不可', 2985), ('之所', 2723)]
 
 .. container:: cell code
 
    .. code:: python
 
-      # Trigram frequency
-      c.freq_distr_ngrams(n=3, subcorp_idx=0).most_common(10)
+      CC.freq_distr_ngrams(n=3, subcorp_idx=0).most_common(4)
 
    .. container:: output stream stdout
 
@@ -505,133 +539,221 @@ Stats
 
       .. code:: json
 
-         {"version_major":2,"version_minor":0,"model_id":"5fdaae56638c43fda862f9243ffc3c1a"}
+         {"version_major":2,"version_minor":0,"model_id":"98917c323e1943c694386d79c257604f"}
 
    .. container:: output execute_result
 
       ::
 
-         [('天下之', 946),
-          ('歧伯曰', 766),
-          ('之所以', 605),
-          ('不可以', 580),
-          ('子對曰', 443),
-          ('黃帝曰', 403),
-          ('此之謂', 350),
-          ('子墨子', 343),
-          ('孔子曰', 302),
-          ('不可不', 298)]
+         [('天下之', 946), ('歧伯曰', 766), ('之所以', 605), ('不可以', 580)]
 
 .. container:: cell markdown
 
-   .. rubric:: 4 Collocation
-      :name: 4-collocation
+   .. rubric:: Collocation
+      :name: collocation
+
+   Association measures could be used to quantify the strengths of
+   attraction between a pair of characters. Pairs with strong
+   attractions could be considered as collocations. *hgct* implements
+   two types of collocation extraction functions. The first
+   (``Concordancer.bigram_associations()``) is based on bigrams, which
+   simply computes association scores for all bigrams. With the second
+   implementation (``Concordancer.collocates()``), users could specify a
+   node and a window size, and characters falling within this window
+   around the node would be treated as a node-collocate pair. Each pair
+   is then computed for an association score.
 
 .. container:: cell markdown
 
-   .. rubric:: 4.1 Bigram Association
-      :name: 41-bigram-association
+   .. rubric:: Bigram Association
+      :name: bigram-association
 
 .. container:: cell code
 
    .. code:: python
 
-      bi_asso = c.bigram_associations(subcorp_idx=0, sort_by="DeltaP21")
-      [x for x in bi_asso if x[1].get('RawCount', 0) > 100][:3]
+      bi_asso = CC.bigram_associations(subcorp_idx=3, sort_by="Gsq")
+      bi_asso[0]
 
    .. container:: output execute_result
 
       ::
 
-         [('歧伯',
-           {'DeltaP12': 0.515988379165576,
-            'DeltaP21': 0.9870480872578454,
-            'Dice': 0.6778754298815437,
-            'FisherExact': 0.0,
-            'Gsq': 12041.994806908666,
-            'MI': 9.41167469710956,
-            'RawCount': 887,
-            'Xsq': 603675.038957376}),
-          ('柰何',
-           {'DeltaP12': 0.056661809249506735,
-            'DeltaP21': 0.9864357417273106,
-            'Dice': 0.10718562874251497,
-            'FisherExact': 0.0,
-            'Gsq': 2110.3645096843,
-            'MI': 8.535527535461881,
-            'RawCount': 179,
-            'Xsq': 66249.74702510444}),
-          ('嗚呼',
-           {'DeltaP12': 0.5684168332436602,
-            'DeltaP21': 0.9699560936315373,
-            'Dice': 0.7168141592920354,
-            'FisherExact': 0.0,
-            'Gsq': 2772.224707107538,
-            'MI': 11.978137468386173,
-            'RawCount': 162,
-            'Xsq': 653497.5945430023})]
+         ('自己',
+          {'DeltaP12': 0.9778668701918644,
+           'DeltaP21': 0.36342714003090937,
+           'Dice': 0.5303392259913999,
+           'FisherExact': 0.0,
+           'Gsq': 6188.677676112116,
+           'MI': 7.855905225817536,
+           'RawCount': 555,
+           'Xsq': 128210.23324106314})
+
+.. container:: cell code
+
+   .. code:: python
+
+      d = pd.DataFrame([{'bigram': x[0], **x[1]} for x in bi_asso][:5])
+      # print(d.to_markdown(index=False, floatfmt=".2f", numalign="left"))
+      d
+
+   .. container:: output execute_result
+
+      ::
+
+           bigram        MI            Xsq  ...  DeltaP12  FisherExact  RawCount
+         0     自己  7.855905  128210.233241  ...  0.977867          0.0       555
+         1     什麼  9.153258  192859.824384  ...  0.547635          0.0       339
+         2     我們  6.183966   42280.224680  ...  0.446638          0.0       592
+         3     台灣  8.126771  111740.169937  ...  0.693597          0.0       401
+         4     沒有  6.394685   43012.134830  ...  0.164128          0.0       518
+
+         [5 rows x 9 columns]
 
 .. container:: cell markdown
 
-   .. rubric:: 4.2 Node-Collocate Association
-      :name: 42-node-collocate-association
+   .. rubric:: Node-Collocate Association
+      :name: node-collocate-association
+
+   The example below use the character sequence ``我們`` as the node and
+   looks for collocates occurring on the immediate right (``left=0`` and
+   ``right=1``) on the node. After computing association scores for each
+   node-collocate pair, these pairs are sorted based on the MI measure.
+   The data frame below shows the top-5 collocates with the highest MI
+   scores (a minimum frequency threshold of 6 is applied) of the node
+   ``我們``.
 
 .. container:: cell code
 
    .. code:: python
 
       cql = """
-      "孔" "子"
+      [char="我"] [char="們"]
       """
-      collo = c.collocates(cql, left=3, right=3, subcorp_idx=0, sort_by="Xsq", alpha=0)
-      collo[:5]
+      collo = CC.collocates(cql, left=0, right=1, subcorp_idx=3, 
+                            sort_by="MI", alpha=0)
+      collo[0]
 
    .. container:: output execute_result
 
       ::
 
-         [('曰',
-           {'DeltaP12': 0.5508984202190699,
-            'DeltaP21': 0.017436408382199422,
-            'Dice': 0.03412938870076635,
-            'FisherExact': 0.0,
-            'Gsq': 2486.7011528898893,
-            'MI': 5.5855958675486095,
-            'RawCount': 383,
-            'Xsq': 17849.561805227277}),
-          ('愀',
-           {'DeltaP12': 0.008807342620906026,
-            'DeltaP21': 0.4996367483650986,
-            'Dice': 0.017316017316017316,
-            'FisherExact': 2.1855507492354285e-18,
-            'Gsq': 78.36068664097104,
-            'MI': 10.41398510902232,
-            'RawCount': 6,
-            'Xsq': 8177.080337219988}),
-          ('孔',
-           {'DeltaP12': 0.06707828763041274,
-            'DeltaP21': 0.04976704015525816,
-            'Dice': 0.05753595997498437,
-            'FisherExact': 1.5730409497803884e-81,
-            'Gsq': 366.5766447587887,
-            'MI': 7.095196721665525,
-            'RawCount': 46,
-            'Xsq': 6203.299925288661}),
-          ('矙',
-           {'DeltaP12': 0.002936857562408223,
-            'DeltaP21': 0.999634597729232,
-            'Dice': 0.005856515373352855,
-            'FisherExact': 1.341091030070595e-07,
-            'Gsq': 31.652163710326512,
-            'MI': 11.41398510902232,
-            'RawCount': 2,
-            'Xsq': 5455.356826047563}),
-          ('問',
-           {'DeltaP12': 0.06938851232700384,
-            'DeltaP21': 0.022691599983249697,
-            'Dice': 0.03471971066907776,
-            'FisherExact': 1.0446010447528008e-68,
-            'Gsq': 307.47664398618406,
-            'MI': 5.973808047464968,
-            'RawCount': 48,
-            'Xsq': 2925.847560753262})]
+         ('釘',
+          {'DeltaP12': 0.0016848237685590844,
+           'DeltaP21': 0.33204500782950214,
+           'Dice': 0.0033613445378151263,
+           'FisherExact': 0.003866505328061448,
+           'Gsq': 9.493215334772461,
+           'MI': 8.012895027477056,
+           'RawCount': 1,
+           'Xsq': 256.6351579547297})
+
+.. container:: cell code
+
+   .. code:: python
+
+      d = pd.DataFrame([{'char': x[0], **x[1]} for x in collo 
+                        if x[1]['RawCount'] > 5][:5])
+      #print(d.to_markdown(index=False, floatfmt=".2f", numalign="left"))
+      d
+
+   .. container:: output execute_result
+
+      ::
+
+           char        MI         Xsq  ...  DeltaP12   FisherExact  RawCount
+         0    認  3.979880  124.857368  ...  0.014258  9.310853e-09         9
+         1    還  3.388404   77.315368  ...  0.013769  2.970053e-07         9
+         2    都  3.328575  122.653021  ...  0.022845  6.215205e-11        15
+         3    就  3.207562  125.435532  ...  0.025641  1.218295e-11        17
+         4    所  3.047111   76.926085  ...  0.017841  4.222232e-08        12
+
+         [5 rows x 9 columns]
+
+.. container:: cell markdown
+
+   .. rubric:: Productivity
+      :name: productivity
+
+   Finally, we demonstrate the usage of the tentative applications of
+   Productivity measures [@\ baayen1993;@baayen2009] to character
+   components. This is implemented in ``CompoAnalysis.productivity()``.
+   The categories for computing measures of productivity are defined
+   based on the arguments passed.
+
+.. container:: cell code
+
+   .. code:: python
+
+      # Productivity of a radical
+      CA.productivity(radical="广", subcorp_idx=0)
+
+   .. container:: output execute_result
+
+      ::
+
+         {'N': 1505967,
+          'NC': 5889,
+          'V1': 1896,
+          'V1C': 7,
+          'productivity': {'expanding': 0.003691983122362869,
+           'potential': 0.0011886568177958906,
+           'realized': 58}}
+
+.. container:: cell code
+
+   .. code:: python
+
+      # Productivity of a component
+      CA.productivity(compo="虫", idc="horz2", pos=0, subcorp_idx=0)
+
+   .. container:: output execute_result
+
+      ::
+
+         {'N': 1505967,
+          'NC': 1027,
+          'V1': 1896,
+          'V1C': 72,
+          'productivity': {'expanding': 0.0379746835443038,
+           'potential': 0.07010710808179163,
+           'realized': 178}}
+
+.. container:: cell code
+
+   .. code:: python
+
+      # Productivity of Hanzi shapes (IDCs)
+      df_prod = []
+      for idc_nm, idc_val in CC.chr_idcs.items():   
+          p = CA.productivity(idc=idc_nm, subcorp_idx=0)
+          df_prod.append({
+              'name': idc_nm, 
+              'shape': idc_val, 
+              **p['productivity'],
+              'V1C': p['V1C'],
+              'V1': p['V1'],
+              'NC': p['NC'],
+              'N': p['N'],
+          })
+
+      df_prod = pd.DataFrame(df_prod)
+      df_prod
+
+   .. container:: output execute_result
+
+      ::
+
+              name shape  realized  expanding  potential   V1C    V1      NC        N
+         0   horz2     ⿰      5436   0.719409   0.003115  1364  1896  437854  1505967
+         1   vert2     ⿱      2045   0.219409   0.000741   416  1896  561357  1505967
+         2   horz3     ⿲        35   0.001582   0.000481     3  1896    6240  1505967
+         3   vert3     ⿳        80   0.005802   0.000765    11  1896   14371  1505967
+         4    encl     ⿴        27   0.001582   0.000208     3  1896   14409  1505967
+         5    surN     ⿵        84   0.004747   0.000357     9  1896   25231  1505967
+         6    surU     ⿶         6   0.000000   0.000000     0  1896    7275  1505967
+         7    curC     ⿷        20   0.002110   0.002438     4  1896    1641  1505967
+         8    surT     ⿸       332   0.026371   0.000548    50  1896   91208  1505967
+         9    sur7     ⿹        48   0.002637   0.000197     5  1896   25379  1505967
+         10   surL     ⿺       178   0.013186   0.000931    25  1896   26844  1505967
+         11   over     ⿻        43   0.000527   0.000026     1  1896   37846  1505967

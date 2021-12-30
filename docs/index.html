@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hanzi Corpus Toolkit &mdash; cctk 0.0.9 documentation</title>
+  <title>Hanzi Glyph Corpus Toolkit &mdash; hgct 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -26,7 +26,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> cctk
+            <a href="#" class="icon icon-home"> hgct
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -42,7 +42,6 @@
 <li class="toctree-l1"><a class="reference internal" href="stats.html">2. Stats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="corpusReader.html">3. Corpus Input</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concordance.html">4. Corpus Search &amp; Concordancer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sense.html">5. Sense Analysis</a></li>
 </ul>
 
         </div>
@@ -51,7 +50,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">cctk</a>
+          <a href="#">hgct</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -59,7 +58,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>Hanzi Corpus Toolkit</li>
+      <li>Hanzi Glyph Corpus Toolkit</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -69,8 +68,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="hanzi-corpus-toolkit">
-<h1>Hanzi Corpus Toolkit<a class="headerlink" href="#hanzi-corpus-toolkit" title="Permalink to this headline"></a></h1>
+  <section id="hanzi-glyph-corpus-toolkit">
+<h1>Hanzi Glyph Corpus Toolkit<a class="headerlink" href="#hanzi-glyph-corpus-toolkit" title="Permalink to this headline"></a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -78,49 +77,12 @@
 <li class="toctree-l1"><a class="reference internal" href="stats.html">2. Stats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="corpusReader.html">3. Corpus Input</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concordance.html">4. Corpus Search &amp; Concordancer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sense.html">5. Sense Analysis</a></li>
 </ul>
 </div>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -U hctk
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -U hgct
 </pre></div>
-</div>
-</section>
-<section id="jupter-notebooks-colab">
-<h2>Jupter Notebooks (Colab)<a class="headerlink" href="#jupter-notebooks-colab" title="Permalink to this headline"></a></h2>
-<p>In order to work properly on Google Colab, some additional settings (e.g.,
-Chinese fonts, interactive visualizing package setup) need to be done:</p>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">Display Chinese characters in plot outputs</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download font data</span>
-!wget <span class="s1">&#39;https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKtc-hinted.zip&#39;</span>
-!mkdir /tmp/fonts
-!unzip -o NotoSansCJKtc-hinted.zip -d /tmp/fonts/
-!mv /tmp/fonts/NotoSansMonoCJKtc-Regular.otf /usr/share/fonts/truetype/NotoSansMonoCJKtc-Regular.otf -f
-!rm -rf /tmp/fonts
-!rm NotoSansCJKtc-hinted.zip
-</pre></div>
-</div>
-</div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set chinese font for plotting</span>
-<span class="kn">import</span> <span class="nn">matplotlib.font_manager</span> <span class="k">as</span> <span class="nn">font_manager</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="n">font_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;/usr/share/fonts/truetype/&#39;</span><span class="p">]</span>
-<span class="n">font_files</span> <span class="o">=</span> <span class="n">font_manager</span><span class="o">.</span><span class="n">findSystemFonts</span><span class="p">(</span><span class="n">fontpaths</span><span class="o">=</span><span class="n">font_dirs</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">font_file</span> <span class="ow">in</span> <span class="n">font_files</span><span class="p">:</span>
-   <span class="n">font_manager</span><span class="o">.</span><span class="n">fontManager</span><span class="o">.</span><span class="n">addfont</span><span class="p">(</span><span class="n">font_file</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Noto Sans Mono CJK TC&quot;</span>
-</pre></div>
-</div>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">Setup interactive visualization display</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bokeh.io</span> <span class="kn">import</span> <span class="n">output_notebook</span>
-<span class="kn">from</span> <span class="nn">bokeh.resources</span> <span class="kn">import</span> <span class="n">INLINE</span>
-<span class="n">output_notebook</span><span class="p">(</span><span class="n">resources</span><span class="o">=</span><span class="n">INLINE</span><span class="p">)</span>
-</pre></div>
-</div>
 </div>
 </section>
 </section>

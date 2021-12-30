@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>2. Stats &mdash; cctk 0.0.9 documentation</title>
+  <title>2. Stats &mdash; hgct 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -15,7 +15,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,7 +27,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> cctk
+            <a href="index.html" class="icon icon-home"> hgct
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,7 +43,6 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">2. Stats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="corpusReader.html">3. Corpus Input</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concordance.html">4. Corpus Search &amp; Concordancer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sense.html">5. Sense Analysis</a></li>
 </ul>
 
         </div>
@@ -53,7 +51,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cctk</a>
+          <a href="index.html">hgct</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -74,109 +72,40 @@
   <section id="stats">
 <h1><span class="section-number">2. </span>Stats<a class="headerlink" href="#stats" title="Permalink to this headline"></a></h1>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gdown https://github.com/liao961120/hctk/raw/main/test/data.zip
-!unzip -q data.zip
-!pip install -qU hctk
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Colab setup</span>
+<span class="c1"># !gdown https://github.com/liao961120/hgct/raw/main/test/data.zip</span>
+<span class="c1"># !unzip -q data.zip</span>
+<span class="c1"># !pip install -qU hgct</span>
 </pre></div>
-</div>
-<div class="output stream stdout docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Downloading</span><span class="o">...</span>
-<span class="n">From</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">liao961120</span><span class="o">/</span><span class="n">hctk</span><span class="o">/</span><span class="n">raw</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">test</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
-<span class="n">To</span><span class="p">:</span> <span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">zip</span>
-<span class="mi">100</span><span class="o">%</span> <span class="mf">11.5</span><span class="n">M</span><span class="o">/</span><span class="mf">11.5</span><span class="n">M</span> <span class="p">[</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">&lt;</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">,</span> <span class="mf">70.2</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span><span class="p">]</span>
-<span class="n">ents</span> <span class="n">to</span> <span class="n">build</span> <span class="n">wheel</span> <span class="o">...</span> <span class="n">etadata</span> <span class="o">...</span>
-</pre></div>
-</div>
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="dispersion">1 Dispersion</p>
-</div>
-<div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-<span class="kn">from</span> <span class="nn">hctk</span> <span class="kn">import</span> <span class="n">PlainTextReader</span><span class="p">,</span> <span class="n">Dispersion</span>
-
-<span class="n">dp</span> <span class="o">=</span> <span class="n">Dispersion</span><span class="p">(</span><span class="n">PlainTextReader</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="output stream stdout docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Indexing</span> <span class="n">corpus</span> <span class="k">for</span> <span class="n">text</span> <span class="n">retrival</span><span class="o">...</span>
-</pre></div>
-</div>
-</div>
-<div class="output display-data docutils container">
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;6edf85bb5c074d658d5b95482ec8e353&quot;</span><span class="p">}</span>
-</pre></div>
-</div>
-</div>
-<div class="output stream stdout docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Indexing</span> <span class="n">corpus</span> <span class="k">for</span> <span class="n">concordance</span> <span class="n">search</span><span class="o">...</span>
-</pre></div>
-</div>
-</div>
-<div class="output display-data docutils container">
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;ee96a5c61b2e4f69a823d8371933afe4&quot;</span><span class="p">}</span>
-</pre></div>
-</div>
-</div>
+<p class="rubric" id="corpus-analysis-api-in-hgtk">Corpus Analysis API in <em>hgtk</em></p>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="dispersion-measures-of-characters">1.1 Dispersion Measures of Characters</p>
-</div>
-<div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="s1">&#39;之也水火&#39;</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
-    <span class="n">pprint</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">char_dispersion</span><span class="p">(</span><span class="n">char</span><span class="o">=</span><span class="n">ch</span><span class="p">))</span>
-</pre></div>
-</div>
-<div class="output stream stdout docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">之</span>
-<span class="p">{</span><span class="s1">&#39;DP&#39;</span><span class="p">:</span> <span class="mf">0.20221115044151497</span><span class="p">,</span>
- <span class="s1">&#39;DPnorm&#39;</span><span class="p">:</span> <span class="mf">0.2022113683260698</span><span class="p">,</span>
- <span class="s1">&#39;JuillandD&#39;</span><span class="p">:</span> <span class="mf">0.9852586807096999</span><span class="p">,</span>
- <span class="s1">&#39;KLdivergence&#39;</span><span class="p">:</span> <span class="mf">0.19438584134276882</span><span class="p">,</span>
- <span class="s1">&#39;Range&#39;</span><span class="p">:</span> <span class="mi">1845</span><span class="p">,</span>
- <span class="s1">&#39;RosengrenS&#39;</span><span class="p">:</span> <span class="mf">0.9263264076180923</span><span class="p">}</span>
-<span class="n">也</span>
-<span class="p">{</span><span class="s1">&#39;DP&#39;</span><span class="p">:</span> <span class="mf">0.35839650852771193</span><span class="p">,</span>
- <span class="s1">&#39;DPnorm&#39;</span><span class="p">:</span> <span class="mf">0.35839689470356595</span><span class="p">,</span>
- <span class="s1">&#39;JuillandD&#39;</span><span class="p">:</span> <span class="mf">0.9762985043690171</span><span class="p">,</span>
- <span class="s1">&#39;KLdivergence&#39;</span><span class="p">:</span> <span class="mf">0.5790626716815067</span><span class="p">,</span>
- <span class="s1">&#39;Range&#39;</span><span class="p">:</span> <span class="mi">1657</span><span class="p">,</span>
- <span class="s1">&#39;RosengrenS&#39;</span><span class="p">:</span> <span class="mf">0.8017462266655788</span><span class="p">}</span>
-<span class="n">水</span>
-<span class="p">{</span><span class="s1">&#39;DP&#39;</span><span class="p">:</span> <span class="mf">0.4248753877868117</span><span class="p">,</span>
- <span class="s1">&#39;DPnorm&#39;</span><span class="p">:</span> <span class="mf">0.4248758455943289</span><span class="p">,</span>
- <span class="s1">&#39;JuillandD&#39;</span><span class="p">:</span> <span class="mf">0.9419817581882376</span><span class="p">,</span>
- <span class="s1">&#39;KLdivergence&#39;</span><span class="p">:</span> <span class="mf">1.2093306326342055</span><span class="p">,</span>
- <span class="s1">&#39;Range&#39;</span><span class="p">:</span> <span class="mi">1032</span><span class="p">,</span>
- <span class="s1">&#39;RosengrenS&#39;</span><span class="p">:</span> <span class="mf">0.6599676413503003</span><span class="p">}</span>
-<span class="n">火</span>
-<span class="p">{</span><span class="s1">&#39;DP&#39;</span><span class="p">:</span> <span class="mf">0.5258856218700372</span><span class="p">,</span>
- <span class="s1">&#39;DPnorm&#39;</span><span class="p">:</span> <span class="mf">0.5258861885171008</span><span class="p">,</span>
- <span class="s1">&#39;JuillandD&#39;</span><span class="p">:</span> <span class="mf">0.9082169168517871</span><span class="p">,</span>
- <span class="s1">&#39;KLdivergence&#39;</span><span class="p">:</span> <span class="mf">1.5125799798374882</span><span class="p">,</span>
- <span class="s1">&#39;Range&#39;</span><span class="p">:</span> <span class="mi">630</span><span class="p">,</span>
- <span class="s1">&#39;RosengrenS&#39;</span><span class="p">:</span> <span class="mf">0.5227475458444708</span><span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell markdown docutils container">
-<p class="rubric" id="dispersion-measures-of-complex-forms-defined-by-cql">1.2 Dispersion Measures of Complex Forms (defined by CQL)</p>
+<p>In this second tutorial, we demonstrate functions for quantitative
+analysis of the corpus in <em>hgct</em>. To get started, we need two
+additional objects <code class="docutils literal notranslate"><span class="pre">CompoAnalysis</span></code> and <code class="docutils literal notranslate"><span class="pre">Dispersion</span></code> in addition
+to the <code class="docutils literal notranslate"><span class="pre">Concordancer</span></code> object introduced in the previous tutorial.
+The corpus used is identical to the one in Appendix A.</p>
+<p>Note that when initializing with <code class="docutils literal notranslate"><span class="pre">CompoAnalysis()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">PlainTextReader()</span></code>, the argument <code class="docutils literal notranslate"><span class="pre">auto_load=False</span></code> needs to be
+given to <code class="docutils literal notranslate"><span class="pre">PlainTextReader()</span></code>. This prevents the full corpus to be
+loaded into the memory, such that functionalities provided by
+<code class="docutils literal notranslate"><span class="pre">CompoAnalysis</span></code> could be used to analyze large data that do not fit
+into the computer’s memory. For more information, refer to the source
+code on GitHub[1].</p>
+<p>[1]
+<a class="reference external" href="https://github.com/liao961120/hgct/blob/main/hgct/compoAnalysis.py">https://github.com/liao961120/hgct/blob/main/hgct/compoAnalysis.py</a></p>
 </div>
 <div class="cell code docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">hctk</span> <span class="kn">import</span> <span class="n">Concordancer</span>
+<span class="kn">from</span> <span class="nn">hgct</span> <span class="kn">import</span> <span class="n">PlainTextReader</span><span class="p">,</span> <span class="n">Concordancer</span>
+<span class="kn">from</span> <span class="nn">hgct</span> <span class="kn">import</span> <span class="n">CompoAnalysis</span><span class="p">,</span> <span class="n">Dispersion</span>
 
-<span class="n">c</span> <span class="o">=</span> <span class="n">Concordancer</span><span class="p">(</span><span class="n">PlainTextReader</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
-<span class="n">cql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">[compo=&quot;氵&quot; &amp; idc=&quot;horz2&quot; &amp; pos=&quot;0&quot;] [compo=&quot;氵&quot; &amp; idc=&quot;horz2&quot; &amp; pos=&quot;0&quot;]</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-<span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">cql_search</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Num of results:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="n">CC</span> <span class="o">=</span> <span class="n">Concordancer</span><span class="p">(</span><span class="n">PlainTextReader</span><span class="p">(</span><span class="s2">&quot;data/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
+<span class="n">CA</span> <span class="o">=</span> <span class="n">CompoAnalysis</span><span class="p">(</span><span class="n">PlainTextReader</span><span class="p">(</span><span class="s2">&quot;data/&quot;</span><span class="p">,</span> <span class="n">auto_load</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="n">DP</span> <span class="o">=</span> <span class="n">Dispersion</span><span class="p">(</span><span class="n">PlainTextReader</span><span class="p">(</span><span class="s2">&quot;data/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output stream stdout docutils container">
@@ -185,7 +114,7 @@
 </div>
 </div>
 <div class="output display-data docutils container">
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;231c8e09bef640c5965d4bc5e293b65c&quot;</span><span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;58de1c717dba4b13b447b9c9d19e02b7&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -195,151 +124,186 @@
 </div>
 </div>
 <div class="output display-data docutils container">
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;9bbbfb3fb87946afa4b8bb655c54f8fa&quot;</span><span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;638bc9b3e1e740fcb0332d33fd692876&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <div class="output stream stdout docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Num of results: 9782
-&lt;Concord 其中軍銜枚{潛涉}，不鼓不譟&gt;
-&lt;Concord 也？《春秋{潛潭}巴》曰：「&gt;
-&lt;Concord 舟之魚不居{潛澤}，度量之士&gt;
-&lt;Concord 色親也。』{潛潭}巴曰：『虹&gt;
-&lt;Concord 之厚德也。{潛潭}巴曰：『有&gt;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Indexing</span> <span class="n">corpus</span> <span class="k">for</span> <span class="n">text</span> <span class="n">retrival</span><span class="o">...</span>
 </pre></div>
 </div>
 </div>
-</div>
-<div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute separate dispersion measures for each subcorpus (time-sliced)</span>
-<span class="n">df</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dp</span><span class="o">.</span><span class="n">num_of_subcorp</span><span class="p">):</span>
-    <span class="n">stats</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">pattern_dispersion</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">return_raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
-    <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;freq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span>
-    <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;range (%)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;Range&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span>
-    <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;num_of_texts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span>
-    <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;corpus_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;corpus_size&#39;</span><span class="p">]</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
-
-<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<div class="output display-data docutils container">
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;23eb85e2194a4cbb82db8031596b9b29&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
-<div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="n">Range</span>        <span class="n">DP</span>    <span class="n">DPnorm</span>  <span class="o">...</span>  <span class="nb">range</span> <span class="p">(</span><span class="o">%</span><span class="p">)</span>  <span class="n">num_of_texts</span>  <span class="n">corpus_size</span>
-<span class="mi">0</span>    <span class="mi">346</span>  <span class="mf">0.464641</span>  <span class="mf">0.464645</span>  <span class="o">...</span>   <span class="mf">0.472678</span>           <span class="mi">732</span>      <span class="mi">1858228</span>
-<span class="mi">1</span>    <span class="mi">621</span>  <span class="mf">0.276959</span>  <span class="mf">0.276960</span>  <span class="o">...</span>   <span class="mf">0.591992</span>          <span class="mi">1049</span>      <span class="mi">3938310</span>
-<span class="mi">2</span>    <span class="mi">130</span>  <span class="mf">0.181770</span>  <span class="mf">0.181792</span>  <span class="o">...</span>   <span class="mf">0.833333</span>           <span class="mi">156</span>      <span class="mi">2097273</span>
-<span class="mi">3</span>      <span class="mi">2</span>  <span class="mf">0.127389</span>  <span class="mf">0.235377</span>  <span class="o">...</span>   <span class="mf">1.000000</span>             <span class="mi">2</span>       <span class="mi">458738</span>
-<span class="mi">4</span>      <span class="mi">0</span>  <span class="mf">0.000000</span>  <span class="mf">0.000000</span>  <span class="o">...</span>   <span class="mf">0.000000</span>             <span class="mi">5</span>           <span class="mi">50</span>
-
-<span class="p">[</span><span class="mi">5</span> <span class="n">rows</span> <span class="n">x</span> <span class="mi">11</span> <span class="n">columns</span><span class="p">]</span>
+</div>
+<div class="output stream stdout docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Indexing</span> <span class="n">corpus</span> <span class="k">for</span> <span class="n">concordance</span> <span class="n">search</span><span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="output display-data docutils container">
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;dbe1ae734bfa43baac59822da8c1059b&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="hanzi-component">2 Hanzi Component</p>
+<p class="rubric" id="frequency-list-distribution">Frequency List (Distribution)</p>
+<p>Frequency lists are provided by the function
+<code class="docutils literal notranslate"><span class="pre">CompoAnalysis.freq_distr()</span></code>. Based on the arguments passed, this
+function computes and returns the frequency distribution of either
+the characters, IDCs, Kangxi radicals, or characters with a given
+radical/component. Below, we demonstrate each of these types of
+frequency distributions.</p>
+</div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="character">Character</p>
+<p>To return the frequency distribution of the characters in the corpus,
+set the argument <code class="docutils literal notranslate"><span class="pre">tp</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;chr&quot;</span></code>. <code class="docutils literal notranslate"><span class="pre">CompoAnalysis.freq_distr()</span></code>
+by default returns a <code class="docutils literal notranslate"><span class="pre">Counter</span></code>[1], which has the convenient
+method <code class="docutils literal notranslate"><span class="pre">most_common()</span></code> that could be used to retrieve the terms
+with the highest frequencies.</p>
+<p>[1]
+<a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter">https://docs.python.org/3/library/collections.html#collections.Counter</a></p>
 </div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hctk</span> <span class="kn">import</span> <span class="n">PlainTextReader</span>
-<span class="kn">from</span> <span class="nn">hctk.compoAnalysis</span> <span class="kn">import</span> <span class="n">CompoAnalysis</span>
-
-<span class="n">reader</span> <span class="o">=</span> <span class="n">PlainTextReader</span><span class="p">(</span><span class="s2">&quot;data/&quot;</span><span class="p">,</span> <span class="n">auto_load</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">c2</span> <span class="o">=</span> <span class="n">CompoAnalysis</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CA</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="s2">&quot;chr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;之&#39;</span><span class="p">,</span> <span class="mi">210608</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;不&#39;</span><span class="p">,</span> <span class="mi">129212</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;也&#39;</span><span class="p">,</span> <span class="mi">107639</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;以&#39;</span><span class="p">,</span> <span class="mi">104578</span><span class="p">)]</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="frequency-distribution">2.1 Frequency Distribution</p>
+<p>As mentioned in &#64;sec:app-search-by-character, we could limit the
+scope of calculation to a particular subcorpus by specifying its
+index. To do this, pass the argument <code class="docutils literal notranslate"><span class="pre">subcorp_idx</span></code> to the function.
+The example below sets the subcorpus to <code class="docutils literal notranslate"><span class="pre">3</span></code>, which is the subcorpus
+of modern Chinese (ASBC).</p>
 </div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hanzi</span>
-<span class="n">c2</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="s2">&quot;chr&quot;</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CA</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="s2">&quot;chr&quot;</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;，&#39;</span><span class="p">,</span> <span class="mi">178802</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;。&#39;</span><span class="p">,</span> <span class="mi">83819</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;之&#39;</span><span class="p">,</span> <span class="mi">64665</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;不&#39;</span><span class="p">,</span> <span class="mi">37264</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;也&#39;</span><span class="p">,</span> <span class="mi">32634</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;而&#39;</span><span class="p">,</span> <span class="mi">32035</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;以&#39;</span><span class="p">,</span> <span class="mi">27556</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;其&#39;</span><span class="p">,</span> <span class="mi">25931</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;者&#39;</span><span class="p">,</span> <span class="mi">23304</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;曰&#39;</span><span class="p">,</span> <span class="mi">21763</span><span class="p">)]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;的&#39;</span><span class="p">,</span> <span class="mi">15826</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;一&#39;</span><span class="p">,</span> <span class="mi">5537</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;是&#39;</span><span class="p">,</span> <span class="mi">5130</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;不&#39;</span><span class="p">,</span> <span class="mi">4469</span><span class="p">)]</span>
 </pre></div>
 </div>
 </div>
 </div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="idc">IDC</p>
+<p>Frequency distributions of the Ideographic Description Characters
+(IDCs) could similarly be retrieved by setting <code class="docutils literal notranslate"><span class="pre">tp</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;idc&quot;</span></code>.
+Note that there is an argument <code class="docutils literal notranslate"><span class="pre">use_chr_types</span></code> that applies when
+<code class="docutils literal notranslate"><span class="pre">tp=&quot;idc&quot;</span></code> (IDC) or <code class="docutils literal notranslate"><span class="pre">tp=&quot;rad&quot;</span></code> (radical). <code class="docutils literal notranslate"><span class="pre">use_chr_types</span></code> is
+used to determine how to compute the frequencies. If it is set to
+<code class="docutils literal notranslate"><span class="pre">False</span></code>, character frequencies are considered. If it is <code class="docutils literal notranslate"><span class="pre">True</span></code>,
+character frequencies are discarded. In other words, when
+<code class="docutils literal notranslate"><span class="pre">use_chr_types=False</span></code>, an IDC or a radical would only be counted
+once for each type of character. See &#64;sec:frequency-lists for a toy
+example.</p>
+</div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Shape of hanzi (IDC)</span>
-<span class="n">c2</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="s2">&quot;idc&quot;</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CA</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="s2">&quot;idc&quot;</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="mi">256312</span><span class="p">,</span>
-         <span class="s1">&#39;noChrData&#39;</span><span class="p">:</span> <span class="mi">351898</span><span class="p">,</span>
-         <span class="s1">&#39;⿰&#39;</span><span class="p">:</span> <span class="mi">438079</span><span class="p">,</span>
-         <span class="s1">&#39;⿱&#39;</span><span class="p">:</span> <span class="mi">561453</span><span class="p">,</span>
-         <span class="s1">&#39;⿲&#39;</span><span class="p">:</span> <span class="mi">6242</span><span class="p">,</span>
-         <span class="s1">&#39;⿳&#39;</span><span class="p">:</span> <span class="mi">14381</span><span class="p">,</span>
-         <span class="s1">&#39;⿴&#39;</span><span class="p">:</span> <span class="mi">14409</span><span class="p">,</span>
-         <span class="s1">&#39;⿵&#39;</span><span class="p">:</span> <span class="mi">25234</span><span class="p">,</span>
-         <span class="s1">&#39;⿶&#39;</span><span class="p">:</span> <span class="mi">7275</span><span class="p">,</span>
-         <span class="s1">&#39;⿷&#39;</span><span class="p">:</span> <span class="mi">1641</span><span class="p">,</span>
-         <span class="s1">&#39;⿸&#39;</span><span class="p">:</span> <span class="mi">91226</span><span class="p">,</span>
-         <span class="s1">&#39;⿹&#39;</span><span class="p">:</span> <span class="mi">25384</span><span class="p">,</span>
-         <span class="s1">&#39;⿺&#39;</span><span class="p">:</span> <span class="mi">26847</span><span class="p">,</span>
-         <span class="s1">&#39;⿻&#39;</span><span class="p">:</span> <span class="mi">37847</span><span class="p">})</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="mi">48725</span><span class="p">,</span>
+         <span class="s1">&#39;⿰&#39;</span><span class="p">:</span> <span class="mi">167681</span><span class="p">,</span>
+         <span class="s1">&#39;⿱&#39;</span><span class="p">:</span> <span class="mi">120035</span><span class="p">,</span>
+         <span class="s1">&#39;⿲&#39;</span><span class="p">:</span> <span class="mi">1965</span><span class="p">,</span>
+         <span class="s1">&#39;⿳&#39;</span><span class="p">:</span> <span class="mi">4068</span><span class="p">,</span>
+         <span class="s1">&#39;⿴&#39;</span><span class="p">:</span> <span class="mi">5744</span><span class="p">,</span>
+         <span class="s1">&#39;⿵&#39;</span><span class="p">:</span> <span class="mi">7834</span><span class="p">,</span>
+         <span class="s1">&#39;⿶&#39;</span><span class="p">:</span> <span class="mi">1637</span><span class="p">,</span>
+         <span class="s1">&#39;⿷&#39;</span><span class="p">:</span> <span class="mi">537</span><span class="p">,</span>
+         <span class="s1">&#39;⿸&#39;</span><span class="p">:</span> <span class="mi">18511</span><span class="p">,</span>
+         <span class="s1">&#39;⿹&#39;</span><span class="p">:</span> <span class="mi">4412</span><span class="p">,</span>
+         <span class="s1">&#39;⿺&#39;</span><span class="p">:</span> <span class="mi">13451</span><span class="p">,</span>
+         <span class="s1">&#39;⿻&#39;</span><span class="p">:</span> <span class="mi">10324</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Radical of hanzi</span>
-<span class="n">c2</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="s2">&quot;rad&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CA</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="s2">&quot;idc&quot;</span><span class="p">,</span> <span class="n">use_chr_types</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;noChrData&#39;</span><span class="p">,</span> <span class="mi">1517367</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;人&#39;</span><span class="p">,</span> <span class="mi">422649</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;一&#39;</span><span class="p">,</span> <span class="mi">281707</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;丿&#39;</span><span class="p">,</span> <span class="mi">252723</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;口&#39;</span><span class="p">,</span> <span class="mi">249345</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;火&#39;</span><span class="p">,</span> <span class="mi">165875</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;言&#39;</span><span class="p">,</span> <span class="mi">157936</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;水&#39;</span><span class="p">,</span> <span class="mi">155632</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;八&#39;</span><span class="p">,</span> <span class="mi">151539</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;心&#39;</span><span class="p">,</span> <span class="mi">145208</span><span class="p">)]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="mi">119</span><span class="p">,</span>
+         <span class="s1">&#39;⿰&#39;</span><span class="p">:</span> <span class="mi">2454</span><span class="p">,</span>
+         <span class="s1">&#39;⿱&#39;</span><span class="p">:</span> <span class="mi">1019</span><span class="p">,</span>
+         <span class="s1">&#39;⿲&#39;</span><span class="p">:</span> <span class="mi">26</span><span class="p">,</span>
+         <span class="s1">&#39;⿳&#39;</span><span class="p">:</span> <span class="mi">39</span><span class="p">,</span>
+         <span class="s1">&#39;⿴&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+         <span class="s1">&#39;⿵&#39;</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span>
+         <span class="s1">&#39;⿶&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+         <span class="s1">&#39;⿷&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+         <span class="s1">&#39;⿸&#39;</span><span class="p">:</span> <span class="mi">176</span><span class="p">,</span>
+         <span class="s1">&#39;⿹&#39;</span><span class="p">:</span> <span class="mi">41</span><span class="p">,</span>
+         <span class="s1">&#39;⿺&#39;</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span>
+         <span class="s1">&#39;⿻&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
 </div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="radical">Radical</p>
+<p>To retrieve frequency distributions for radicals, set <code class="docutils literal notranslate"><span class="pre">tp=&quot;rad&quot;</span></code>.
+The usage of <code class="docutils literal notranslate"><span class="pre">use_chr_types</span></code> here is similar to the IDC described
+above.</p>
+</div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hanzi with a certain radical</span>
-<span class="n">c2</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">radical</span><span class="o">=</span><span class="s2">&quot;广&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CA</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="s2">&quot;rad&quot;</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;度&#39;</span><span class="p">,</span> <span class="mi">4757</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;廣&#39;</span><span class="p">,</span> <span class="mi">4050</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;廟&#39;</span><span class="p">,</span> <span class="mi">3067</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;府&#39;</span><span class="p">,</span> <span class="mi">3064</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;廢&#39;</span><span class="p">,</span> <span class="mi">2542</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;庶&#39;</span><span class="p">,</span> <span class="mi">2281</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;廉&#39;</span><span class="p">,</span> <span class="mi">1594</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;康&#39;</span><span class="p">,</span> <span class="mi">1570</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;序&#39;</span><span class="p">,</span> <span class="mi">1213</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;庭&#39;</span><span class="p">,</span> <span class="mi">1155</span><span class="p">)]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;人&#39;</span><span class="p">,</span> <span class="mi">28149</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;白&#39;</span><span class="p">,</span> <span class="mi">16640</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;一&#39;</span><span class="p">,</span> <span class="mi">15567</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;口&#39;</span><span class="p">,</span> <span class="mi">15443</span><span class="p">)]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hanzi with a certain component</span>
-<span class="n">c2</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compo</span><span class="o">=</span><span class="s2">&quot;水&quot;</span><span class="p">,</span> <span class="n">idc</span><span class="o">=</span><span class="s2">&quot;vert2&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CA</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="s2">&quot;rad&quot;</span><span class="p">,</span> <span class="n">use_chr_types</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;水&#39;</span><span class="p">,</span> <span class="mi">233</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;口&#39;</span><span class="p">,</span> <span class="mi">207</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;手&#39;</span><span class="p">,</span> <span class="mi">201</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;人&#39;</span><span class="p">,</span> <span class="mi">172</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="characters-with-a-given-radical">Characters with a given radical</p>
+<p>It is also possible to look into characters of a specific type. By
+setting <code class="docutils literal notranslate"><span class="pre">tp=None</span></code>, one could then pass in a radical to the argument
+<code class="docutils literal notranslate"><span class="pre">radical</span></code> to look at the frequency distribution of the characters
+with this particular radical.</p>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CA</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">radical</span><span class="o">=</span><span class="s2">&quot;广&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;度&#39;</span><span class="p">,</span> <span class="mi">4757</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;廣&#39;</span><span class="p">,</span> <span class="mi">4050</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;廟&#39;</span><span class="p">,</span> <span class="mi">3067</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;府&#39;</span><span class="p">,</span> <span class="mi">3064</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="characters-with-a-given-idc-component">Characters with a given IDC component</p>
+<p>Similarly, a frequency distribution of characters of a specific type
+defined according to a component and an optional IDC describing the
+the shape could also be retrieved by specifying <code class="docutils literal notranslate"><span class="pre">tp=None</span></code> and the
+arguments <code class="docutils literal notranslate"><span class="pre">compo</span></code> and <code class="docutils literal notranslate"><span class="pre">idc</span></code> (optional).</p>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CA</span><span class="o">.</span><span class="n">freq_distr</span><span class="p">(</span><span class="n">tp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compo</span><span class="o">=</span><span class="s2">&quot;水&quot;</span><span class="p">,</span> <span class="n">idc</span><span class="o">=</span><span class="s2">&quot;vert2&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
@@ -360,120 +324,173 @@
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="productivity">2.2 Productivity</p>
-<ul class="simple">
-<li><p>Realized Productivity: <span class="math notranslate nohighlight">\(V(C, N)\)</span></p></li>
-<li><p>Expanding Productivity: <span class="math notranslate nohighlight">\(\frac{V(1, C, N)}{V(1, N)}\)</span></p></li>
-<li><p>Potential Productivity: <span class="math notranslate nohighlight">\(\frac{V(1, C, N)}{N(C)}\)</span></p></li>
-</ul>
+<p class="rubric" id="dispersion">Dispersion</p>
+<p>Measures of dispersion could be calculated based on a character or a
+search pattern.</p>
+</div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="dispersion-measures-for-characters">Dispersion Measures for Characters</p>
+<p><code class="docutils literal notranslate"><span class="pre">Dispersion.char_dispersion()</span></code> is used for calculating dispersion
+measures for a character. The examples below—using the toy corpus in
+Gries (2020)—demonstrate the validity of the returned measure. The
+values should be identical to those in Table 1 of Gries (2020).</p>
 </div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Productivity of a radical</span>
-<span class="n">c2</span><span class="o">.</span><span class="n">productivity</span><span class="p">(</span><span class="n">radical</span><span class="o">=</span><span class="s2">&quot;广&quot;</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Gries (2020, Table 1)</span>
+<span class="n">DP</span><span class="o">.</span><span class="n">char_dispersion</span><span class="p">(</span><span class="n">char</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="mi">1858228</span><span class="p">,</span>
- <span class="s1">&#39;NC&#39;</span><span class="p">:</span> <span class="mi">5897</span><span class="p">,</span>
- <span class="s1">&#39;V1&#39;</span><span class="p">:</span> <span class="mi">2083</span><span class="p">,</span>
- <span class="s1">&#39;V1C&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
- <span class="s1">&#39;productivity&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;expanding&#39;</span><span class="p">:</span> <span class="mf">0.0043206913106096975</span><span class="p">,</span>
-  <span class="s1">&#39;potential&#39;</span><span class="p">:</span> <span class="mf">0.001526199762591148</span><span class="p">,</span>
-  <span class="s1">&#39;realized&#39;</span><span class="p">:</span> <span class="mi">62</span><span class="p">}}</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Productivity of a component</span>
-<span class="n">c2</span><span class="o">.</span><span class="n">productivity</span><span class="p">(</span><span class="n">compo</span><span class="o">=</span><span class="s2">&quot;虫&quot;</span><span class="p">,</span> <span class="n">idc</span><span class="o">=</span><span class="s2">&quot;horz2&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="mi">1858228</span><span class="p">,</span>
- <span class="s1">&#39;NC&#39;</span><span class="p">:</span> <span class="mi">1027</span><span class="p">,</span>
- <span class="s1">&#39;V1&#39;</span><span class="p">:</span> <span class="mi">2083</span><span class="p">,</span>
- <span class="s1">&#39;V1C&#39;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
- <span class="s1">&#39;productivity&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;expanding&#39;</span><span class="p">:</span> <span class="mf">0.03456553048487758</span><span class="p">,</span>
-  <span class="s1">&#39;potential&#39;</span><span class="p">:</span> <span class="mf">0.07010710808179163</span><span class="p">,</span>
-  <span class="s1">&#39;realized&#39;</span><span class="p">:</span> <span class="mi">178</span><span class="p">}}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;DP&#39;</span><span class="p">:</span> <span class="mf">0.18</span><span class="p">,</span>
+ <span class="s1">&#39;DPnorm&#39;</span><span class="p">:</span> <span class="mf">0.2195121951219512</span><span class="p">,</span>
+ <span class="s1">&#39;JuillandD&#39;</span><span class="p">:</span> <span class="mf">0.7851504534504508</span><span class="p">,</span>
+ <span class="s1">&#39;KLdivergence&#39;</span><span class="p">:</span> <span class="mf">0.13697172936522078</span><span class="p">,</span>
+ <span class="s1">&#39;Range&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+ <span class="s1">&#39;RosengrenS&#39;</span><span class="p">:</span> <span class="mf">0.9498163423042408</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Productivity of Hanzi shapes (IDCs)</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">CompoTree</span> <span class="kn">import</span> <span class="n">IDC</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">idc</span> <span class="ow">in</span> <span class="n">IDC</span><span class="p">:</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">c2</span><span class="o">.</span><span class="n">productivity</span><span class="p">(</span><span class="n">idc</span><span class="o">=</span><span class="n">idc</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">idc</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-        <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="n">idc</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;productivity&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;V1C&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;V1C&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;V1&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;V1&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;NC&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;NC&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">],</span>
-    <span class="p">})</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="n">df</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># return_raw=True to get the raw data for dispersion calculation</span>
+<span class="n">DP</span><span class="o">.</span><span class="n">char_dispersion</span><span class="p">(</span><span class="n">char</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">return_raw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     name shape  realized  expanding  potential   V1C    V1      NC        N
-0   horz2     ⿰      5580   0.709073   0.003372  1477  2083  438079  1858228
-1   vert2     ⿱      2110   0.223236   0.000828   465  2083  561453  1858228
-2   horz3     ⿲        37   0.002400   0.000801     5  2083    6242  1858228
-3   vert3     ⿳        85   0.006721   0.000974    14  2083   14381  1858228
-4    encl     ⿴        27   0.001440   0.000208     3  2083   14409  1858228
-5    surN     ⿵        87   0.005761   0.000476    12  2083   25234  1858228
-6    surU     ⿶         6   0.000000   0.000000     0  2083    7275  1858228
-7    curC     ⿷        20   0.001920   0.002438     4  2083    1641  1858228
-8    surT     ⿸       342   0.026884   0.000614    56  2083   91226  1858228
-9    sur7     ⿹        51   0.002880   0.000236     6  2083   25384  1858228
-10   surL     ⿺       180   0.012482   0.000968    26  2083   26847  1858228
-11   over     ⿻        44   0.000960   0.000053     2  2083   37847  1858228
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">({</span><span class="s1">&#39;DP&#39;</span><span class="p">:</span> <span class="mf">0.18</span><span class="p">,</span>
+  <span class="s1">&#39;DPnorm&#39;</span><span class="p">:</span> <span class="mf">0.2195121951219512</span><span class="p">,</span>
+  <span class="s1">&#39;JuillandD&#39;</span><span class="p">:</span> <span class="mf">0.7851504534504508</span><span class="p">,</span>
+  <span class="s1">&#39;KLdivergence&#39;</span><span class="p">:</span> <span class="mf">0.13697172936522078</span><span class="p">,</span>
+  <span class="s1">&#39;Range&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+  <span class="s1">&#39;RosengrenS&#39;</span><span class="p">:</span> <span class="mf">0.9498163423042408</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;corpus_size&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+  <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+  <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+  <span class="s1">&#39;p&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1111111111111111</span><span class="p">,</span> <span class="mf">0.45454545454545453</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
+  <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.18</span><span class="p">,</span> <span class="mf">0.22</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+  <span class="s1">&#39;v&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">]})</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="ngram-frequency">3 Ngram Frequency</p>
+<p>To see how dispersion measures behave on real data, we calculate
+dispersion measures for four characters (之, 也, 草, and 巾) in a
+corpus of Literary Chinese texts. The first two characters 之 and 也
+are often used as function words and the last two as content words in
+Literary Chinese. Hence, we would expect the first two to be
+distributed evenly, and the latter two unevenly in the corpus.</p>
 </div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hctk</span> <span class="kn">import</span> <span class="n">PlainTextReader</span><span class="p">,</span> <span class="n">Concordancer</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">subcorp_idx</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">df_disp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="s1">&#39;之也草巾&#39;</span><span class="p">:</span>
+    <span class="n">stats</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">DP</span><span class="o">.</span><span class="n">char_dispersion</span><span class="p">(</span>
+        <span class="n">char</span><span class="o">=</span><span class="n">ch</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="n">subcorp_idx</span><span class="p">,</span> <span class="n">return_raw</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;char&#39;</span><span class="p">:</span> <span class="n">ch</span><span class="p">,</span>
+        <span class="s1">&#39;Range(%)&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;Range&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">raw</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]),</span>
+        <span class="o">**</span><span class="n">stats</span>
+    <span class="p">}</span>
+    <span class="n">df_disp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="n">df_disp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_disp</span><span class="p">)</span>
+<span class="n">df_disp</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">char</span> <span class="n">Range</span><span class="p">(</span><span class="o">%</span><span class="p">)</span>  <span class="n">Range</span>        <span class="n">DP</span>    <span class="n">DPnorm</span>  <span class="n">KLdivergence</span>  <span class="n">JuillandD</span>  <span class="n">RosengrenS</span>
+<span class="mi">0</span>    <span class="n">之</span>    <span class="mf">90.98</span>    <span class="mi">666</span>  <span class="mf">0.128508</span>  <span class="mf">0.128509</span>      <span class="mf">0.095890</span>   <span class="mf">0.977316</span>    <span class="mf">0.961405</span>
+<span class="mi">1</span>    <span class="n">也</span>    <span class="mf">77.05</span>    <span class="mi">564</span>  <span class="mf">0.251459</span>  <span class="mf">0.251462</span>      <span class="mf">0.401038</span>   <span class="mf">0.962913</span>    <span class="mf">0.823893</span>
+<span class="mi">2</span>    <span class="n">草</span>    <span class="mf">22.40</span>    <span class="mi">164</span>  <span class="mf">0.649643</span>  <span class="mf">0.649649</span>      <span class="mf">2.331477</span>   <span class="mf">0.863829</span>    <span class="mf">0.320790</span>
+<span class="mi">3</span>    <span class="n">巾</span>     <span class="mf">3.69</span>     <span class="mi">27</span>  <span class="mf">0.844676</span>  <span class="mf">0.844683</span>      <span class="mf">4.077689</span>   <span class="mf">0.541787</span>    <span class="mf">0.101871</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="dispersion-measures-of-complex-forms-defined-by-cql">Dispersion Measures of Complex Forms (defined by CQL)</p>
+<p>Dispersion measures for abstract units could also be calculated with
+the returned concordance lines provided by
+<code class="docutils literal notranslate"><span class="pre">Concordancer.cql_search()</span></code>. The function
+<code class="docutils literal notranslate"><span class="pre">DP.pattern_dispersion()</span></code> is designed to take the queried results
+from <code class="docutils literal notranslate"><span class="pre">Concordancer.cql_search()</span></code> to calculate dispersion measures.</p>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">[semtag=&quot;人體精神&quot;] [semtag=&quot;人體精神&quot;]</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">CC</span><span class="o">.</span><span class="n">cql_search</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Num of results:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output stream stdout docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Num of results: 8459
+&lt;Concord 。有孚{惠心}，勿問&gt;
+&lt;Concord 大澤則{惠必}及下，&gt;
+&lt;Concord 「仁義{惠愛}而已矣&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DP</span><span class="o">.</span><span class="n">pattern_dispersion</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;DP&#39;</span><span class="p">:</span> <span class="mf">0.1504848557289626</span><span class="p">,</span>
+ <span class="s1">&#39;DPnorm&#39;</span><span class="p">:</span> <span class="mf">0.15050344195568013</span><span class="p">,</span>
+ <span class="s1">&#39;JuillandD&#39;</span><span class="p">:</span> <span class="mf">0.9387038720245429</span><span class="p">,</span>
+ <span class="s1">&#39;KLdivergence&#39;</span><span class="p">:</span> <span class="mf">0.135483902941753</span><span class="p">,</span>
+ <span class="s1">&#39;Range&#39;</span><span class="p">:</span> <span class="mi">134</span><span class="p">,</span>
+ <span class="s1">&#39;RosengrenS&#39;</span><span class="p">:</span> <span class="mf">0.9428568965311757</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell markdown docutils container">
+<p>The example below calculates dispersion measures for <strong>each subcorpus
+0, 1, and 2</strong>. This is useful when the user is interested in
+contrasting dispersion measures in different corpora (e.g.,
+genre/diachronic comparison).</p>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute separate dispersion measures for each subcorpus</span>
+<span class="n">df_pat_disp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">stats</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">DP</span><span class="o">.</span><span class="n">pattern_dispersion</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">return_raw</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;Range(%)&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;Range&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">raw</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]),</span>
+        <span class="o">**</span><span class="n">stats</span><span class="p">,</span>
+        <span class="s1">&#39;freq&#39;</span><span class="p">:</span> <span class="n">raw</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;corp_size&#39;</span><span class="p">:</span> <span class="n">raw</span><span class="p">[</span><span class="s1">&#39;corpus_size&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">df_pat_disp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="n">df_pat_disp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_pat_disp</span><span class="p">)</span>
+<span class="n">df_pat_disp</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">Range</span><span class="p">(</span><span class="o">%</span><span class="p">)</span>  <span class="n">Range</span>        <span class="n">DP</span>    <span class="n">DPnorm</span>  <span class="o">...</span>  <span class="n">JuillandD</span>  <span class="n">RosengrenS</span>  <span class="n">freq</span>  <span class="n">corp_size</span>
+<span class="mi">0</span>    <span class="mf">44.40</span>    <span class="mi">325</span>  <span class="mf">0.399226</span>  <span class="mf">0.399229</span>  <span class="o">...</span>   <span class="mf">0.907705</span>    <span class="mf">0.629630</span>  <span class="mi">1689</span>    <span class="mi">1858228</span>
+<span class="mi">1</span>    <span class="mf">53.38</span>    <span class="mi">560</span>  <span class="mf">0.325007</span>  <span class="mf">0.325008</span>  <span class="o">...</span>   <span class="mf">0.950161</span>    <span class="mf">0.753668</span>  <span class="mi">3500</span>    <span class="mi">3938310</span>
+<span class="mi">2</span>    <span class="mf">85.90</span>    <span class="mi">134</span>  <span class="mf">0.150485</span>  <span class="mf">0.150503</span>  <span class="o">...</span>   <span class="mf">0.938704</span>    <span class="mf">0.942857</span>  <span class="mi">2489</span>    <span class="mi">2097273</span>
 
-<span class="n">c</span> <span class="o">=</span> <span class="n">Concordancer</span><span class="p">(</span><span class="n">PlainTextReader</span><span class="p">(</span><span class="s2">&quot;data/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="output stream stdout docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Indexing</span> <span class="n">corpus</span> <span class="k">for</span> <span class="n">text</span> <span class="n">retrival</span><span class="o">...</span>
+<span class="p">[</span><span class="mi">3</span> <span class="n">rows</span> <span class="n">x</span> <span class="mi">9</span> <span class="n">columns</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
-<div class="output display-data docutils container">
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;139312fcf88f4d288ed2420f4e845446&quot;</span><span class="p">}</span>
-</pre></div>
 </div>
-</div>
-<div class="output stream stdout docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Indexing</span> <span class="n">corpus</span> <span class="k">for</span> <span class="n">concordance</span> <span class="n">search</span><span class="o">...</span>
-</pre></div>
-</div>
-</div>
-<div class="output display-data docutils container">
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;241d4cf67ffd42648fcee02c8d4d6a1e&quot;</span><span class="p">}</span>
-</pre></div>
-</div>
-</div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="ngram-frequency">Ngram Frequency</p>
+<p>We now turn to the relationships across characters. To compute
+character n-grams, one can use <code class="docutils literal notranslate"><span class="pre">Concordancer.freq_distr_ngrams()</span></code>.</p>
 </div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bigram frequency</span>
-<span class="n">c</span><span class="o">.</span><span class="n">freq_distr_ngrams</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CC</span><span class="o">.</span><span class="n">freq_distr_ngrams</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output stream stdout docutils container">
@@ -482,28 +499,18 @@
 </div>
 </div>
 <div class="output display-data docutils container">
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;253235628fd84bc5896ae35eae437e7b&quot;</span><span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;bb5037e60ea8460abcc2e2050bd94200&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;而不&#39;</span><span class="p">,</span> <span class="mi">3913</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;天下&#39;</span><span class="p">,</span> <span class="mi">3661</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;不可&#39;</span><span class="p">,</span> <span class="mi">2985</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;之所&#39;</span><span class="p">,</span> <span class="mi">2723</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;子曰&#39;</span><span class="p">,</span> <span class="mi">2581</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;人之&#39;</span><span class="p">,</span> <span class="mi">2317</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;以為&#39;</span><span class="p">,</span> <span class="mi">2231</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;所以&#39;</span><span class="p">,</span> <span class="mi">2023</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;不能&#39;</span><span class="p">,</span> <span class="mi">1934</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;可以&#39;</span><span class="p">,</span> <span class="mi">1667</span><span class="p">)]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;而不&#39;</span><span class="p">,</span> <span class="mi">3913</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;天下&#39;</span><span class="p">,</span> <span class="mi">3661</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;不可&#39;</span><span class="p">,</span> <span class="mi">2985</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;之所&#39;</span><span class="p">,</span> <span class="mi">2723</span><span class="p">)]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Trigram frequency</span>
-<span class="n">c</span><span class="o">.</span><span class="n">freq_distr_ngrams</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CC</span><span class="o">.</span><span class="n">freq_distr_ngrams</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output stream stdout docutils container">
@@ -512,125 +519,198 @@
 </div>
 </div>
 <div class="output display-data docutils container">
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;5fdaae56638c43fda862f9243ffc3c1a&quot;</span><span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;version_major&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;version_minor&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">&quot;model_id&quot;</span><span class="p">:</span><span class="s2">&quot;98917c323e1943c694386d79c257604f&quot;</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;天下之&#39;</span><span class="p">,</span> <span class="mi">946</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;歧伯曰&#39;</span><span class="p">,</span> <span class="mi">766</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;之所以&#39;</span><span class="p">,</span> <span class="mi">605</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;不可以&#39;</span><span class="p">,</span> <span class="mi">580</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;子對曰&#39;</span><span class="p">,</span> <span class="mi">443</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;黃帝曰&#39;</span><span class="p">,</span> <span class="mi">403</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;此之謂&#39;</span><span class="p">,</span> <span class="mi">350</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;子墨子&#39;</span><span class="p">,</span> <span class="mi">343</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;孔子曰&#39;</span><span class="p">,</span> <span class="mi">302</span><span class="p">),</span>
- <span class="p">(</span><span class="s1">&#39;不可不&#39;</span><span class="p">,</span> <span class="mi">298</span><span class="p">)]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;天下之&#39;</span><span class="p">,</span> <span class="mi">946</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;歧伯曰&#39;</span><span class="p">,</span> <span class="mi">766</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;之所以&#39;</span><span class="p">,</span> <span class="mi">605</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;不可以&#39;</span><span class="p">,</span> <span class="mi">580</span><span class="p">)]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="collocation">4 Collocation</p>
+<p class="rubric" id="collocation">Collocation</p>
+<p>Association measures could be used to quantify the strengths of
+attraction between a pair of characters. Pairs with strong
+attractions could be considered as collocations. <em>hgct</em> implements
+two types of collocation extraction functions. The first
+(<code class="docutils literal notranslate"><span class="pre">Concordancer.bigram_associations()</span></code>) is based on bigrams, which
+simply computes association scores for all bigrams. With the second
+implementation (<code class="docutils literal notranslate"><span class="pre">Concordancer.collocates()</span></code>), users could specify a
+node and a window size, and characters falling within this window
+around the node would be treated as a node-collocate pair. Each pair
+is then computed for an association score.</p>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="bigram-association">4.1 Bigram Association</p>
+<p class="rubric" id="bigram-association">Bigram Association</p>
 </div>
 <div class="cell code docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bi_asso</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">bigram_associations</span><span class="p">(</span><span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;DeltaP21&quot;</span><span class="p">)</span>
-<span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">bi_asso</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;RawCount&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">][:</span><span class="mi">3</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bi_asso</span> <span class="o">=</span> <span class="n">CC</span><span class="o">.</span><span class="n">bigram_associations</span><span class="p">(</span><span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;Gsq&quot;</span><span class="p">)</span>
+<span class="n">bi_asso</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;歧伯&#39;</span><span class="p">,</span>
-  <span class="p">{</span><span class="s1">&#39;DeltaP12&#39;</span><span class="p">:</span> <span class="mf">0.515988379165576</span><span class="p">,</span>
-   <span class="s1">&#39;DeltaP21&#39;</span><span class="p">:</span> <span class="mf">0.9870480872578454</span><span class="p">,</span>
-   <span class="s1">&#39;Dice&#39;</span><span class="p">:</span> <span class="mf">0.6778754298815437</span><span class="p">,</span>
-   <span class="s1">&#39;FisherExact&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-   <span class="s1">&#39;Gsq&#39;</span><span class="p">:</span> <span class="mf">12041.994806908666</span><span class="p">,</span>
-   <span class="s1">&#39;MI&#39;</span><span class="p">:</span> <span class="mf">9.41167469710956</span><span class="p">,</span>
-   <span class="s1">&#39;RawCount&#39;</span><span class="p">:</span> <span class="mi">887</span><span class="p">,</span>
-   <span class="s1">&#39;Xsq&#39;</span><span class="p">:</span> <span class="mf">603675.038957376</span><span class="p">}),</span>
- <span class="p">(</span><span class="s1">&#39;柰何&#39;</span><span class="p">,</span>
-  <span class="p">{</span><span class="s1">&#39;DeltaP12&#39;</span><span class="p">:</span> <span class="mf">0.056661809249506735</span><span class="p">,</span>
-   <span class="s1">&#39;DeltaP21&#39;</span><span class="p">:</span> <span class="mf">0.9864357417273106</span><span class="p">,</span>
-   <span class="s1">&#39;Dice&#39;</span><span class="p">:</span> <span class="mf">0.10718562874251497</span><span class="p">,</span>
-   <span class="s1">&#39;FisherExact&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-   <span class="s1">&#39;Gsq&#39;</span><span class="p">:</span> <span class="mf">2110.3645096843</span><span class="p">,</span>
-   <span class="s1">&#39;MI&#39;</span><span class="p">:</span> <span class="mf">8.535527535461881</span><span class="p">,</span>
-   <span class="s1">&#39;RawCount&#39;</span><span class="p">:</span> <span class="mi">179</span><span class="p">,</span>
-   <span class="s1">&#39;Xsq&#39;</span><span class="p">:</span> <span class="mf">66249.74702510444</span><span class="p">}),</span>
- <span class="p">(</span><span class="s1">&#39;嗚呼&#39;</span><span class="p">,</span>
-  <span class="p">{</span><span class="s1">&#39;DeltaP12&#39;</span><span class="p">:</span> <span class="mf">0.5684168332436602</span><span class="p">,</span>
-   <span class="s1">&#39;DeltaP21&#39;</span><span class="p">:</span> <span class="mf">0.9699560936315373</span><span class="p">,</span>
-   <span class="s1">&#39;Dice&#39;</span><span class="p">:</span> <span class="mf">0.7168141592920354</span><span class="p">,</span>
-   <span class="s1">&#39;FisherExact&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-   <span class="s1">&#39;Gsq&#39;</span><span class="p">:</span> <span class="mf">2772.224707107538</span><span class="p">,</span>
-   <span class="s1">&#39;MI&#39;</span><span class="p">:</span> <span class="mf">11.978137468386173</span><span class="p">,</span>
-   <span class="s1">&#39;RawCount&#39;</span><span class="p">:</span> <span class="mi">162</span><span class="p">,</span>
-   <span class="s1">&#39;Xsq&#39;</span><span class="p">:</span> <span class="mf">653497.5945430023</span><span class="p">})]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="s1">&#39;自己&#39;</span><span class="p">,</span>
+ <span class="p">{</span><span class="s1">&#39;DeltaP12&#39;</span><span class="p">:</span> <span class="mf">0.9778668701918644</span><span class="p">,</span>
+  <span class="s1">&#39;DeltaP21&#39;</span><span class="p">:</span> <span class="mf">0.36342714003090937</span><span class="p">,</span>
+  <span class="s1">&#39;Dice&#39;</span><span class="p">:</span> <span class="mf">0.5303392259913999</span><span class="p">,</span>
+  <span class="s1">&#39;FisherExact&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+  <span class="s1">&#39;Gsq&#39;</span><span class="p">:</span> <span class="mf">6188.677676112116</span><span class="p">,</span>
+  <span class="s1">&#39;MI&#39;</span><span class="p">:</span> <span class="mf">7.855905225817536</span><span class="p">,</span>
+  <span class="s1">&#39;RawCount&#39;</span><span class="p">:</span> <span class="mi">555</span><span class="p">,</span>
+  <span class="s1">&#39;Xsq&#39;</span><span class="p">:</span> <span class="mf">128210.23324106314</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span><span class="s1">&#39;bigram&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">bi_asso</span><span class="p">][:</span><span class="mi">5</span><span class="p">])</span>
+<span class="c1"># print(d.to_markdown(index=False, floatfmt=&quot;.2f&quot;, numalign=&quot;left&quot;))</span>
+<span class="n">d</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">bigram</span>        <span class="n">MI</span>            <span class="n">Xsq</span>  <span class="o">...</span>  <span class="n">DeltaP12</span>  <span class="n">FisherExact</span>  <span class="n">RawCount</span>
+<span class="mi">0</span>     <span class="n">自己</span>  <span class="mf">7.855905</span>  <span class="mf">128210.233241</span>  <span class="o">...</span>  <span class="mf">0.977867</span>          <span class="mf">0.0</span>       <span class="mi">555</span>
+<span class="mi">1</span>     <span class="n">什麼</span>  <span class="mf">9.153258</span>  <span class="mf">192859.824384</span>  <span class="o">...</span>  <span class="mf">0.547635</span>          <span class="mf">0.0</span>       <span class="mi">339</span>
+<span class="mi">2</span>     <span class="n">我們</span>  <span class="mf">6.183966</span>   <span class="mf">42280.224680</span>  <span class="o">...</span>  <span class="mf">0.446638</span>          <span class="mf">0.0</span>       <span class="mi">592</span>
+<span class="mi">3</span>     <span class="n">台灣</span>  <span class="mf">8.126771</span>  <span class="mf">111740.169937</span>  <span class="o">...</span>  <span class="mf">0.693597</span>          <span class="mf">0.0</span>       <span class="mi">401</span>
+<span class="mi">4</span>     <span class="n">沒有</span>  <span class="mf">6.394685</span>   <span class="mf">43012.134830</span>  <span class="o">...</span>  <span class="mf">0.164128</span>          <span class="mf">0.0</span>       <span class="mi">518</span>
+
+<span class="p">[</span><span class="mi">5</span> <span class="n">rows</span> <span class="n">x</span> <span class="mi">9</span> <span class="n">columns</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell markdown docutils container">
-<p class="rubric" id="node-collocate-association">4.2 Node-Collocate Association</p>
+<p class="rubric" id="node-collocate-association">Node-Collocate Association</p>
+<p>The example below use the character sequence <code class="docutils literal notranslate"><span class="pre">我們</span></code> as the node and
+looks for collocates occurring on the immediate right (<code class="docutils literal notranslate"><span class="pre">left=0</span></code> and
+<code class="docutils literal notranslate"><span class="pre">right=1</span></code>) on the node. After computing association scores for each
+node-collocate pair, these pairs are sorted based on the MI measure.
+The data frame below shows the top-5 collocates with the highest MI
+scores (a minimum frequency threshold of 6 is applied) of the node
+<code class="docutils literal notranslate"><span class="pre">我們</span></code>.</p>
 </div>
 <div class="cell code docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">&quot;孔&quot; &quot;子&quot;</span>
+<span class="s2">[char=&quot;我&quot;] [char=&quot;們&quot;]</span>
 <span class="s2">&quot;&quot;&quot;</span>
-<span class="n">collo</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">collocates</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;Xsq&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">collo</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">collo</span> <span class="o">=</span> <span class="n">CC</span><span class="o">.</span><span class="n">collocates</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                      <span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;MI&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">collo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="output execute-result docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;曰&#39;</span><span class="p">,</span>
-  <span class="p">{</span><span class="s1">&#39;DeltaP12&#39;</span><span class="p">:</span> <span class="mf">0.5508984202190699</span><span class="p">,</span>
-   <span class="s1">&#39;DeltaP21&#39;</span><span class="p">:</span> <span class="mf">0.017436408382199422</span><span class="p">,</span>
-   <span class="s1">&#39;Dice&#39;</span><span class="p">:</span> <span class="mf">0.03412938870076635</span><span class="p">,</span>
-   <span class="s1">&#39;FisherExact&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-   <span class="s1">&#39;Gsq&#39;</span><span class="p">:</span> <span class="mf">2486.7011528898893</span><span class="p">,</span>
-   <span class="s1">&#39;MI&#39;</span><span class="p">:</span> <span class="mf">5.5855958675486095</span><span class="p">,</span>
-   <span class="s1">&#39;RawCount&#39;</span><span class="p">:</span> <span class="mi">383</span><span class="p">,</span>
-   <span class="s1">&#39;Xsq&#39;</span><span class="p">:</span> <span class="mf">17849.561805227277</span><span class="p">}),</span>
- <span class="p">(</span><span class="s1">&#39;愀&#39;</span><span class="p">,</span>
-  <span class="p">{</span><span class="s1">&#39;DeltaP12&#39;</span><span class="p">:</span> <span class="mf">0.008807342620906026</span><span class="p">,</span>
-   <span class="s1">&#39;DeltaP21&#39;</span><span class="p">:</span> <span class="mf">0.4996367483650986</span><span class="p">,</span>
-   <span class="s1">&#39;Dice&#39;</span><span class="p">:</span> <span class="mf">0.017316017316017316</span><span class="p">,</span>
-   <span class="s1">&#39;FisherExact&#39;</span><span class="p">:</span> <span class="mf">2.1855507492354285e-18</span><span class="p">,</span>
-   <span class="s1">&#39;Gsq&#39;</span><span class="p">:</span> <span class="mf">78.36068664097104</span><span class="p">,</span>
-   <span class="s1">&#39;MI&#39;</span><span class="p">:</span> <span class="mf">10.41398510902232</span><span class="p">,</span>
-   <span class="s1">&#39;RawCount&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
-   <span class="s1">&#39;Xsq&#39;</span><span class="p">:</span> <span class="mf">8177.080337219988</span><span class="p">}),</span>
- <span class="p">(</span><span class="s1">&#39;孔&#39;</span><span class="p">,</span>
-  <span class="p">{</span><span class="s1">&#39;DeltaP12&#39;</span><span class="p">:</span> <span class="mf">0.06707828763041274</span><span class="p">,</span>
-   <span class="s1">&#39;DeltaP21&#39;</span><span class="p">:</span> <span class="mf">0.04976704015525816</span><span class="p">,</span>
-   <span class="s1">&#39;Dice&#39;</span><span class="p">:</span> <span class="mf">0.05753595997498437</span><span class="p">,</span>
-   <span class="s1">&#39;FisherExact&#39;</span><span class="p">:</span> <span class="mf">1.5730409497803884e-81</span><span class="p">,</span>
-   <span class="s1">&#39;Gsq&#39;</span><span class="p">:</span> <span class="mf">366.5766447587887</span><span class="p">,</span>
-   <span class="s1">&#39;MI&#39;</span><span class="p">:</span> <span class="mf">7.095196721665525</span><span class="p">,</span>
-   <span class="s1">&#39;RawCount&#39;</span><span class="p">:</span> <span class="mi">46</span><span class="p">,</span>
-   <span class="s1">&#39;Xsq&#39;</span><span class="p">:</span> <span class="mf">6203.299925288661</span><span class="p">}),</span>
- <span class="p">(</span><span class="s1">&#39;矙&#39;</span><span class="p">,</span>
-  <span class="p">{</span><span class="s1">&#39;DeltaP12&#39;</span><span class="p">:</span> <span class="mf">0.002936857562408223</span><span class="p">,</span>
-   <span class="s1">&#39;DeltaP21&#39;</span><span class="p">:</span> <span class="mf">0.999634597729232</span><span class="p">,</span>
-   <span class="s1">&#39;Dice&#39;</span><span class="p">:</span> <span class="mf">0.005856515373352855</span><span class="p">,</span>
-   <span class="s1">&#39;FisherExact&#39;</span><span class="p">:</span> <span class="mf">1.341091030070595e-07</span><span class="p">,</span>
-   <span class="s1">&#39;Gsq&#39;</span><span class="p">:</span> <span class="mf">31.652163710326512</span><span class="p">,</span>
-   <span class="s1">&#39;MI&#39;</span><span class="p">:</span> <span class="mf">11.41398510902232</span><span class="p">,</span>
-   <span class="s1">&#39;RawCount&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-   <span class="s1">&#39;Xsq&#39;</span><span class="p">:</span> <span class="mf">5455.356826047563</span><span class="p">}),</span>
- <span class="p">(</span><span class="s1">&#39;問&#39;</span><span class="p">,</span>
-  <span class="p">{</span><span class="s1">&#39;DeltaP12&#39;</span><span class="p">:</span> <span class="mf">0.06938851232700384</span><span class="p">,</span>
-   <span class="s1">&#39;DeltaP21&#39;</span><span class="p">:</span> <span class="mf">0.022691599983249697</span><span class="p">,</span>
-   <span class="s1">&#39;Dice&#39;</span><span class="p">:</span> <span class="mf">0.03471971066907776</span><span class="p">,</span>
-   <span class="s1">&#39;FisherExact&#39;</span><span class="p">:</span> <span class="mf">1.0446010447528008e-68</span><span class="p">,</span>
-   <span class="s1">&#39;Gsq&#39;</span><span class="p">:</span> <span class="mf">307.47664398618406</span><span class="p">,</span>
-   <span class="s1">&#39;MI&#39;</span><span class="p">:</span> <span class="mf">5.973808047464968</span><span class="p">,</span>
-   <span class="s1">&#39;RawCount&#39;</span><span class="p">:</span> <span class="mi">48</span><span class="p">,</span>
-   <span class="s1">&#39;Xsq&#39;</span><span class="p">:</span> <span class="mf">2925.847560753262</span><span class="p">})]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="s1">&#39;釘&#39;</span><span class="p">,</span>
+ <span class="p">{</span><span class="s1">&#39;DeltaP12&#39;</span><span class="p">:</span> <span class="mf">0.0016848237685590844</span><span class="p">,</span>
+  <span class="s1">&#39;DeltaP21&#39;</span><span class="p">:</span> <span class="mf">0.33204500782950214</span><span class="p">,</span>
+  <span class="s1">&#39;Dice&#39;</span><span class="p">:</span> <span class="mf">0.0033613445378151263</span><span class="p">,</span>
+  <span class="s1">&#39;FisherExact&#39;</span><span class="p">:</span> <span class="mf">0.003866505328061448</span><span class="p">,</span>
+  <span class="s1">&#39;Gsq&#39;</span><span class="p">:</span> <span class="mf">9.493215334772461</span><span class="p">,</span>
+  <span class="s1">&#39;MI&#39;</span><span class="p">:</span> <span class="mf">8.012895027477056</span><span class="p">,</span>
+  <span class="s1">&#39;RawCount&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s1">&#39;Xsq&#39;</span><span class="p">:</span> <span class="mf">256.6351579547297</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span><span class="s1">&#39;char&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">collo</span>
+                  <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;RawCount&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">][:</span><span class="mi">5</span><span class="p">])</span>
+<span class="c1">#print(d.to_markdown(index=False, floatfmt=&quot;.2f&quot;, numalign=&quot;left&quot;))</span>
+<span class="n">d</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">char</span>        <span class="n">MI</span>         <span class="n">Xsq</span>  <span class="o">...</span>  <span class="n">DeltaP12</span>   <span class="n">FisherExact</span>  <span class="n">RawCount</span>
+<span class="mi">0</span>    <span class="n">認</span>  <span class="mf">3.979880</span>  <span class="mf">124.857368</span>  <span class="o">...</span>  <span class="mf">0.014258</span>  <span class="mf">9.310853e-09</span>         <span class="mi">9</span>
+<span class="mi">1</span>    <span class="n">還</span>  <span class="mf">3.388404</span>   <span class="mf">77.315368</span>  <span class="o">...</span>  <span class="mf">0.013769</span>  <span class="mf">2.970053e-07</span>         <span class="mi">9</span>
+<span class="mi">2</span>    <span class="n">都</span>  <span class="mf">3.328575</span>  <span class="mf">122.653021</span>  <span class="o">...</span>  <span class="mf">0.022845</span>  <span class="mf">6.215205e-11</span>        <span class="mi">15</span>
+<span class="mi">3</span>    <span class="n">就</span>  <span class="mf">3.207562</span>  <span class="mf">125.435532</span>  <span class="o">...</span>  <span class="mf">0.025641</span>  <span class="mf">1.218295e-11</span>        <span class="mi">17</span>
+<span class="mi">4</span>    <span class="n">所</span>  <span class="mf">3.047111</span>   <span class="mf">76.926085</span>  <span class="o">...</span>  <span class="mf">0.017841</span>  <span class="mf">4.222232e-08</span>        <span class="mi">12</span>
+
+<span class="p">[</span><span class="mi">5</span> <span class="n">rows</span> <span class="n">x</span> <span class="mi">9</span> <span class="n">columns</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell markdown docutils container">
+<p class="rubric" id="productivity">Productivity</p>
+<p>Finally, we demonstrate the usage of the tentative applications of
+Productivity measures [&#64;baayen1993;&#64;baayen2009] to character
+components. This is implemented in <code class="docutils literal notranslate"><span class="pre">CompoAnalysis.productivity()</span></code>.
+The categories for computing measures of productivity are defined
+based on the arguments passed.</p>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Productivity of a radical</span>
+<span class="n">CA</span><span class="o">.</span><span class="n">productivity</span><span class="p">(</span><span class="n">radical</span><span class="o">=</span><span class="s2">&quot;广&quot;</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="mi">1505967</span><span class="p">,</span>
+ <span class="s1">&#39;NC&#39;</span><span class="p">:</span> <span class="mi">5889</span><span class="p">,</span>
+ <span class="s1">&#39;V1&#39;</span><span class="p">:</span> <span class="mi">1896</span><span class="p">,</span>
+ <span class="s1">&#39;V1C&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+ <span class="s1">&#39;productivity&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;expanding&#39;</span><span class="p">:</span> <span class="mf">0.003691983122362869</span><span class="p">,</span>
+  <span class="s1">&#39;potential&#39;</span><span class="p">:</span> <span class="mf">0.0011886568177958906</span><span class="p">,</span>
+  <span class="s1">&#39;realized&#39;</span><span class="p">:</span> <span class="mi">58</span><span class="p">}}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Productivity of a component</span>
+<span class="n">CA</span><span class="o">.</span><span class="n">productivity</span><span class="p">(</span><span class="n">compo</span><span class="o">=</span><span class="s2">&quot;虫&quot;</span><span class="p">,</span> <span class="n">idc</span><span class="o">=</span><span class="s2">&quot;horz2&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="mi">1505967</span><span class="p">,</span>
+ <span class="s1">&#39;NC&#39;</span><span class="p">:</span> <span class="mi">1027</span><span class="p">,</span>
+ <span class="s1">&#39;V1&#39;</span><span class="p">:</span> <span class="mi">1896</span><span class="p">,</span>
+ <span class="s1">&#39;V1C&#39;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
+ <span class="s1">&#39;productivity&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;expanding&#39;</span><span class="p">:</span> <span class="mf">0.0379746835443038</span><span class="p">,</span>
+  <span class="s1">&#39;potential&#39;</span><span class="p">:</span> <span class="mf">0.07010710808179163</span><span class="p">,</span>
+  <span class="s1">&#39;realized&#39;</span><span class="p">:</span> <span class="mi">178</span><span class="p">}}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell code docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Productivity of Hanzi shapes (IDCs)</span>
+<span class="n">df_prod</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">idc_nm</span><span class="p">,</span> <span class="n">idc_val</span> <span class="ow">in</span> <span class="n">CC</span><span class="o">.</span><span class="n">chr_idcs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">CA</span><span class="o">.</span><span class="n">productivity</span><span class="p">(</span><span class="n">idc</span><span class="o">=</span><span class="n">idc_nm</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">df_prod</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">idc_nm</span><span class="p">,</span>
+        <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="n">idc_val</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;productivity&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;V1C&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;V1C&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;V1&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;V1&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;NC&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;NC&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">],</span>
+    <span class="p">})</span>
+
+<span class="n">df_prod</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_prod</span><span class="p">)</span>
+<span class="n">df_prod</span>
+</pre></div>
+</div>
+<div class="output execute-result docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     name shape  realized  expanding  potential   V1C    V1      NC        N
+0   horz2     ⿰      5436   0.719409   0.003115  1364  1896  437854  1505967
+1   vert2     ⿱      2045   0.219409   0.000741   416  1896  561357  1505967
+2   horz3     ⿲        35   0.001582   0.000481     3  1896    6240  1505967
+3   vert3     ⿳        80   0.005802   0.000765    11  1896   14371  1505967
+4    encl     ⿴        27   0.001582   0.000208     3  1896   14409  1505967
+5    surN     ⿵        84   0.004747   0.000357     9  1896   25231  1505967
+6    surU     ⿶         6   0.000000   0.000000     0  1896    7275  1505967
+7    curC     ⿷        20   0.002110   0.002438     4  1896    1641  1505967
+8    surT     ⿸       332   0.026371   0.000548    50  1896   91208  1505967
+9    sur7     ⿹        48   0.002637   0.000197     5  1896   25379  1505967
+10   surL     ⿺       178   0.013186   0.000931    25  1896   26844  1505967
+11   over     ⿻        43   0.000527   0.000026     1  1896   37846  1505967
 </pre></div>
 </div>
 </div>

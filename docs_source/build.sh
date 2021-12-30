@@ -1,5 +1,5 @@
-pandoc nb/query.ipynb -f ipynb -t rst --extract-media img/ -s -o temp.rst
-pandoc nb/stats.ipynb -f ipynb -t rst --extract-media img/ -s -o temp2.rst
+pandoc nb/corpusSearch.ipynb -f ipynb -t rst --extract-media img/ -s -o temp.rst
+pandoc nb/corpusAnalysis.ipynb -f ipynb -t rst --extract-media img/ -s -o temp2.rst
 
 echo -e 'Query\n================\n\n' > query.rst
 cat temp.rst >> query.rst

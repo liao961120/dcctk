@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3. Corpus Input &mdash; cctk 0.0.9 documentation</title>
+  <title>3. Corpus Input &mdash; hgct 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> cctk
+            <a href="index.html" class="icon icon-home"> hgct
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -43,7 +43,6 @@
 <li class="toctree-l1"><a class="reference internal" href="stats.html">2. Stats</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">3. Corpus Input</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concordance.html">4. Corpus Search &amp; Concordancer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sense.html">5. Sense Analysis</a></li>
 </ul>
 
         </div>
@@ -52,7 +51,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cctk</a>
+          <a href="index.html">hgct</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -72,12 +71,12 @@
              
   <section id="corpus-input">
 <h1><span class="section-number">3. </span>Corpus Input<a class="headerlink" href="#corpus-input" title="Permalink to this headline"></a></h1>
-<p><a class="reference internal" href="#dcctk.corpusReader.PlainTextReader" title="dcctk.corpusReader.PlainTextReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">dcctk.corpusReader.PlainTextReader</span></code></a> deals with the default plain text
-corpus structure input in <code class="code docutils literal notranslate"><span class="pre">dcctk</span></code>.
+<p><a class="reference internal" href="#hgct.corpusReader.PlainTextReader" title="hgct.corpusReader.PlainTextReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">hgct.corpusReader.PlainTextReader</span></code></a> deals with the default plain text
+corpus structure input in <code class="code docutils literal notranslate"><span class="pre">hgct</span></code>.
 To read in corpus with other structures, you could write your own class or
 function that returnes a corpus object that follows the required structure.
-This required structure can be found below (a corpus with two timesteps, with
-each timestep having three texts in it):</p>
+This required structure can be found below (a corpus with two subcorpora, with
+each subcorpus having three texts in it):</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Required corpus structure</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
@@ -129,8 +128,8 @@ each timestep having three texts in it):</p>
 </div>
 </div>
 <dl class="py class">
-<dt class="sig sig-object py" id="dcctk.corpusReader.PlainTextReader">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dcctk.corpusReader.</span></span><span class="sig-name descname"><span class="pre">PlainTextReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path='data/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts_meta_filename='time.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_meta_filename='text_meta.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts_meta_loader=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_meta_loader=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plain_text_reader=&lt;function</span> <span class="pre">read_text_as_sentences&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/corpusReader.html#PlainTextReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.corpusReader.PlainTextReader" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="hgct.corpusReader.PlainTextReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hgct.corpusReader.</span></span><span class="sig-name descname"><span class="pre">PlainTextReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path='data/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts_meta_filename='time.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_meta_filename='text_meta.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts_meta_loader=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_meta_loader=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plain_text_reader=&lt;function</span> <span class="pre">read_text_as_sentences&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_load=True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hgct/corpusReader.html#PlainTextReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hgct.corpusReader.PlainTextReader" title="Permalink to this definition"></a></dt>
 <dd><p>Plain text corpus input handler</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
@@ -166,9 +165,21 @@ each timestep having three texts in it):</p>
 <span class="go">            &#39;m&#39;: {&#39;about&#39;: &#39;Text 2 in 2nd timestep&#39;}}]}]</span>
 </pre></div>
 </div>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 68%" />
+<col style="width: 32%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>get_corpus_as_gen</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <dl class="py method">
-<dt class="sig sig-object py" id="dcctk.corpusReader.PlainTextReader.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path='data/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts_meta_filename='time.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_meta_filename='text_meta.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts_meta_loader=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_meta_loader=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plain_text_reader=&lt;function</span> <span class="pre">read_text_as_sentences&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/corpusReader.html#PlainTextReader.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.corpusReader.PlainTextReader.__init__" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="hgct.corpusReader.PlainTextReader.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path='data/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts_meta_filename='time.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_meta_filename='text_meta.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts_meta_loader=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_meta_loader=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plain_text_reader=&lt;function</span> <span class="pre">read_text_as_sentences&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_load=True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hgct/corpusReader.html#PlainTextReader.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hgct.corpusReader.PlainTextReader.__init__" title="Permalink to this definition"></a></dt>
 <dd><p>Read in plain text corpus</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -190,7 +201,7 @@ by default “text_meta.yaml”.</p>
 <code class="code docutils literal notranslate"><span class="pre">text_meta_filename</span></code>, by default None.</p>
 </dd>
 <dt><strong>plain_text_reader</strong><span class="classifier">Callable, optional</span></dt><dd><p>Function to read a corpus text file as a sequence of sentences, 
-by default <a class="reference internal" href="#dcctk.UtilsTextProcess.read_text_as_sentences" title="dcctk.UtilsTextProcess.read_text_as_sentences"><code class="xref py py-func docutils literal notranslate"><span class="pre">dcctk.UtilsTextProcess.read_text_as_sentences()</span></code></a>.</p>
+by default <code class="xref py py-func docutils literal notranslate"><span class="pre">dcctk.UtilsTextProcess.read_text_as_sentences()</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -198,16 +209,16 @@ by default <a class="reference internal" href="#dcctk.UtilsTextProcess.read_text
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dcctk.corpusReader.PlainTextReader.__weakref__">
-<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#dcctk.corpusReader.PlainTextReader.__weakref__" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="hgct.corpusReader.PlainTextReader.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#hgct.corpusReader.PlainTextReader.__weakref__" title="Permalink to this definition"></a></dt>
 <dd><p>list of weak references to the object (if defined)</p>
 </dd></dl>
 
 </dd></dl>
 
-<span class="target" id="module-dcctk.UtilsTextProcess"></span><dl class="py function">
-<dt class="sig sig-object py" id="dcctk.UtilsTextProcess.read_text_as_sentences">
-<span class="sig-prename descclassname"><span class="pre">dcctk.UtilsTextProcess.</span></span><span class="sig-name descname"><span class="pre">read_text_as_sentences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/UtilsTextProcess.html#read_text_as_sentences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.UtilsTextProcess.read_text_as_sentences" title="Permalink to this definition"></a></dt>
+<span class="target" id="module-hgct.UtilsTextProcess"></span><dl class="py function">
+<dt class="sig sig-object py" id="hgct.UtilsTextProcess.read_text_as_sentences">
+<span class="sig-prename descclassname"><span class="pre">hgct.UtilsTextProcess.</span></span><span class="sig-name descname"><span class="pre">read_text_as_sentences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hgct/UtilsTextProcess.html#read_text_as_sentences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hgct.UtilsTextProcess.read_text_as_sentences" title="Permalink to this definition"></a></dt>
 <dd><p>Read text file as a sequency of sentences</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

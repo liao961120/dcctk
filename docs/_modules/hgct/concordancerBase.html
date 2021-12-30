@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dcctk.concordancerBase &mdash; cctk 0.0.9 documentation</title>
+  <title>hgct.concordancerBase &mdash; hgct 0.0.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -24,7 +24,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> cctk
+            <a href="../../index.html" class="icon icon-home"> hgct
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -40,7 +40,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../stats.html">2. Stats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../corpusReader.html">3. Corpus Input</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../concordance.html">4. Corpus Search &amp; Concordancer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sense.html">5. Sense Analysis</a></li>
 </ul>
 
         </div>
@@ -49,7 +48,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">cctk</a>
+          <a href="../../index.html">hgct</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -58,7 +57,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>dcctk.concordancerBase</li>
+      <li>hgct.concordancerBase</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -67,7 +66,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for dcctk.concordancerBase</h1><div class="highlight"><pre>
+  <h1>Source code for hgct.concordancerBase</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">json</span>
@@ -372,9 +371,9 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">subcorp_idx</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">][</span><span class="n">doc_idx</span><span class="p">][</span><span class="s1">&#39;c&#39;</span><span class="p">][</span><span class="n">sent_idx</span><span class="p">][</span><span class="n">tk_idx</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="ConcordLine"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.ConcordLine">[docs]</a><span class="k">class</span> <span class="nc">ConcordLine</span><span class="p">:</span>
+<div class="viewcode-block" id="ConcordLine"><a class="viewcode-back" href="../../concordance.html#hgct.concordancer.ConcordLine">[docs]</a><span class="k">class</span> <span class="nc">ConcordLine</span><span class="p">:</span>
 
-<div class="viewcode-block" id="ConcordLine.__init__"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.ConcordLine.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<div class="viewcode-block" id="ConcordLine.__init__"><a class="viewcode-back" href="../../concordance.html#hgct.concordancer.ConcordLine.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize an instance of concordance line</span>
 
 <span class="sd">        Parameters</span>
@@ -417,7 +416,7 @@
         <span class="k">return</span> <span class="n">cc</span>
 
 
-<div class="viewcode-block" id="ConcordLine.get_kwic"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.ConcordLine.get_kwic">[docs]</a>    <span class="k">def</span> <span class="nf">get_kwic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_keyword_idx</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ConcordLine.get_kwic"><a class="viewcode-back" href="../../concordance.html#hgct.concordancer.ConcordLine.get_kwic">[docs]</a>    <span class="k">def</span> <span class="nf">get_kwic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_keyword_idx</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get string representation of the concordance line</span>
 
 <span class="sd">        Parameters</span>
@@ -442,7 +441,7 @@
         <span class="k">return</span> <span class="n">s</span>        </div>
 
 
-<div class="viewcode-block" id="ConcordLine.get_timestep"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.ConcordLine.get_timestep">[docs]</a>    <span class="k">def</span> <span class="nf">get_timestep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span><span class="n">Callable</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ConcordLine.get_timestep"><a class="viewcode-back" href="../../concordance.html#hgct.concordancer.ConcordLine.get_timestep">[docs]</a>    <span class="k">def</span> <span class="nf">get_timestep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span><span class="n">Callable</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get time step info of the concordance line</span>
 
 <span class="sd">        Parameters</span>

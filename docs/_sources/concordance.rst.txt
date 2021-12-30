@@ -2,10 +2,10 @@ Corpus Search & Concordancer
 ============================
 
 
-.. autoclass:: dcctk.concordancer.Concordancer
+.. autoclass:: hgct.concordancer.Concordancer
     :members:
     :special-members: __init__
 
-.. autoclass:: dcctk.concordancer.ConcordLine
+.. autoclass:: hgct.concordancer.ConcordLine
     :members:
     :special-members: __init__

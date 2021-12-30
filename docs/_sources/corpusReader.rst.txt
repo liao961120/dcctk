@@ -1,12 +1,12 @@
 Corpus Input
 ============
 
-:class:`dcctk.corpusReader.PlainTextReader` deals with the default plain text 
-corpus structure input in :code:`dcctk`.
+:class:`hgct.corpusReader.PlainTextReader` deals with the default plain text 
+corpus structure input in :code:`hgct`.
 To read in corpus with other structures, you could write your own class or 
 function that returnes a corpus object that follows the required structure. 
-This required structure can be found below (a corpus with two timesteps, with 
-each timestep having three texts in it):
+This required structure can be found below (a corpus with two subcorpora, with 
+each subcorpus having three texts in it):
 
 .. code-block:: json
     :caption: Required corpus structure
@@ -57,10 +57,10 @@ each timestep having three texts in it):
        }    
     ]
 
-.. autoclass:: dcctk.corpusReader.PlainTextReader
+.. autoclass:: hgct.corpusReader.PlainTextReader
     :members:
     :special-members: 
 
-.. automodule:: dcctk.UtilsTextProcess
+.. automodule:: hgct.UtilsTextProcess
     :members:
     :undoc-members:

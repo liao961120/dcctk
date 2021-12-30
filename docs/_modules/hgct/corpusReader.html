@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dcctk.corpusReader &mdash; cctk 0.0.9 documentation</title>
+  <title>hgct.corpusReader &mdash; hgct 0.0.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -24,7 +24,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> cctk
+            <a href="../../index.html" class="icon icon-home"> hgct
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -40,7 +40,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../stats.html">2. Stats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../corpusReader.html">3. Corpus Input</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../concordance.html">4. Corpus Search &amp; Concordancer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sense.html">5. Sense Analysis</a></li>
 </ul>
 
         </div>
@@ -49,7 +48,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">cctk</a>
+          <a href="../../index.html">hgct</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -58,7 +57,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>dcctk.corpusReader</li>
+      <li>hgct.corpusReader</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -67,13 +66,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for dcctk.corpusReader</h1><div class="highlight"><pre>
+  <h1>Source code for hgct.corpusReader</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">.UtilsTextProcess</span> <span class="kn">import</span> <span class="o">*</span>
 
 
-<div class="viewcode-block" id="PlainTextReader"><a class="viewcode-back" href="../../corpusReader.html#dcctk.corpusReader.PlainTextReader">[docs]</a><span class="k">class</span> <span class="nc">PlainTextReader</span><span class="p">:</span>
+<div class="viewcode-block" id="PlainTextReader"><a class="viewcode-back" href="../../corpusReader.html#hgct.corpusReader.PlainTextReader">[docs]</a><span class="k">class</span> <span class="nc">PlainTextReader</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Plain text corpus input handler</span>
 
 <span class="sd">    Examples</span>
@@ -114,9 +113,9 @@
 <span class="sd">                    &#39;m&#39;: {&#39;about&#39;: &#39;Text 2 in 2nd timestep&#39;}}]}]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="PlainTextReader.__init__"><a class="viewcode-back" href="../../corpusReader.html#dcctk.corpusReader.PlainTextReader.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_path</span><span class="o">=</span><span class="s2">&quot;data/&quot;</span><span class="p">,</span> <span class="n">ts_meta_filename</span><span class="o">=</span><span class="s2">&quot;time.yaml&quot;</span><span class="p">,</span> \
+<div class="viewcode-block" id="PlainTextReader.__init__"><a class="viewcode-back" href="../../corpusReader.html#hgct.corpusReader.PlainTextReader.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_path</span><span class="o">=</span><span class="s2">&quot;data/&quot;</span><span class="p">,</span> <span class="n">ts_meta_filename</span><span class="o">=</span><span class="s2">&quot;time.yaml&quot;</span><span class="p">,</span> \
         <span class="n">text_meta_filename</span><span class="o">=</span><span class="s2">&quot;text_meta.yaml&quot;</span><span class="p">,</span> <span class="n">ts_meta_loader</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
-        <span class="n">text_meta_loader</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plain_text_reader</span><span class="o">=</span><span class="n">read_text_as_sentences</span><span class="p">):</span>
+        <span class="n">text_meta_loader</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plain_text_reader</span><span class="o">=</span><span class="n">read_text_as_sentences</span><span class="p">,</span> <span class="n">auto_load</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Read in plain text corpus</span>
 
 <span class="sd">        Parameters</span>
@@ -146,13 +145,39 @@
         <span class="c1"># Attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">corp_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_subcorp</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corp_path</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text_meta</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timestep_meta</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plain_text_reader</span> <span class="o">=</span> <span class="n">plain_text_reader</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timestep_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_meta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corp_path</span> <span class="o">/</span> <span class="n">ts_meta_filename</span><span class="p">,</span> <span class="n">custom_loader</span><span class="o">=</span><span class="n">ts_meta_loader</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">text_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_meta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corp_path</span> <span class="o">/</span> <span class="n">text_meta_filename</span><span class="p">,</span> <span class="n">custom_loader</span><span class="o">=</span><span class="n">text_meta_loader</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_read_corpus</span><span class="p">()</span></div>
+        <span class="k">if</span> <span class="n">auto_load</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_read_corpus</span><span class="p">()</span></div>
 
+
+    <span class="k">def</span> <span class="nf">get_corpus_as_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">dir_</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corp_path</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">dir_</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span> <span class="k">continue</span>
+            <span class="c1"># Construct corpus</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">timestep_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dir_</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">meta</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">yield</span> <span class="p">{</span>
+                <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">dir_</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span>
+                <span class="s1">&#39;m&#39;</span><span class="p">:</span> <span class="n">meta</span><span class="p">,</span>
+                <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_texts_as_gen</span><span class="p">(</span><span class="n">dir_</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.txt&quot;</span><span class="p">))</span>
+            <span class="p">}</span>
+
+
+    <span class="k">def</span> <span class="nf">_get_texts_as_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fps</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">fps</span><span class="p">:</span>
+            <span class="n">text_id</span><span class="p">,</span> <span class="n">text_meta</span><span class="p">,</span> <span class="n">text_content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_text</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">text_id</span><span class="p">,</span>
+                <span class="s1">&#39;m&#39;</span><span class="p">:</span> <span class="n">text_meta</span><span class="p">,</span>
+                <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">text_content</span><span class="p">)</span>  <span class="c1"># A list of sentences</span>
+            <span class="p">}</span>
+            <span class="k">yield</span> <span class="n">text</span>
 
     <span class="k">def</span> <span class="nf">_read_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">dir_</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corp_path</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()):</span>
@@ -191,6 +216,7 @@
 
 
     <span class="k">def</span> <span class="nf">_get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">custom_loader</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fp</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span> <span class="k">return</span> <span class="p">{}</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">custom_loader</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">custom_loader</span><span class="p">()</span>

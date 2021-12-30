@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>4. Corpus Search &amp; Concordancer &mdash; cctk 0.0.9 documentation</title>
+  <title>4. Corpus Search &amp; Concordancer &mdash; hgct 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,7 +18,6 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="5. Sense Analysis" href="sense.html" />
     <link rel="prev" title="3. Corpus Input" href="corpusReader.html" /> 
 </head>
 
@@ -27,7 +26,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> cctk
+            <a href="index.html" class="icon icon-home"> hgct
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -43,7 +42,6 @@
 <li class="toctree-l1"><a class="reference internal" href="stats.html">2. Stats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="corpusReader.html">3. Corpus Input</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">4. Corpus Search &amp; Concordancer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sense.html">5. Sense Analysis</a></li>
 </ul>
 
         </div>
@@ -52,7 +50,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cctk</a>
+          <a href="index.html">hgct</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -73,14 +71,13 @@
   <section id="corpus-search-concordancer">
 <h1><span class="section-number">4. </span>Corpus Search &amp; Concordancer<a class="headerlink" href="#corpus-search-concordancer" title="Permalink to this headline"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="dcctk.concordancer.Concordancer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dcctk.concordancer.</span></span><span class="sig-name descname"><span class="pre">Concordancer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#Concordancer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.Concordancer" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="hgct.concordancer.Concordancer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hgct.concordancer.</span></span><span class="sig-name descname"><span class="pre">Concordancer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hgct/concordancer.html#Concordancer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hgct.concordancer.Concordancer" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>all_idx_cache</strong></dt><dd></dd>
 <dt><strong>chr_idcs</strong></dt><dd></dd>
-<dt><strong>chr_phonetic_systems</strong></dt><dd></dd>
 <dt><strong>chr_radicals</strong></dt><dd></dd>
 <dt><strong>corp_size</strong></dt><dd></dd>
 <dt><strong>cql_attrs</strong></dt><dd></dd>
@@ -95,10 +92,10 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dcctk.concordancer.Concordancer.collocates" title="dcctk.concordancer.Concordancer.collocates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collocates</span></code></a>(node_cql[, left, right, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hgct.concordancer.Concordancer.collocates" title="hgct.concordancer.Concordancer.collocates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collocates</span></code></a>(node_cql[, left, right, ...])</p></td>
 <td><p>node       ~node</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dcctk.concordancer.Concordancer.cql_search" title="dcctk.concordancer.Concordancer.cql_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cql_search</span></code></a>(cql[, left, right])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hgct.concordancer.Concordancer.cql_search" title="hgct.concordancer.Concordancer.cql_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cql_search</span></code></a>(cql[, left, right])</p></td>
 <td><p>Search the corpus with Corpus Query Language</p></td>
 </tr>
 </tbody>
@@ -139,8 +136,8 @@
 </tbody>
 </table>
 <dl class="py method">
-<dt class="sig sig-object py" id="dcctk.concordancer.Concordancer.collocates">
-<span class="sig-name descname"><span class="pre">collocates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_cql</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subcorp_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Gsq'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chinese_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#Concordancer.collocates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.Concordancer.collocates" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="hgct.concordancer.Concordancer.collocates">
+<span class="sig-name descname"><span class="pre">collocates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_cql</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subcorp_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Gsq'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chinese_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hgct/concordancer.html#Concordancer.collocates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hgct.concordancer.Concordancer.collocates" title="Permalink to this definition"></a></dt>
 <dd><blockquote>
 <div><p>node       ~node</p>
 </div></blockquote>
@@ -155,8 +152,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dcctk.concordancer.Concordancer.cql_search">
-<span class="sig-name descname"><span class="pre">cql_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cql</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancer.html#Concordancer.cql_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.Concordancer.cql_search" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="hgct.concordancer.Concordancer.cql_search">
+<span class="sig-name descname"><span class="pre">cql_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cql</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hgct/concordancer.html#Concordancer.cql_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hgct.concordancer.Concordancer.cql_search" title="Permalink to this definition"></a></dt>
 <dd><p>Search the corpus with Corpus Query Language</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -193,8 +190,8 @@
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="dcctk.concordancer.ConcordLine">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dcctk.concordancer.</span></span><span class="sig-name descname"><span class="pre">ConcordLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancerBase.html#ConcordLine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="hgct.concordancer.ConcordLine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hgct.concordancer.</span></span><span class="sig-name descname"><span class="pre">ConcordLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hgct/concordancerBase.html#ConcordLine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hgct.concordancer.ConcordLine" title="Permalink to this definition"></a></dt>
 <dd><p class="rubric">Methods</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -202,10 +199,10 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dcctk.concordancer.ConcordLine.get_kwic" title="dcctk.concordancer.ConcordLine.get_kwic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_kwic</span></code></a>([return_keyword_idx])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hgct.concordancer.ConcordLine.get_kwic" title="hgct.concordancer.ConcordLine.get_kwic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_kwic</span></code></a>([return_keyword_idx])</p></td>
 <td><p>Get string representation of the concordance line</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dcctk.concordancer.ConcordLine.get_timestep" title="dcctk.concordancer.ConcordLine.get_timestep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_timestep</span></code></a>([key])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hgct.concordancer.ConcordLine.get_timestep" title="hgct.concordancer.ConcordLine.get_timestep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_timestep</span></code></a>([key])</p></td>
 <td><p>Get time step info of the concordance line</p></td>
 </tr>
 </tbody>
@@ -222,8 +219,8 @@
 </tbody>
 </table>
 <dl class="py method">
-<dt class="sig sig-object py" id="dcctk.concordancer.ConcordLine.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancerBase.html#ConcordLine.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine.__init__" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="hgct.concordancer.ConcordLine.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hgct/concordancerBase.html#ConcordLine.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hgct.concordancer.ConcordLine.__init__" title="Permalink to this definition"></a></dt>
 <dd><p>Initialize an instance of concordance line</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -260,8 +257,8 @@ It has the following stucture:</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dcctk.concordancer.ConcordLine.get_kwic">
-<span class="sig-name descname"><span class="pre">get_kwic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_keyword_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancerBase.html#ConcordLine.get_kwic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine.get_kwic" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="hgct.concordancer.ConcordLine.get_kwic">
+<span class="sig-name descname"><span class="pre">get_kwic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_keyword_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hgct/concordancerBase.html#ConcordLine.get_kwic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hgct.concordancer.ConcordLine.get_kwic" title="Permalink to this definition"></a></dt>
 <dd><p>Get string representation of the concordance line</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -283,8 +280,8 @@ keywords (idx_from, idx_to).</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dcctk.concordancer.ConcordLine.get_timestep">
-<span class="sig-name descname"><span class="pre">get_timestep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dcctk/concordancerBase.html#ConcordLine.get_timestep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dcctk.concordancer.ConcordLine.get_timestep" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="hgct.concordancer.ConcordLine.get_timestep">
+<span class="sig-name descname"><span class="pre">get_timestep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/hgct/concordancerBase.html#ConcordLine.get_timestep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hgct.concordancer.ConcordLine.get_timestep" title="Permalink to this definition"></a></dt>
 <dd><p>Get time step info of the concordance line</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -313,7 +310,6 @@ subcorp_idx as time step information.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="corpusReader.html" class="btn btn-neutral float-left" title="3. Corpus Input" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="sense.html" class="btn btn-neutral float-right" title="5. Sense Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

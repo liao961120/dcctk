@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dcctk.concordancer &mdash; cctk 0.0.9 documentation</title>
+  <title>hgct.concordancer &mdash; hgct 0.0.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -24,7 +24,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> cctk
+            <a href="../../index.html" class="icon icon-home"> hgct
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -40,7 +40,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../stats.html">2. Stats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../corpusReader.html">3. Corpus Input</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../concordance.html">4. Corpus Search &amp; Concordancer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../sense.html">5. Sense Analysis</a></li>
 </ul>
 
         </div>
@@ -49,7 +48,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">cctk</a>
+          <a href="../../index.html">hgct</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -58,7 +57,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>dcctk.concordancer</li>
+      <li>hgct.concordancer</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -67,13 +66,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for dcctk.concordancer</h1><div class="highlight"><pre>
+  <h1>Source code for hgct.concordancer</h1><div class="highlight"><pre>
 <span></span><span class="c1">#%%</span>
 <span class="kn">import</span> <span class="nn">cqls</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
 <span class="kn">from</span> <span class="nn">CompoTree</span> <span class="kn">import</span> <span class="n">IDC</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-
 <span class="kn">from</span> <span class="nn">.concordancerBase</span> <span class="kn">import</span> <span class="n">ConcordancerBase</span><span class="p">,</span> <span class="n">ConcordLine</span>
 <span class="kn">from</span> <span class="nn">.subCharQuery</span> <span class="kn">import</span> <span class="n">find_compo</span><span class="p">,</span> <span class="n">load_lexicon</span><span class="p">,</span> <span class="n">char_match_compo</span><span class="p">,</span> <span class="n">get_radicals</span>
 <span class="kn">from</span> <span class="nn">.UtilsConcord</span> <span class="kn">import</span> <span class="n">queryMatchToken</span>
@@ -81,11 +79,11 @@
 <span class="kn">from</span> <span class="nn">.UtilsStats</span> <span class="kn">import</span> <span class="n">additive_smooth</span>
 
 
-<div class="viewcode-block" id="Concordancer"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.Concordancer">[docs]</a><span class="k">class</span> <span class="nc">Concordancer</span><span class="p">(</span><span class="n">ConcordancerBase</span><span class="p">):</span>
+<div class="viewcode-block" id="Concordancer"><a class="viewcode-back" href="../../concordance.html#hgct.concordancer.Concordancer">[docs]</a><span class="k">class</span> <span class="nc">Concordancer</span><span class="p">(</span><span class="n">ConcordancerBase</span><span class="p">):</span>
     
     <span class="n">lexicon</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="Concordancer.cql_search"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.Concordancer.cql_search">[docs]</a>    <span class="k">def</span> <span class="nf">cql_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cql</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<div class="viewcode-block" id="Concordancer.cql_search"><a class="viewcode-back" href="../../concordance.html#hgct.concordancer.Concordancer.cql_search">[docs]</a>    <span class="k">def</span> <span class="nf">cql_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cql</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
         <span class="n">queries</span> <span class="o">=</span> <span class="n">cqls</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">cql</span><span class="p">,</span> <span class="n">default_attr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cql_default_attr</span><span class="p">,</span> \
             <span class="n">max_quant</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cql_max_quantity</span><span class="p">)</span>
         
@@ -155,16 +153,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lexicon</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lexicon</span> <span class="o">=</span> <span class="n">load_lexicon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">get_radicals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lexicon</span><span class="p">)</span>
-        
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">chr_phonetic_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="s1">&#39;moe&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;phonetic_repr&#39;</span><span class="p">:</span> <span class="s1">&#39;bpm pinyin ipa&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">(),</span>
-                <span class="s1">&#39;tone&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="s1">&#39;12345&#39;</span><span class="p">),</span>
-                <span class="s1">&#39;src&#39;</span><span class="p">:</span> <span class="s1">&#39;https://github.com/g0v/moedict-data&#39;</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cql_attrs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -172,11 +161,18 @@
             <span class="s2">&quot;Default&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;char&#39;</span><span class="p">],</span>
             <span class="s2">&quot;CharComponent&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;compo&#39;</span><span class="p">,</span> <span class="s1">&#39;max_depth&#39;</span><span class="p">,</span> <span class="s1">&#39;idc&#39;</span><span class="p">,</span> <span class="s1">&#39;pos&#39;</span><span class="p">],</span>
             <span class="s2">&quot;CharRadical&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;radical&#39;</span><span class="p">],</span>
-            <span class="s2">&quot;CharPhonetic&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;phon&quot;</span><span class="p">,</span> <span class="s2">&quot;tone&quot;</span><span class="p">,</span> <span class="s2">&quot;sys&quot;</span><span class="p">]</span>
+            <span class="s2">&quot;CharSemantic&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;semtag&#39;</span><span class="p">],</span>
+            <span class="s2">&quot;CharPhonetic&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;moe&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;phon&#39;</span><span class="p">,</span> <span class="s1">&#39;tone&#39;</span><span class="p">,</span> <span class="s1">&#39;tp&#39;</span><span class="p">,</span> <span class="s1">&#39;sys=&quot;moe&quot;&#39;</span><span class="p">],</span>
+                <span class="s2">&quot;廣韻&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s1">&#39;攝&#39;</span><span class="p">,</span> <span class="s1">&#39;聲調&#39;</span><span class="p">,</span> <span class="s1">&#39;韻母&#39;</span><span class="p">,</span> <span class="s1">&#39;聲母&#39;</span><span class="p">,</span> <span class="s1">&#39;開合&#39;</span><span class="p">,</span> 
+                    <span class="s1">&#39;等第&#39;</span><span class="p">,</span> <span class="s1">&#39;反切&#39;</span><span class="p">,</span> <span class="s1">&#39;拼音&#39;</span><span class="p">,</span> <span class="s1">&#39;IPA&#39;</span><span class="p">,</span> <span class="s1">&#39;sys=&quot;廣韻&quot;&#39;</span>
+                <span class="p">]</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
 
-<div class="viewcode-block" id="Concordancer.collocates"><a class="viewcode-back" href="../../concordance.html#dcctk.concordancer.Concordancer.collocates">[docs]</a>    <span class="k">def</span> <span class="nf">collocates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_cql</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;Gsq&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">chinese_only</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Concordancer.collocates"><a class="viewcode-back" href="../../concordance.html#hgct.concordancer.Concordancer.collocates">[docs]</a>    <span class="k">def</span> <span class="nf">collocates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_cql</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">subcorp_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;Gsq&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">chinese_only</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                     node       ~node</span>
 <span class="sd">        collocate    O11         O12    R1 (char index len)</span>
@@ -232,6 +228,8 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subcorp_idx</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">corp_size</span><span class="p">[</span><span class="n">subcorp_idx</span><span class="p">]</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corp_size</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
+
+<span class="c1"># %%</span>
 </pre></div>
 
            </div>
