@@ -142,7 +142,7 @@ Query
       any Chinese characters (not, e.g., punctuations)
 
    Passing this pattern to ``get_first_n()`` (or
-   ``Concordancer.cql_search()`` gives us a sequence of ``Concord``
+   ``Concordancer.cql_search()``) gives us a sequence of ``Concord``
    objects. A ``Concord`` object is used to represent a matched result
    returned from the corpus in *hgct*.
 
