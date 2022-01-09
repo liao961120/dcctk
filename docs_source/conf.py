@@ -18,8 +18,10 @@
 # -- Project information -----------------------------------------------------
 
 project = 'hgct'
-copyright = '2021, Yongfu Liao'
-author = 'Yongfu Liao'
+copyright = '2022, Nobody'
+author = 'Nobody'
+# copyright = '2021, Yongfu Liao'
+# author = 'Yongfu Liao'
 
 # The full version, including alpha/beta/rc tags
 with open("../VERSION") as f:
